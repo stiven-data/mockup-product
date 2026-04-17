@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { buildMortgageDecisionModel } = require("./dashboard-model.js");
+const { buildMortgageDecisionModel, evaluateBenchmark } = require("./dashboard-model.js");
 
 const fixture = {
   currentDebt: {
@@ -63,6 +63,7 @@ const fixture = {
     }
   ],
   analysis: {
+    marketValue: 14970243.296551725,
     priorNoi: 498300
   }
 };
@@ -81,4 +82,13 @@ test("buildMortgageDecisionModel returns mortgage-health KPIs with benchmark sta
   assert.equal(model.overview.kpis[1].state, "watchlist");
   assert.equal(model.overview.kpis[3].label, "Debt Yield");
   assert.equal(model.overview.kpis[3].state, "critical");
+});
+
+test("evaluateBenchmark uses inclusive threshold boundaries", () => {
+  assert.equal(evaluateBenchmark("dscr", 1.25), "healthy");
+  assert.equal(evaluateBenchmark("dscr", 1.1), "watchlist");
+  assert.equal(evaluateBenchmark("dscr", 1.0999), "critical");
+  assert.equal(evaluateBenchmark("ltv", 0.65), "healthy");
+  assert.equal(evaluateBenchmark("ltv", 0.75), "watchlist");
+  assert.equal(evaluateBenchmark("ltv", 0.7501), "critical");
 });
