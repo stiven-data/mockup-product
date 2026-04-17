@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { buildMortgageDecisionModel, evaluateBenchmark } = require("./dashboard-model.js");
+const { buildMortgageDecisionModel, calculateDirection, evaluateBenchmark } = require("./dashboard-model.js");
 
 const fixture = {
   currentDebt: {
@@ -91,4 +91,24 @@ test("evaluateBenchmark uses inclusive threshold boundaries", () => {
   assert.equal(evaluateBenchmark("ltv", 0.65), "healthy");
   assert.equal(evaluateBenchmark("ltv", 0.75), "watchlist");
   assert.equal(evaluateBenchmark("ltv", 0.7501), "critical");
+});
+
+test("calculateDirection reports flat and directional movement", () => {
+  assert.deepEqual(calculateDirection(10, 10), {
+    delta: 0,
+    arrow: "→",
+    tone: "watchlist"
+  });
+
+  assert.deepEqual(calculateDirection(11, 10), {
+    delta: 1,
+    arrow: "↑",
+    tone: "healthy"
+  });
+
+  assert.deepEqual(calculateDirection(9, 10, true), {
+    delta: -1,
+    arrow: "↓",
+    tone: "healthy"
+  });
 });

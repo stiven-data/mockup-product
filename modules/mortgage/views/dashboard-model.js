@@ -127,9 +127,9 @@ function buildMortgageDecisionModel(data) {
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { BENCHMARKS, buildMortgageDecisionModel, evaluateBenchmark };
+  module.exports = { BENCHMARKS, buildMortgageDecisionModel, calculateDirection, evaluateBenchmark };
 }
 
 if (typeof window !== "undefined") {
-  window.mortgageDashboardModel = { BENCHMARKS, buildMortgageDecisionModel, evaluateBenchmark };
+  window.mortgageDashboardModel = { BENCHMARKS, buildMortgageDecisionModel, calculateDirection, evaluateBenchmark };
 }
