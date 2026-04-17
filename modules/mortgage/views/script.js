@@ -273,7 +273,7 @@ function renderLineChart(containerId, series, options = {}) {
   container.innerHTML = buildLineChartMarkup(series, options);
 }
 
-function renderTrends(model) {
+function buildDashboardViewModel(model) {
   const statements = mortgageData.statements;
   const latest = statements[statements.length - 1];
   const previous = statements[statements.length - 2];
@@ -284,64 +284,117 @@ function renderTrends(model) {
   const dscrCard = model.overview.kpis[0];
   const ltvCard = model.overview.kpis[1];
   const escrowCard = model.overview.kpis[4];
-  const dueDelta = latest.totalDue - previous.totalDue;
   const escrowDelta = latest.endingEscrowBalance - previous.endingEscrowBalance;
   const principalDelta = latest.principalBalance - first.principalBalance;
+  const budget = mortgageData.budget;
+  const rentRoll = mortgageData.rentRoll;
+  const refiDriver = model.drivers.refi;
+  const leakageDrivers = [
+    { label: "Vacancy", value: Math.abs(budget.vacancyYtd), className: "danger" },
+    { label: "Bad debt", value: Math.abs(budget.badDebtYtd), className: "warn" },
+    { label: "Concessions", value: Math.abs(budget.concessionsYtd), className: "" }
+  ].sort((a, b) => b.value - a.value);
+  const statuses = [
+    { label: "Current", key: "current", value: rentRoll.currentUnits },
+    { label: "Notice", key: "notice", value: rentRoll.noticeUnits },
+    { label: "Vacant-Rented", key: "vacant-rented", value: rentRoll.vacantRentedUnits },
+    { label: "Evict", key: "evict", value: rentRoll.evictUnits },
+    { label: "Vacant-Unrented", key: "vacant-unrented", value: rentRoll.vacantUnrentedUnits }
+  ];
+  const refiOptions = mortgageData.refinancing.map((quote) => {
+    const annualIoPayment = quote.annualIoPayment || (quote.proposedLoanAmount * quote.noteRate);
+
+    return {
+      lender: quote.lender,
+      product: quote.product,
+      noteRate: quote.noteRate,
+      ltv: quote.ltv,
+      monthlySavings: mortgageData.currentDebt.monthlyInterestOnly - (annualIoPayment / 12),
+      takeoutGap: mortgageData.currentDebt.principalBalance - quote.proposedLoanAmount,
+      isBestOption: refiDriver.available && quote.lender === refiDriver.lender && quote.product === refiDriver.product
+    };
+  });
+
+  return {
+    header: {
+      status: capitalizeLabel(model.health.status),
+      latestCycle: formatDate(mortgageData.currentDebt.latestDueDate)
+    },
+    trends: {
+      coverage: {
+        card: dscrCard,
+        series: last12.map((row) => ({
+          label: compactMonth(row.statementDate),
+          value: row.totalDue,
+          anomaly: row.totalDue >= 113000 || row.totalDue <= 104000
+        })),
+        insight: `${dscrCard.value} coverage remains below ${dscrCard.benchmark}; monthly debt service still peaks above ${formatCurrency(latest.totalDue, true)}.`
+      },
+      escrow: {
+        card: escrowCard,
+        series: last12.map((row) => ({
+          label: compactMonth(row.statementDate),
+          value: row.endingEscrowBalance || 0,
+          anomaly: (row.endingEscrowBalance || 0) < escrowPeak * 0.45
+        })),
+        insight: `${escrowCard.value} of runway leaves limited reserve buffer even after a ${formatCurrency(Math.abs(escrowDelta), true)} sequential move.`
+      },
+      leverage: {
+        card: ltvCard,
+        series: statements.map((row, index) => {
+          const prior = statements[index - 1];
+
+          return {
+            label: compactMonth(row.statementDate),
+            value: row.principalBalance,
+            anomaly: prior ? Math.abs(row.principalBalance - prior.principalBalance) > 1000 : false
+          };
+        }),
+        insight: `${ltvCard.value} leverage sits above the ${ltvCard.benchmark} target, with principal still up ${formatCurrency(principalDelta, true)} from the starting balance.`
+      }
+    },
+    drivers: {
+      leakageDrivers,
+      grossPotentialRent: budget.grossPotentialRentYtd,
+      leakageInsight: `${formatCurrency(model.metrics.noi, true)} T12 NOI is still weighed down by vacancy and bad debt leakage.`,
+      statuses,
+      totalUnits: rentRoll.units,
+      statusInsight: `${model.decisionBox.impact.riskReduction} units sit outside the stable current bucket.`,
+      refiOptions,
+      capitalInsight: refiDriver.available
+        ? `${formatCurrency(refiDriver.annualSavings, true)} annual savings is available, but the ${formatCurrency(Math.abs(refiDriver.takeoutGap), true)} takeout gap remains the gating item.`
+        : "Lower-rate execution cannot be underwritten until fresh lender quotes are available."
+    },
+    priorities: model.priorities
+  };
+}
+
+function renderTrends(viewModel) {
+  const { coverage, escrow, leverage } = viewModel.trends;
 
   const debtChip = document.getElementById("debt-trend-chip");
-  debtChip.className = `compare-chip ${compareChipClass(dscrCard.direction.delta)}`;
-  debtChip.innerHTML = `${dscrCard.direction.arrow} ${dscrCard.benchmark}`;
-  document.getElementById("debt-trend-headline").textContent = `${dscrCard.label} ${dscrCard.value}`;
-  renderLineChart(
-    "debt-trend-chart",
-    last12.map((row) => ({
-      label: compactMonth(row.statementDate),
-      value: row.totalDue,
-      anomaly: row.totalDue >= 113000 || row.totalDue <= 104000
-    })),
-    {
-      variant: "warn"
-    }
-  );
-  document.getElementById("debt-trend-insight").textContent = `${dscrCard.value} coverage remains below ${dscrCard.benchmark}; monthly debt service still peaks above ${formatCurrency(latest.totalDue, true)}.`;
+  debtChip.className = `compare-chip ${compareChipClass(coverage.card.direction.delta)}`;
+  debtChip.innerHTML = `${coverage.card.direction.arrow} ${coverage.card.benchmark}`;
+  document.getElementById("debt-trend-headline").textContent = `${coverage.card.label} ${coverage.card.value}`;
+  renderLineChart("debt-trend-chart", coverage.series, { variant: "warn" });
+  document.getElementById("debt-trend-insight").textContent = coverage.insight;
 
   const escrowChip = document.getElementById("escrow-trend-chip");
-  escrowChip.className = `compare-chip ${compareChipClass(escrowCard.direction.delta)}`;
-  escrowChip.innerHTML = `${escrowCard.direction.arrow} ${escrowCard.benchmark}`;
-  document.getElementById("escrow-trend-headline").textContent = `${escrowCard.label} ${escrowCard.value}`;
-  renderLineChart(
-    "escrow-trend-chart",
-    last12.map((row) => ({
-      label: compactMonth(row.statementDate),
-      value: row.endingEscrowBalance || 0,
-      anomaly: (row.endingEscrowBalance || 0) < escrowPeak * 0.45
-    })),
-    {
-      variant: "danger"
-    }
-  );
-  document.getElementById("escrow-trend-insight").textContent = `${escrowCard.value} of runway leaves limited reserve buffer even after a ${formatCurrency(Math.abs(escrowDelta), true)} sequential move.`;
+  escrowChip.className = `compare-chip ${compareChipClass(escrow.card.direction.delta)}`;
+  escrowChip.innerHTML = `${escrow.card.direction.arrow} ${escrow.card.benchmark}`;
+  document.getElementById("escrow-trend-headline").textContent = `${escrow.card.label} ${escrow.card.value}`;
+  renderLineChart("escrow-trend-chart", escrow.series, { variant: "danger" });
+  document.getElementById("escrow-trend-insight").textContent = escrow.insight;
 
   const principalChip = document.getElementById("principal-trend-chip");
-  principalChip.className = `compare-chip ${compareChipClass(ltvCard.direction.delta, true)}`;
-  principalChip.innerHTML = `${ltvCard.direction.arrow} ${ltvCard.benchmark}`;
-  document.getElementById("principal-trend-headline").textContent = `${ltvCard.label} ${ltvCard.value}`;
-  renderLineChart(
-    "principal-trend-chart",
-    statements.map((row, index) => {
-      const prior = statements[index - 1];
-      return {
-        label: compactMonth(row.statementDate),
-        value: row.principalBalance,
-        anomaly: prior ? Math.abs(row.principalBalance - prior.principalBalance) > 1000 : false
-      };
-    }),
-    {
-      variant: "danger",
-      compact: true
-    }
-  );
-  document.getElementById("principal-trend-insight").textContent = `${ltvCard.value} leverage sits above the ${ltvCard.benchmark} target, with principal still up ${formatCurrency(principalDelta, true)} from the starting balance.`;
+  principalChip.className = `compare-chip ${compareChipClass(leverage.card.direction.delta, true)}`;
+  principalChip.innerHTML = `${leverage.card.direction.arrow} ${leverage.card.benchmark}`;
+  document.getElementById("principal-trend-headline").textContent = `${leverage.card.label} ${leverage.card.value}`;
+  renderLineChart("principal-trend-chart", leverage.series, {
+    variant: "danger",
+    compact: true
+  });
+  document.getElementById("principal-trend-insight").textContent = leverage.insight;
 }
 
 function renderAlerts(model) {
@@ -357,41 +410,25 @@ function renderAlerts(model) {
   `).join("");
 }
 
-function renderDrivers(model) {
-  const grossPotential = mortgageData.budget.grossPotentialRentYtd;
-  const refiDriver = model.drivers.refi;
-  const leakageDrivers = [
-    { label: "Vacancy", value: Math.abs(mortgageData.budget.vacancyYtd), className: "danger" },
-    { label: "Bad debt", value: Math.abs(mortgageData.budget.badDebtYtd), className: "warn" },
-    { label: "Concessions", value: Math.abs(mortgageData.budget.concessionsYtd), className: "" }
-  ].sort((a, b) => b.value - a.value);
-
-  document.getElementById("leakage-list").innerHTML = leakageDrivers.map((item) => `
+function renderDrivers(viewModel) {
+  document.getElementById("leakage-list").innerHTML = viewModel.drivers.leakageDrivers.map((item) => `
     <div class="rank-item">
       <div class="rank-head">
         <strong>${item.label}</strong>
-        <span>${formatCurrency(item.value, true)} &middot; ${formatPercent(item.value / grossPotential, 1)}</span>
+        <span>${formatCurrency(item.value, true)} &middot; ${formatPercent(item.value / viewModel.drivers.grossPotentialRent, 1)}</span>
       </div>
       <div class="meter">
-        <div class="meter-fill ${item.className}" style="width:${(item.value / leakageDrivers[0].value) * 100}%"></div>
+        <div class="meter-fill ${item.className}" style="width:${(item.value / viewModel.drivers.leakageDrivers[0].value) * 100}%"></div>
       </div>
     </div>
   `).join("");
-  document.getElementById("leakage-insight").textContent = `${formatCurrency(model.metrics.noi, true)} T12 NOI is still weighed down by vacancy and bad debt leakage.`;
+  document.getElementById("leakage-insight").textContent = viewModel.drivers.leakageInsight;
 
-  const statuses = [
-    { label: "Current", key: "current", value: mortgageData.rentRoll.currentUnits },
-    { label: "Notice", key: "notice", value: mortgageData.rentRoll.noticeUnits },
-    { label: "Vacant-Rented", key: "vacant-rented", value: mortgageData.rentRoll.vacantRentedUnits },
-    { label: "Evict", key: "evict", value: mortgageData.rentRoll.evictUnits },
-    { label: "Vacant-Unrented", key: "vacant-unrented", value: mortgageData.rentRoll.vacantUnrentedUnits }
-  ];
-
-  document.getElementById("status-segment-bar").innerHTML = statuses.map((status) => `
-    <span class="segment-piece ${status.key}" style="width:${(status.value / mortgageData.rentRoll.units) * 100}%"></span>
+  document.getElementById("status-segment-bar").innerHTML = viewModel.drivers.statuses.map((status) => `
+    <span class="segment-piece ${status.key}" style="width:${(status.value / viewModel.drivers.totalUnits) * 100}%"></span>
   `).join("");
 
-  document.getElementById("status-legend").innerHTML = statuses.map((status) => `
+  document.getElementById("status-legend").innerHTML = viewModel.drivers.statuses.map((status) => `
     <div class="legend-item">
       <div class="legend-label">
         <span class="legend-swatch ${status.key}"></span>
@@ -400,37 +437,25 @@ function renderDrivers(model) {
       <span>${status.value}</span>
     </div>
   `).join("");
-  document.getElementById("status-insight").textContent = `${model.decisionBox.impact.riskReduction} units sit outside the stable current bucket.`;
+  document.getElementById("status-insight").textContent = viewModel.drivers.statusInsight;
 
-  document.getElementById("capital-options").innerHTML = mortgageData.refinancing.map((quote) => {
-    const annualIoPayment = quote.annualIoPayment || (quote.proposedLoanAmount * quote.noteRate);
-    const monthlySavings = mortgageData.currentDebt.monthlyInterestOnly - (annualIoPayment / 12);
-    const isBestOption = refiDriver.available && quote.lender === refiDriver.lender && quote.product === refiDriver.product;
-
-    return `
+  document.getElementById("capital-options").innerHTML = viewModel.drivers.refiOptions.map((quote) => `
     <div class="option-card">
       <div class="option-head">
         <strong>${quote.lender} &middot; ${quote.product}</strong>
-        <span class="risk-chip ${isBestOption ? "risk-opportunity" : "risk-medium"}">${isBestOption ? "best" : "alt"}</span>
+        <span class="risk-chip ${quote.isBestOption ? "risk-opportunity" : "risk-medium"}">${quote.isBestOption ? "best" : "alt"}</span>
       </div>
       <div class="option-metrics">
         <span>Rate ${formatPercent(quote.noteRate, 2)} &middot; LTV ${formatPercent(quote.ltv, 1)}</span>
-        <span>Savings ${formatCurrency(monthlySavings, true)} &middot; Gap ${formatCurrency(Math.abs(mortgageData.currentDebt.principalBalance - quote.proposedLoanAmount), true)}</span>
+        <span>Savings ${formatCurrency(quote.monthlySavings, true)} &middot; Gap ${formatCurrency(Math.abs(quote.takeoutGap), true)}</span>
       </div>
     </div>
-  `;
-  }).join("");
-
-  if (!refiDriver.available) {
-    document.getElementById("capital-insight").textContent = "Lower-rate execution cannot be underwritten until fresh lender quotes are available.";
-    return;
-  }
-
-  document.getElementById("capital-insight").textContent = `${formatCurrency(refiDriver.annualSavings, true)} annual savings is available, but the ${formatCurrency(Math.abs(refiDriver.takeoutGap), true)} takeout gap remains the gating item.`;
+  `).join("");
+  document.getElementById("capital-insight").textContent = viewModel.drivers.capitalInsight;
 }
 
-function renderPriorities(model) {
-  const filtered = model.priorities.filter((item) => state.priorityFilter === "all" || item.riskLevel === state.priorityFilter);
+function renderPriorities(viewModel) {
+  const filtered = viewModel.priorities.filter((item) => state.priorityFilter === "all" || item.riskLevel === state.priorityFilter);
 
   document.getElementById("priority-table-body").innerHTML = filtered.map((item) => `
     <tr>
@@ -451,36 +476,37 @@ function renderPriorities(model) {
   `).join("");
 }
 
-function bindFilters(model) {
+function bindFilters(viewModel) {
   document.querySelectorAll(".filter-chip").forEach((button) => {
     button.addEventListener("click", () => {
       state.priorityFilter = button.dataset.filter;
       document.querySelectorAll(".filter-chip").forEach((chip) => {
         chip.classList.toggle("active", chip.dataset.filter === state.priorityFilter);
       });
-      renderPriorities(model);
+      renderPriorities(viewModel);
     });
   });
 }
 
-function initHeader(model) {
-  document.getElementById("portfolio-status").textContent = capitalizeLabel(model.health.status);
-  document.getElementById("latest-cycle").textContent = formatDate(mortgageData.currentDebt.latestDueDate);
+function initHeader(viewModel) {
+  document.getElementById("portfolio-status").textContent = viewModel.header.status;
+  document.getElementById("latest-cycle").textContent = viewModel.header.latestCycle;
 }
 
 function init() {
   const model = window.mortgageDashboardModel.buildMortgageDecisionModel(mortgageData);
+  const viewModel = buildDashboardViewModel(model);
 
-  initHeader(model);
+  initHeader(viewModel);
   renderDecisionPanel(model);
   renderHealthPanel(model);
   renderScenarioPanel(model);
   renderOverview(model);
-  renderTrends(model);
+  renderTrends(viewModel);
   renderAlerts(model);
-  renderDrivers(model);
-  renderPriorities(model);
-  bindFilters(model);
+  renderDrivers(viewModel);
+  renderPriorities(viewModel);
+  bindFilters(viewModel);
 
   console.info("Mortgage executive dashboard ready", {
     asset: mortgageData.property.name,
