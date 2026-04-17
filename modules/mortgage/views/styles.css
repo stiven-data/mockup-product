@@ -491,7 +491,11 @@ a {
 }
 
 .line-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   min-height: 240px;
+  padding: 10px 12px 12px;
   border-radius: var(--radius-md);
   border: 1px solid rgba(79, 63, 38, 0.08);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(249, 244, 235, 0.92));
@@ -505,7 +509,8 @@ a {
 .line-chart svg {
   display: block;
   width: 100%;
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .line-grid {
@@ -540,6 +545,12 @@ a {
   stroke-dasharray: 5 5;
 }
 
+.line-threshold-label {
+  fill: var(--warn);
+  font-size: 11px;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
 .line-path.warn {
   stroke: var(--warn);
 }
@@ -568,6 +579,10 @@ a {
 
 .line-point.danger {
   stroke: var(--danger);
+}
+
+.line-point.secondary {
+  stroke: rgba(20, 95, 89, 0.55);
 }
 
 .line-point.anomaly {
@@ -604,6 +619,18 @@ a {
 
 .legend-line.secondary {
   background: rgba(20, 95, 89, 0.55);
+}
+
+.legend-line.warn {
+  background: var(--warn);
+}
+
+.legend-line.danger {
+  background: var(--danger);
+}
+
+.legend-line.threshold {
+  background: rgba(185, 122, 41, 0.55);
 }
 
 .alert-card {

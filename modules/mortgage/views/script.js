@@ -212,40 +212,82 @@ function buildLineChartMarkup(series, options = {}) {
   const padding = { top: 22, right: 18, bottom: 34, left: 18 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
-  const values = series.map((item) => item.value || 0);
+  const primarySeries = Array.isArray(series) ? series : [];
+  const secondarySeries = Array.isArray(options.secondarySeries) ? options.secondarySeries : [];
+  const threshold = options.threshold && Number.isFinite(options.threshold.value) ? options.threshold : null;
+  const values = [
+    ...primarySeries.map((item) => item.value || 0),
+    ...secondarySeries.map((item) => item.value || 0),
+    ...(threshold ? [threshold.value] : [])
+  ];
   const maxValue = Math.max(...values, 1);
   const minValue = Math.min(...values, 0);
   const range = Math.max(maxValue - minValue, 1);
-  const getX = (index) => padding.left + ((chartWidth / Math.max(series.length - 1, 1)) * index);
+  const getX = (index, count) => padding.left + ((chartWidth / Math.max(count - 1, 1)) * index);
   const getY = (value) => padding.top + ((maxValue - value) / range) * chartHeight;
-  const points = series.map((item, index) => ({
+  const buildPoints = (inputSeries) => inputSeries.map((item, index) => ({
     ...item,
-    x: getX(index),
+    x: getX(index, inputSeries.length),
     y: getY(item.value || 0)
   }));
-  const path = points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
-  const areaPath = `${path} L ${points[points.length - 1].x} ${height - padding.bottom} L ${points[0].x} ${height - padding.bottom} Z`;
+  const buildPath = (points) => points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
+  const buildAreaPath = (points, path) => `${path} L ${points[points.length - 1].x} ${height - padding.bottom} L ${points[0].x} ${height - padding.bottom} Z`;
+  const primaryPoints = buildPoints(primarySeries);
+  const secondaryPoints = buildPoints(secondarySeries);
+  const primaryPath = buildPath(primaryPoints);
+  const primaryAreaPath = buildAreaPath(primaryPoints, primaryPath);
+  const secondaryPath = secondaryPoints.length > 0 ? buildPath(secondaryPoints) : "";
+  const secondaryAreaPath = secondaryPoints.length > 0 ? buildAreaPath(secondaryPoints, secondaryPath) : "";
   const variantClass = options.variant || "";
   const gridMarkup = Array.from({ length: 4 }, (_, index) => {
     const y = padding.top + (chartHeight / 3) * index;
     return `<line class="line-grid" x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}"></line>`;
   }).join("");
-  const pointsMarkup = points.map((point) => `
-    <circle class="line-point ${variantClass} ${point.anomaly ? "anomaly" : ""}" cx="${point.x}" cy="${point.y}" r="${point.anomaly ? 5 : 4}"></circle>
+  const renderPoints = (points, pointClass = "") => points.map((point) => `
+    <circle class="line-point ${pointClass} ${point.anomaly ? "anomaly" : ""}" cx="${point.x}" cy="${point.y}" r="${point.anomaly ? 5 : 4}"></circle>
   `).join("");
-  const labelsMarkup = points
-    .filter((_, index) => index === 0 || index === points.length - 1 || index % 3 === 0)
+  const labelsMarkup = primaryPoints
+    .filter((_, index) => index === 0 || index === primaryPoints.length - 1 || index % 3 === 0)
     .map((point) => `<text class="line-label" x="${point.x}" y="${height - 12}" text-anchor="middle">${point.label}</text>`)
     .join("");
+  const secondaryMarkup = secondaryPoints.length > 0
+    ? `
+      <path class="line-area secondary" d="${secondaryAreaPath}"></path>
+      <path class="line-path secondary" d="${secondaryPath}"></path>
+      ${renderPoints(secondaryPoints, "secondary")}
+    `
+    : "";
+  const thresholdY = threshold ? getY(threshold.value) : null;
+  const thresholdMarkup = threshold
+    ? `
+      <line class="threshold-line" x1="${padding.left}" y1="${thresholdY}" x2="${width - padding.right}" y2="${thresholdY}"></line>
+      ${threshold.label ? `<text class="line-threshold-label" x="${width - padding.right}" y="${Math.max(thresholdY - 8, padding.top + 8)}" text-anchor="end">${threshold.label}</text>` : ""}
+    `
+    : "";
+  const legendMarkup = Array.isArray(options.legend) && options.legend.length > 0
+    ? `
+      <div class="chart-legend">
+        ${options.legend.map((item) => `
+          <span class="legend-key">
+            <span class="legend-line ${item.variant || ""}"></span>
+            <span>${item.label}</span>
+          </span>
+        `).join("")}
+      </div>
+    `
+    : "";
 
   return `
     <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
       ${gridMarkup}
-      <path class="line-area ${variantClass}" d="${areaPath}"></path>
-      <path class="line-path ${variantClass}" d="${path}"></path>
-      ${pointsMarkup}
+      ${thresholdMarkup}
+      ${secondaryMarkup}
+      <path class="line-area ${variantClass}" d="${primaryAreaPath}"></path>
+      <path class="line-path ${variantClass}" d="${primaryPath}"></path>
+      ${renderPoints(primaryPoints, variantClass)}
       ${labelsMarkup}
     </svg>
+    ${legendMarkup}
   `;
 }
 
@@ -256,12 +298,25 @@ function renderLineChart(containerId, series, options = {}) {
 
 function renderTrends(model) {
   const { coverage, escrow, leverage } = model.trends;
+  const monthlyNoiRunRate = model.metrics.noi / 12;
+  const healthyBalanceTarget = model.metrics.marketValue * 0.65;
+  const watchlistBalanceThreshold = model.metrics.marketValue * 0.75;
 
   const debtChip = document.getElementById("debt-trend-chip");
   debtChip.className = `compare-chip ${compareChipClass(coverage.chipTone)}`;
   debtChip.innerHTML = coverage.chipLabel;
   document.getElementById("debt-trend-headline").textContent = coverage.headline;
-  renderLineChart("debt-trend-chart", coverage.series, { variant: "warn" });
+  renderLineChart("debt-trend-chart", coverage.series, {
+    variant: "warn",
+    secondarySeries: coverage.series.map((item) => ({
+      label: item.label,
+      value: monthlyNoiRunRate
+    })),
+    legend: [
+      { label: "Debt service", variant: "warn" },
+      { label: "NOI run-rate", variant: "secondary" }
+    ]
+  });
   document.getElementById("debt-trend-insight").textContent = coverage.insight;
 
   const escrowChip = document.getElementById("escrow-trend-chip");
@@ -277,7 +332,20 @@ function renderTrends(model) {
   document.getElementById("principal-trend-headline").textContent = leverage.headline;
   renderLineChart("principal-trend-chart", leverage.series, {
     variant: "danger",
-    compact: true
+    compact: true,
+    secondarySeries: leverage.series.map((item) => ({
+      label: item.label,
+      value: healthyBalanceTarget
+    })),
+    threshold: {
+      value: watchlistBalanceThreshold,
+      label: "75% watchlist"
+    },
+    legend: [
+      { label: "Principal balance", variant: "danger" },
+      { label: "Healthy max balance", variant: "secondary" },
+      { label: "Watchlist cap", variant: "threshold" }
+    ]
   });
   document.getElementById("principal-trend-insight").textContent = leverage.insight;
 }
