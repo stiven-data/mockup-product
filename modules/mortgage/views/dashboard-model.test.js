@@ -68,6 +68,10 @@ const fixture = {
   }
 };
 
+function cloneFixture() {
+  return JSON.parse(JSON.stringify(fixture));
+}
+
 test("buildMortgageDecisionModel returns mortgage-health KPIs with benchmark states", () => {
   const model = buildMortgageDecisionModel(fixture);
 
@@ -96,8 +100,51 @@ test("buildMortgageDecisionModel returns decision-support sections", () => {
   assert.equal(model.drivers.refi.spreadBps, 322);
   assert.equal(model.drivers.refi.status, "act-now");
   assert.equal(model.scenarios[0].label, "Rent +5%");
+  assert.equal(model.scenarios[2].label, "Refi at 5.28%");
   assert.equal(model.priorities[0].area, "Capital");
   assert.equal(model.priorities[0].riskLevel, "critical");
+});
+
+test("buildMortgageDecisionModel falls back when refinance quotes are unattractive", () => {
+  const stressedFixture = cloneFixture();
+  stressedFixture.refinancing = [
+    {
+      lender: "Local Bank",
+      product: "Bridge Reset",
+      proposedLoanAmount: 10000000,
+      noteRate: 0.083,
+      ltv: 0.73,
+      annualIoPayment: 950000
+    }
+  ];
+
+  const model = buildMortgageDecisionModel(stressedFixture);
+
+  assert.equal(model.drivers.refi.marketRate, 0.083);
+  assert.equal(model.drivers.refi.status, "monitor");
+  assert.equal(model.drivers.refi.annualSavings, -27480);
+  assert.equal(model.decisionBox.recommendation, "Stabilize NOI and liquidity before refinancing");
+  assert.equal(model.decisionBox.impact.annualSavings, 0);
+  assert.equal(model.alerts[3].title, "Refinance market not yet compelling");
+  assert.equal(model.alerts[3].severity, "watchlist");
+  assert.equal(model.scenarios[2].label, "Refi at 8.30%");
+  assert.equal(model.priorities[0].area, "Operations");
+  assert.equal(model.priorities[0].issue, "NOI recovery plan");
+});
+
+test("buildMortgageDecisionModel handles missing refinance quotes without throwing", () => {
+  const noRefiFixture = cloneFixture();
+  noRefiFixture.refinancing = [];
+
+  const model = buildMortgageDecisionModel(noRefiFixture);
+
+  assert.equal(model.drivers.refi.status, "unavailable");
+  assert.equal(model.drivers.refi.marketRate, null);
+  assert.equal(model.decisionBox.recommendation, "Stabilize NOI and liquidity before refinancing");
+  assert.equal(model.alerts[3].title, "No refinance quotes available");
+  assert.equal(model.alerts[3].severity, "watchlist");
+  assert.equal(model.priorities[0].area, "Operations");
+  assert.equal(model.scenarios[2].label, "Refi watch");
 });
 
 test("evaluateBenchmark uses inclusive threshold boundaries", () => {
@@ -112,19 +159,19 @@ test("evaluateBenchmark uses inclusive threshold boundaries", () => {
 test("calculateDirection reports flat and directional movement", () => {
   assert.deepEqual(calculateDirection(10, 10), {
     delta: 0,
-    arrow: "→",
+    arrow: "\u2192",
     tone: "watchlist"
   });
 
   assert.deepEqual(calculateDirection(11, 10), {
     delta: 1,
-    arrow: "↑",
+    arrow: "\u2191",
     tone: "healthy"
   });
 
   assert.deepEqual(calculateDirection(9, 10, true), {
     delta: -1,
-    arrow: "↓",
+    arrow: "\u2193",
     tone: "healthy"
   });
 });
