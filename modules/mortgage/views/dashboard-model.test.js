@@ -86,6 +86,9 @@ test("buildMortgageDecisionModel returns mortgage-health KPIs with benchmark sta
   assert.equal(model.overview.kpis[1].state, "watchlist");
   assert.equal(model.overview.kpis[3].label, "Debt Yield");
   assert.equal(model.overview.kpis[3].state, "critical");
+  assert.equal(model.overview.kpiMap.dscr.key, "dscr");
+  assert.equal(model.overview.kpiMap.ltv.key, "ltv");
+  assert.equal(model.overview.kpiMap.escrowRunway.key, "escrowRunway");
 });
 
 test("buildMortgageDecisionModel returns decision-support sections", () => {
@@ -103,6 +106,18 @@ test("buildMortgageDecisionModel returns decision-support sections", () => {
   assert.equal(model.scenarios[2].label, "Refi at 5.28%");
   assert.equal(model.priorities[0].area, "Capital");
   assert.equal(model.priorities[0].riskLevel, "critical");
+  assert.equal(model.header.status, "critical");
+  assert.equal(model.header.latestCycle, "Feb 9, 2026");
+  assert.equal(model.overview.criticalPoints[0], "DSCR 0.48x vs >= 1.25x");
+  assert.equal(model.trends.coverage.cardKey, "dscr");
+  assert.equal(model.trends.coverage.chipTone, "critical");
+  assert.equal(model.trends.coverage.series[0].label, "Dec 25");
+  assert.equal(model.trends.coverage.insight, "0.48x coverage remains below >= 1.25x; monthly debt service still peaks above $112,158.22.");
+  assert.equal(model.drivers.leakageDrivers[0].label, "Vacancy");
+  assert.equal(model.drivers.statusSegments[0].key, "current");
+  assert.equal(model.drivers.refiOptions[0].isBestOption, false);
+  assert.equal(model.drivers.refiOptions[1].isBestOption, true);
+  assert.equal(model.priorities[0].displayTitle, "Refinance execution");
 });
 
 test("buildMortgageDecisionModel falls back when refinance quotes are unattractive", () => {
@@ -145,6 +160,8 @@ test("buildMortgageDecisionModel handles missing refinance quotes without throwi
   assert.equal(model.alerts[3].severity, "watchlist");
   assert.equal(model.priorities[0].area, "Operations");
   assert.equal(model.scenarios[2].label, "Refi watch");
+  assert.equal(model.drivers.refiOptions.length, 0);
+  assert.equal(model.drivers.capitalInsight, "Lower-rate execution cannot be underwritten until fresh lender quotes are available.");
 });
 
 test("evaluateBenchmark uses inclusive threshold boundaries", () => {

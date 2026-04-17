@@ -74,6 +74,32 @@ function formatCurrency(value) {
   return `$${Math.round(value).toLocaleString("en-US")}`;
 }
 
+function formatCurrencyExact(value) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(value);
+}
+
+function formatDate(value) {
+  const date = new Date(`${value}T00:00:00`);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
+}
+
+function compactMonth(value) {
+  const date = new Date(`${value}T00:00:00`);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    year: "2-digit"
+  });
+}
+
 function formatRefiScenarioLabel(rate) {
   if (typeof rate !== "number" || !Number.isFinite(rate)) {
     return "Refi watch";
@@ -247,6 +273,7 @@ function buildDecisionSections(data, metrics, benchmarkStates) {
     ? [
         {
           priority: "P1",
+          displayTitle: "Refinance execution",
           area: "Capital",
           issue: "Refinance execution",
           financialImpact: `${formatCurrency(refi.annualSavings)} annual savings`,
@@ -257,6 +284,7 @@ function buildDecisionSections(data, metrics, benchmarkStates) {
         },
         {
           priority: "P2",
+          displayTitle: "Escrow sufficiency review",
           area: "Liquidity",
           issue: "Escrow sufficiency review",
           financialImpact: `${metrics.escrowRunwayMonths.toFixed(1)} months runway`,
@@ -269,6 +297,7 @@ function buildDecisionSections(data, metrics, benchmarkStates) {
     : [
         {
           priority: "P1",
+          displayTitle: "NOI recovery plan",
           area: "Operations",
           issue: "NOI recovery plan",
           financialImpact: `${formatCurrency(metrics.noi)} current T12 NOI`,
@@ -279,6 +308,7 @@ function buildDecisionSections(data, metrics, benchmarkStates) {
         },
         {
           priority: "P2",
+          displayTitle: "Escrow sufficiency review",
           area: "Liquidity",
           issue: "Escrow sufficiency review",
           financialImpact: `${metrics.escrowRunwayMonths.toFixed(1)} months runway`,
@@ -296,6 +326,130 @@ function buildDecisionSections(data, metrics, benchmarkStates) {
     drivers: { refi },
     scenarios,
     priorities
+  };
+}
+
+function buildKpiMap(kpis) {
+  return Object.fromEntries(kpis.map((kpi) => [kpi.key, kpi]));
+}
+
+function buildOverview(kpis) {
+  const kpiMap = buildKpiMap(kpis);
+
+  return {
+    kpis,
+    kpiMap,
+    criticalPoints: [
+      `DSCR ${kpiMap.dscr.value} vs ${kpiMap.dscr.benchmark}`,
+      `Debt yield ${kpiMap.debtYield.value} trails healthy range`,
+      `Escrow runway ${kpiMap.escrowRunway.value} remains below target`
+    ]
+  };
+}
+
+function buildTrends(data, kpiMap) {
+  const statements = data.statements;
+  const latest = statements[statements.length - 1];
+  const previous = statements[statements.length - 2] || latest;
+  const first = statements[0];
+  const last12 = statements.slice(-12);
+  const escrowPeak = Math.max(...statements.map((row) => row.endingEscrowBalance || 0), 1);
+  const escrowDelta = latest.endingEscrowBalance - previous.endingEscrowBalance;
+  const principalDelta = latest.principalBalance - first.principalBalance;
+
+  return {
+    coverage: {
+      cardKey: "dscr",
+      headline: `${kpiMap.dscr.label} ${kpiMap.dscr.value}`,
+      chipLabel: `${kpiMap.dscr.direction.arrow} ${kpiMap.dscr.benchmark}`,
+      chipTone: kpiMap.dscr.direction.tone,
+      series: last12.map((row) => ({
+        label: compactMonth(row.statementDate),
+        value: row.totalDue,
+        anomaly: row.totalDue >= 113000 || row.totalDue <= 104000
+      })),
+      insight: `${kpiMap.dscr.value} coverage remains below ${kpiMap.dscr.benchmark}; monthly debt service still peaks above ${formatCurrencyExact(latest.totalDue)}.`
+    },
+    escrow: {
+      cardKey: "escrowRunway",
+      headline: `${kpiMap.escrowRunway.label} ${kpiMap.escrowRunway.value}`,
+      chipLabel: `${kpiMap.escrowRunway.direction.arrow} ${kpiMap.escrowRunway.benchmark}`,
+      chipTone: kpiMap.escrowRunway.direction.tone,
+      series: last12.map((row) => ({
+        label: compactMonth(row.statementDate),
+        value: row.endingEscrowBalance || 0,
+        anomaly: (row.endingEscrowBalance || 0) < escrowPeak * 0.45
+      })),
+      insight: `${kpiMap.escrowRunway.value} of runway leaves limited reserve buffer even after a ${formatCurrencyExact(Math.abs(escrowDelta))} sequential move.`
+    },
+    leverage: {
+      cardKey: "ltv",
+      headline: `${kpiMap.ltv.label} ${kpiMap.ltv.value}`,
+      chipLabel: `${kpiMap.ltv.direction.arrow} ${kpiMap.ltv.benchmark}`,
+      chipTone: kpiMap.ltv.direction.tone,
+      series: statements.map((row, index) => {
+        const prior = statements[index - 1];
+        return {
+          label: compactMonth(row.statementDate),
+          value: row.principalBalance,
+          anomaly: prior ? Math.abs(row.principalBalance - prior.principalBalance) > 1000 : false
+        };
+      }),
+      insight: `${kpiMap.ltv.value} leverage sits above the ${kpiMap.ltv.benchmark} target, with principal still up ${formatCurrencyExact(principalDelta)} from the starting balance.`
+    }
+  };
+}
+
+function buildDrivers(data, metrics, refiDriver, decisionBox) {
+  const leakageDrivers = [
+    { label: "Vacancy", value: Math.abs(data.budget.vacancyYtd), className: "danger" },
+    { label: "Bad debt", value: Math.abs(data.budget.badDebtYtd), className: "warn" },
+    { label: "Concessions", value: Math.abs(data.budget.concessionsYtd), className: "" }
+  ]
+    .sort((a, b) => b.value - a.value)
+    .map((item, index, all) => ({
+      ...item,
+      share: item.value / data.budget.grossPotentialRentYtd,
+      widthPercent: all[0].value === 0 ? 0 : (item.value / all[0].value) * 100
+    }));
+
+  const statusSegments = [
+    { label: "Current", key: "current", value: data.rentRoll.currentUnits },
+    { label: "Notice", key: "notice", value: data.rentRoll.noticeUnits },
+    { label: "Vacant-Rented", key: "vacant-rented", value: data.rentRoll.vacantRentedUnits },
+    { label: "Evict", key: "evict", value: data.rentRoll.evictUnits },
+    { label: "Vacant-Unrented", key: "vacant-unrented", value: data.rentRoll.vacantUnrentedUnits }
+  ].map((segment) => ({
+    ...segment,
+    widthPercent: (segment.value / data.rentRoll.units) * 100
+  }));
+
+  const refiOptions = data.refinancing.map((quote) => {
+    const annualIoPayment = quote.annualIoPayment || (quote.proposedLoanAmount * quote.noteRate);
+    const monthlySavings = data.currentDebt.monthlyInterestOnly - (annualIoPayment / 12);
+    const takeoutGap = data.currentDebt.principalBalance - quote.proposedLoanAmount;
+
+    return {
+      lender: quote.lender,
+      product: quote.product,
+      noteRate: quote.noteRate,
+      ltv: quote.ltv,
+      monthlySavings,
+      takeoutGap,
+      isBestOption: refiDriver.available && quote.lender === refiDriver.lender && quote.product === refiDriver.product
+    };
+  });
+
+  return {
+    refi: refiDriver,
+    leakageDrivers,
+    leakageInsight: `${formatCurrencyExact(metrics.noi)} T12 NOI is still weighed down by vacancy and bad debt leakage.`,
+    statusSegments,
+    statusInsight: `${decisionBox.impact.riskReduction} units sit outside the stable current bucket.`,
+    refiOptions,
+    capitalInsight: refiDriver.available
+      ? `${formatCurrencyExact(refiDriver.annualSavings)} annual savings is available, but the ${formatCurrencyExact(Math.abs(refiDriver.takeoutGap))} takeout gap remains the gating item.`
+      : "Lower-rate execution cannot be underwritten until fresh lender quotes are available."
   };
 }
 
@@ -337,55 +491,66 @@ function buildMortgageDecisionModel(data) {
     previous.endingEscrowBalance / data.currentDebt.monthlyWithEscrow
   );
 
-  const overview = {
-    kpis: [
-      {
-        label: "DSCR",
-        value: BENCHMARKS.dscr.formatter(metrics.dscr),
-        benchmark: BENCHMARKS.dscr.target,
-        state: benchmarkStates[0],
-        direction: dscrDirection
-      },
-      {
-        label: "LTV",
-        value: BENCHMARKS.ltv.formatter(metrics.ltv),
-        benchmark: BENCHMARKS.ltv.target,
-        state: benchmarkStates[1],
-        direction: ltvDirection
-      },
-      {
-        label: "NOI",
-        value: `$${Math.round(metrics.noi).toLocaleString("en-US")}`,
-        benchmark: "vs prior T12",
-        state: noiDirection.tone,
-        direction: noiDirection
-      },
-      {
-        label: "Debt Yield",
-        value: BENCHMARKS.debtYield.formatter(metrics.debtYield),
-        benchmark: BENCHMARKS.debtYield.target,
-        state: benchmarkStates[2],
-        direction: debtYieldDirection
-      },
-      {
-        label: "Escrow Runway",
-        value: BENCHMARKS.escrowRunway.formatter(metrics.escrowRunwayMonths),
-        benchmark: BENCHMARKS.escrowRunway.target,
-        state: benchmarkStates[3],
-        direction: runwayDirection
-      }
-    ]
-  };
+  const kpis = [
+    {
+      key: "dscr",
+      label: "DSCR",
+      value: BENCHMARKS.dscr.formatter(metrics.dscr),
+      benchmark: BENCHMARKS.dscr.target,
+      state: benchmarkStates[0],
+      direction: dscrDirection
+    },
+    {
+      key: "ltv",
+      label: "LTV",
+      value: BENCHMARKS.ltv.formatter(metrics.ltv),
+      benchmark: BENCHMARKS.ltv.target,
+      state: benchmarkStates[1],
+      direction: ltvDirection
+    },
+    {
+      key: "noi",
+      label: "NOI",
+      value: `$${Math.round(metrics.noi).toLocaleString("en-US")}`,
+      benchmark: "vs prior T12",
+      state: noiDirection.tone,
+      direction: noiDirection
+    },
+    {
+      key: "debtYield",
+      label: "Debt Yield",
+      value: BENCHMARKS.debtYield.formatter(metrics.debtYield),
+      benchmark: BENCHMARKS.debtYield.target,
+      state: benchmarkStates[2],
+      direction: debtYieldDirection
+    },
+    {
+      key: "escrowRunway",
+      label: "Escrow Runway",
+      value: BENCHMARKS.escrowRunway.formatter(metrics.escrowRunwayMonths),
+      benchmark: BENCHMARKS.escrowRunway.target,
+      state: benchmarkStates[3],
+      direction: runwayDirection
+    }
+  ];
+  const overview = buildOverview(kpis);
 
   const decisionSections = buildDecisionSections(data, metrics, benchmarkStates);
+  const trends = buildTrends(data, overview.kpiMap);
+  const drivers = buildDrivers(data, metrics, decisionSections.drivers.refi, decisionSections.decisionBox);
 
   return {
+    header: {
+      status: decisionSections.health.status,
+      latestCycle: formatDate(data.currentDebt.latestDueDate)
+    },
     metrics,
     overview,
+    trends,
     health: decisionSections.health,
     decisionBox: decisionSections.decisionBox,
     alerts: decisionSections.alerts,
-    drivers: decisionSections.drivers,
+    drivers,
     scenarios: decisionSections.scenarios,
     priorities: decisionSections.priorities
   };
