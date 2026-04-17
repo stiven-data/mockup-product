@@ -390,6 +390,82 @@ a {
   color: var(--muted);
 }
 
+.line-chart {
+  min-height: 240px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(79, 63, 38, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(249, 244, 235, 0.92));
+  overflow: hidden;
+}
+
+.line-chart.compact {
+  min-height: 200px;
+}
+
+.line-chart svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.line-grid {
+  stroke: rgba(79, 63, 38, 0.08);
+  stroke-width: 1;
+}
+
+.line-path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.line-area {
+  fill: rgba(20, 95, 89, 0.08);
+}
+
+.line-path.warn {
+  stroke: var(--warn);
+}
+
+.line-area.warn {
+  fill: rgba(185, 122, 41, 0.08);
+}
+
+.line-path.danger {
+  stroke: var(--danger);
+}
+
+.line-area.danger {
+  fill: rgba(179, 77, 46, 0.08);
+}
+
+.line-point {
+  fill: #fff;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+
+.line-point.warn {
+  stroke: var(--warn);
+}
+
+.line-point.danger {
+  stroke: var(--danger);
+}
+
+.line-point.anomaly {
+  fill: #fff4ef;
+  stroke-width: 3;
+}
+
+.line-label {
+  fill: var(--muted);
+  font-size: 11px;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
 .alert-card {
   display: grid;
   gap: 12px;

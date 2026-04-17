@@ -180,7 +180,6 @@ function buildMetrics() {
 
 function buildKpis(metrics) {
   const dueDelta = metrics.latest.totalDue - metrics.previous.totalDue;
-  const escrowDelta = metrics.latest.endingEscrowBalance - metrics.previous.endingEscrowBalance;
   const occupancyDelta = mortgageData.rentRoll.occupiedRate - 0.95;
   const incomeDelta = metrics.incomeGap;
 
@@ -250,17 +249,52 @@ function buildKpis(metrics) {
   `).join("");
 }
 
-function renderChart(containerId, series, formatter, classResolver) {
-  const container = document.getElementById(containerId);
-  const maxValue = Math.max(...series.map((item) => item.value || 0), 1);
-
-  container.innerHTML = series.map((item) => `
-    <div class="chart-bar ${classResolver ? classResolver(item) : ""}">
-      <div class="chart-bar-value">${formatter(item.value)}</div>
-      <div class="chart-bar-column" style="height:${Math.max(36, (item.value / maxValue) * 170)}px"></div>
-      <div class="chart-bar-label">${item.label}</div>
-    </div>
+function buildLineChartMarkup(series, options = {}) {
+  const width = 520;
+  const height = options.compact ? 200 : 240;
+  const padding = { top: 22, right: 18, bottom: 34, left: 18 };
+  const chartWidth = width - padding.left - padding.right;
+  const chartHeight = height - padding.top - padding.bottom;
+  const values = series.map((item) => item.value || 0);
+  const maxValue = Math.max(...values, 1);
+  const minValue = Math.min(...values, 0);
+  const range = Math.max(maxValue - minValue, 1);
+  const getX = (index) => padding.left + ((chartWidth / Math.max(series.length - 1, 1)) * index);
+  const getY = (value) => padding.top + ((maxValue - value) / range) * chartHeight;
+  const points = series.map((item, index) => ({
+    ...item,
+    x: getX(index),
+    y: getY(item.value || 0)
+  }));
+  const path = points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
+  const areaPath = `${path} L ${points[points.length - 1].x} ${height - padding.bottom} L ${points[0].x} ${height - padding.bottom} Z`;
+  const variantClass = options.variant || "";
+  const gridMarkup = Array.from({ length: 4 }, (_, index) => {
+    const y = padding.top + (chartHeight / 3) * index;
+    return `<line class="line-grid" x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}"></line>`;
+  }).join("");
+  const pointsMarkup = points.map((point) => `
+    <circle class="line-point ${variantClass} ${point.anomaly ? "anomaly" : ""}" cx="${point.x}" cy="${point.y}" r="${point.anomaly ? 5 : 4}"></circle>
   `).join("");
+  const labelsMarkup = points
+    .filter((_, index) => index === 0 || index === points.length - 1 || index % 3 === 0)
+    .map((point) => `<text class="line-label" x="${point.x}" y="${height - 12}" text-anchor="middle">${point.label}</text>`)
+    .join("");
+
+  return `
+    <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+      ${gridMarkup}
+      <path class="line-area ${variantClass}" d="${areaPath}"></path>
+      <path class="line-path ${variantClass}" d="${path}"></path>
+      ${pointsMarkup}
+      ${labelsMarkup}
+    </svg>
+  `;
+}
+
+function renderLineChart(containerId, series, options = {}) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = buildLineChartMarkup(series, options);
 }
 
 function renderTrends(metrics) {
@@ -272,45 +306,56 @@ function renderTrends(metrics) {
   debtChip.innerHTML = `${arrowFor(debtDelta)} ${formatCurrency(Math.abs(debtDelta), true)}`;
   debtChip.classList.add(compareChipClass(debtDelta, true));
   document.getElementById("debt-trend-headline").textContent = formatCurrency(metrics.latest.totalDue, true);
-  renderChart(
+  renderLineChart(
     "debt-trend-chart",
-    metrics.last12.map((row) => ({ label: compactMonth(row.statementDate), value: row.totalDue })),
-    (value) => formatCurrency(value),
-    (item) => item.value > metrics.latest.totalDue ? "warn" : ""
+    metrics.last12.map((row) => ({
+      label: compactMonth(row.statementDate),
+      value: row.totalDue,
+      anomaly: row.totalDue >= 113000 || row.totalDue <= 104000
+    })),
+    {
+      variant: "warn"
+    }
   );
-  document.getElementById("debt-trend-insight").textContent = "Carry remains elevated vs trailing baseline.";
+  document.getElementById("debt-trend-insight").textContent = "Trend stays elevated with repeated peaks above $113K.";
 
   const escrowChip = document.getElementById("escrow-trend-chip");
   escrowChip.innerHTML = `${arrowFor(escrowDelta)} ${formatCurrency(Math.abs(escrowDelta), true)}`;
   escrowChip.classList.add(compareChipClass(escrowDelta));
   document.getElementById("escrow-trend-headline").textContent = formatCurrency(metrics.latest.endingEscrowBalance, true);
-  renderChart(
+  renderLineChart(
     "escrow-trend-chart",
-    metrics.last12.map((row) => ({ label: compactMonth(row.statementDate), value: row.endingEscrowBalance || 0 })),
-    (value) => formatCurrency(value),
-    (item) => item.value < metrics.escrowPeak * 0.45 ? "danger" : item.value < metrics.escrowPeak * 0.65 ? "warn" : ""
+    metrics.last12.map((row) => ({
+      label: compactMonth(row.statementDate),
+      value: row.endingEscrowBalance || 0,
+      anomaly: (row.endingEscrowBalance || 0) < metrics.escrowPeak * 0.45
+    })),
+    {
+      variant: "danger"
+    }
   );
-  document.getElementById("escrow-trend-insight").textContent = "Escrow still sits well below prior peak.";
+  document.getElementById("escrow-trend-insight").textContent = "Escrow rebounds, but still tracks below prior comfort levels.";
 
   const principalChip = document.getElementById("principal-trend-chip");
   principalChip.innerHTML = `${arrowFor(principalDelta)} ${formatCurrency(Math.abs(principalDelta), true)}`;
   principalChip.classList.add(compareChipClass(principalDelta, true));
   document.getElementById("principal-trend-headline").textContent = formatCurrency(metrics.latest.principalBalance, true);
-  renderChart(
+  renderLineChart(
     "principal-trend-chart",
     mortgageData.statements.map((row, index) => {
       const previous = mortgageData.statements[index - 1];
-      const drawEvent = previous ? Math.abs(row.principalBalance - previous.principalBalance) > 1000 : false;
       return {
         label: compactMonth(row.statementDate),
         value: row.principalBalance,
-        drawEvent
+        anomaly: previous ? Math.abs(row.principalBalance - previous.principalBalance) > 1000 : false
       };
     }),
-    (value) => formatCurrency(value),
-    (item) => item.drawEvent ? "warn" : ""
+    {
+      variant: "danger",
+      compact: true
+    }
   );
-  document.getElementById("principal-trend-insight").textContent = "Draws lifted leverage without amortization.";
+  document.getElementById("principal-trend-insight").textContent = "Line steps up around draws and never trends down.";
 }
 
 function renderAlerts(metrics) {
@@ -365,7 +410,7 @@ function renderDrivers(metrics) {
     <div class="rank-item">
       <div class="rank-head">
         <strong>${item.label}</strong>
-        <span>${formatCurrency(item.value, true)} · ${formatPercent(item.value / grossPotential, 1)}</span>
+        <span>${formatCurrency(item.value, true)} &middot; ${formatPercent(item.value / grossPotential, 1)}</span>
       </div>
       <div class="meter">
         <div class="meter-fill ${item.className}" style="width:${(item.value / leakageDrivers[0].value) * 100}%"></div>
@@ -400,12 +445,12 @@ function renderDrivers(metrics) {
   document.getElementById("capital-options").innerHTML = metrics.refinanceOptions.map((quote, index) => `
     <div class="option-card">
       <div class="option-head">
-        <strong>${quote.lender} · ${quote.product}</strong>
+        <strong>${quote.lender} &middot; ${quote.product}</strong>
         <span class="risk-chip ${index === 0 ? "risk-opportunity" : "risk-medium"}">${index === 0 ? "best" : "alt"}</span>
       </div>
       <div class="option-metrics">
-        <span>Rate ${formatPercent(quote.noteRate, 2)} · LTV ${formatPercent(quote.ltv, 1)}</span>
-        <span>Savings ${formatCurrency(quote.monthlySavings, true)} · Gap ${formatCurrency(Math.abs(quote.takeoutGap), true)}</span>
+        <span>Rate ${formatPercent(quote.noteRate, 2)} &middot; LTV ${formatPercent(quote.ltv, 1)}</span>
+        <span>Savings ${formatCurrency(quote.monthlySavings, true)} &middot; Gap ${formatCurrency(Math.abs(quote.takeoutGap), true)}</span>
       </div>
     </div>
   `).join("");
@@ -419,7 +464,7 @@ function buildPriorities(metrics) {
       title: "Close refinance path",
       area: "Capital",
       signal: `${formatCurrency(Math.abs(metrics.refinanceOptions[0].takeoutGap), true)} takeout gap`,
-      action: "Choose lender path and solve funding gap.",
+      recommendation: "Choose lender path and solve funding gap.",
       owner: "Asset Mgmt",
       timing: "30 days"
     },
@@ -428,7 +473,7 @@ function buildPriorities(metrics) {
       title: "Stabilize collections",
       area: "Collections",
       signal: `${formatCurrency(Math.abs(mortgageData.budget.badDebtYtd), true)} bad debt`,
-      action: "Escalate delinquency review and recovery plan.",
+      recommendation: "Escalate delinquency review and recovery plan.",
       owner: "Ops + AM",
       timing: "Immediate"
     },
@@ -437,7 +482,7 @@ function buildPriorities(metrics) {
       title: "Reduce vacancy leakage",
       area: "Leasing",
       signal: `${formatCurrency(Math.abs(mortgageData.budget.vacancyYtd), true)} vacancy drag`,
-      action: "Prioritize notice and vacant turns.",
+      recommendation: "Prioritize notice and vacant turns.",
       owner: "Regional Ops",
       timing: "2 weeks"
     },
@@ -446,7 +491,7 @@ function buildPriorities(metrics) {
       title: "Recheck escrow adequacy",
       area: "Liquidity",
       signal: `${formatCurrency(metrics.latest.endingEscrowBalance, true)} current escrow`,
-      action: "Refresh tax and insurance reserve forecast.",
+      recommendation: "Refresh tax and insurance reserve forecast.",
       owner: "Treasury",
       timing: "This month"
     },
@@ -455,7 +500,7 @@ function buildPriorities(metrics) {
       title: "Use rate relief",
       area: "Strategy",
       signal: `${formatCurrency(metrics.refinanceOptions[0].monthlySavings, true)} best monthly savings`,
-      action: "Pair refi case with operating plan reset.",
+      recommendation: "Pair refi case with operating plan reset.",
       owner: "Asset Mgmt",
       timing: "Q plan"
     }
@@ -476,7 +521,7 @@ function renderPriorities(metrics) {
       </td>
       <td>${item.area}</td>
       <td>${item.signal}</td>
-      <td>${item.action}</td>
+      <td>${item.recommendation}</td>
       <td>${item.owner}</td>
       <td>${item.timing}</td>
     </tr>
@@ -495,14 +540,14 @@ function bindFilters(metrics) {
   });
 }
 
-function initHeader(metrics) {
+function initHeader() {
   document.getElementById("portfolio-status").textContent = "Watchlist";
   document.getElementById("latest-cycle").textContent = formatDate(mortgageData.currentDebt.latestDueDate);
 }
 
 function init() {
   const metrics = buildMetrics();
-  initHeader(metrics);
+  initHeader();
   buildKpis(metrics);
   renderTrends(metrics);
   renderAlerts(metrics);
