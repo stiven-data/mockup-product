@@ -55,9 +55,13 @@ function calculateDirection(current, previous, inverseGood = false) {
 function buildMortgageDecisionModel(data) {
   const latest = data.statements[data.statements.length - 1];
   const previous = data.statements[data.statements.length - 2] || latest;
-  const marketValue = data.refinancing[0].proposedLoanAmount / data.refinancing[0].ltv;
+  const marketValue = data.analysis.marketValue;
   const annualDebtService = data.currentDebt.monthlyInterestOnly * 12;
   const priorNoi = data.analysis.priorNoi;
+
+  if (!marketValue) {
+    throw new Error("buildMortgageDecisionModel requires data.analysis.marketValue");
+  }
 
   const metrics = {
     marketValue,
