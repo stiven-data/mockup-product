@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oasis at San Marco | Mortgage Executive Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="masthead">
+      <div class="masthead-copy">
+        <p class="eyebrow">Mortgage Executive Dashboard</p>
+        <h1>Oasis at San Marco</h1>
+        <p class="subtitle">Indicators · Trends · Critical Points · Risks & Alerts</p>
+      </div>
+
+      <div class="masthead-actions">
+        <div class="status-badge">
+          <span class="status-label">Status</span>
+          <strong id="portfolio-status">Watchlist</strong>
+        </div>
+        <div class="status-badge subtle">
+          <span class="status-label">Latest Cycle</span>
+          <strong id="latest-cycle">Feb 2026 due</strong>
+        </div>
+        <button class="drilldown-button" type="button">View Details</button>
+      </div>
+    </header>
+
+    <nav class="section-nav" aria-label="Page sections">
+      <a href="#overview">Overview</a>
+      <a href="#trends">Trends</a>
+      <a href="#warnings">Alerts</a>
+      <a href="#drivers">Drivers</a>
+      <a href="#priorities">Priorities</a>
+    </nav>
+
+    <main class="page-content">
+      <section id="overview" class="story-section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">1. Overview</p>
+            <h2>Key indicators</h2>
+          </div>
+        </div>
+
+        <div id="overview-kpis" class="overview-kpis"></div>
+        <div id="critical-strip" class="critical-strip"></div>
+      </section>
+
+      <section id="trends" class="story-section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">2. Trends</p>
+            <h2>Direction of travel</h2>
+          </div>
+        </div>
+
+        <div class="trend-grid">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="panel-label">Debt service</p>
+                <h3 id="debt-trend-headline">Monthly total due</h3>
+              </div>
+              <span id="debt-trend-chip" class="compare-chip">vs prior</span>
+            </div>
+            <div id="debt-trend-chart" class="chart-bars"></div>
+            <p id="debt-trend-insight" class="micro-insight"></p>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="panel-label">Escrow</p>
+                <h3 id="escrow-trend-headline">Liquidity cushion</h3>
+              </div>
+              <span id="escrow-trend-chip" class="compare-chip">vs prior</span>
+            </div>
+            <div id="escrow-trend-chart" class="chart-bars"></div>
+            <p id="escrow-trend-insight" class="micro-insight"></p>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="panel-label">Leverage</p>
+                <h3 id="principal-trend-headline">Principal balance</h3>
+              </div>
+              <span id="principal-trend-chip" class="compare-chip">vs start</span>
+            </div>
+            <div id="principal-trend-chart" class="chart-bars compact"></div>
+            <p id="principal-trend-insight" class="micro-insight"></p>
+          </article>
+        </div>
+      </section>
+
+      <section id="warnings" class="story-section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">3. Alerts / Early Warnings</p>
+            <h2>Critical points</h2>
+          </div>
+        </div>
+
+        <div id="alert-grid" class="alert-grid"></div>
+      </section>
+
+      <section id="drivers" class="story-section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">4. Drivers / Segmentación</p>
+            <h2>Risk concentration</h2>
+          </div>
+        </div>
+
+        <div class="driver-grid">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="panel-label">Revenue leakage</p>
+                <h3>Loss drivers</h3>
+              </div>
+            </div>
+            <div id="leakage-list" class="rank-list"></div>
+            <p id="leakage-insight" class="micro-insight"></p>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="panel-label">Unit status</p>
+                <h3>Exposure by cohort</h3>
+              </div>
+            </div>
+            <div id="status-segment-bar" class="segment-bar"></div>
+            <div id="status-legend" class="segment-legend"></div>
+            <p id="status-insight" class="micro-insight"></p>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="panel-label">Capital options</p>
+                <h3>Refi window</h3>
+              </div>
+            </div>
+            <div id="capital-options" class="option-stack"></div>
+            <p id="capital-insight" class="micro-insight"></p>
+          </article>
+        </div>
+      </section>
+
+      <section id="priorities" class="story-section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">5. Tabla de Prioridades</p>
+            <h2>Where to act first</h2>
+          </div>
+        </div>
+
+        <article class="panel">
+          <div class="priority-toolbar">
+            <div class="filter-group" aria-label="Priority filters">
+              <button class="filter-chip active" data-filter="all" type="button">All</button>
+              <button class="filter-chip" data-filter="critical" type="button">Critical</button>
+              <button class="filter-chip" data-filter="high" type="button">High</button>
+              <button class="filter-chip" data-filter="opportunity" type="button">Opportunity</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Priority</th>
+                  <th>Area</th>
+                  <th>Signal</th>
+                  <th>Action</th>
+                  <th>Owner</th>
+                  <th>Timing</th>
+                </tr>
+              </thead>
+              <tbody id="priority-table-body"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
