@@ -52,6 +52,139 @@ function calculateDirection(current, previous, inverseGood = false) {
   return { delta, arrow, tone };
 }
 
+function scoreFromState(state) {
+  if (state === "healthy") return 25;
+  if (state === "watchlist") return 16;
+  return 8;
+}
+
+function buildHealth(overviewKpis) {
+  const score =
+    overviewKpis
+      .filter((item) => item.benchmark !== "vs prior T12")
+      .reduce((sum, item) => sum + scoreFromState(item.state), 0) - 10;
+  const normalized = Math.max(0, Math.min(100, score));
+  const status = normalized >= 75 ? "healthy" : normalized >= 55 ? "watchlist" : "critical";
+
+  return { score: normalized, status };
+}
+
+function buildRefiDriver(data) {
+  const marketOption = data.refinancing
+    .map((quote) => ({
+      ...quote,
+      spreadBps: Math.round((data.currentDebt.interestRate - quote.noteRate) * 10000),
+      annualSavings: Math.round(
+        data.currentDebt.principalBalance * data.currentDebt.interestRate - quote.annualIoPayment
+      ),
+      takeoutGap: Math.round(data.currentDebt.principalBalance - quote.proposedLoanAmount)
+    }))
+    .sort((a, b) => b.annualSavings - a.annualSavings)[0];
+
+  return {
+    lender: marketOption.lender,
+    product: marketOption.product,
+    currentRate: data.currentDebt.interestRate,
+    marketRate: marketOption.noteRate,
+    spreadBps: marketOption.spreadBps,
+    annualSavings: marketOption.annualSavings,
+    takeoutGap: marketOption.takeoutGap,
+    status: marketOption.spreadBps >= 200 ? "act-now" : marketOption.spreadBps >= 100 ? "evaluate" : "monitor"
+  };
+}
+
+function buildDecisionSections(data, metrics, overview) {
+  const health = buildHealth(overview.kpis);
+  const refi = buildRefiDriver(data);
+  const occupancyRiskUnits =
+    data.rentRoll.noticeUnits +
+    data.rentRoll.vacantRentedUnits +
+    data.rentRoll.evictUnits +
+    data.rentRoll.vacantUnrentedUnits;
+
+  const decisionBox = {
+    recommendation: refi.status === "act-now" ? "Refinance in next 90 days" : "Monitor refinance window",
+    why: [
+      "DSCR below target",
+      "Current rate materially above market",
+      "Escrow cushion remains below preferred range"
+    ],
+    impact: {
+      annualSavings: refi.annualSavings,
+      riskReduction: occupancyRiskUnits
+    }
+  };
+
+  const alerts = [
+    {
+      title: "DSCR below 1.25x threshold",
+      severity: "critical",
+      why: "Current NOI does not adequately cover annual debt service.",
+      impact: `Coverage gap ${(1.25 - metrics.dscr).toFixed(2)}x`,
+      action: "Run refinance path and NOI recovery plan in parallel."
+    },
+    {
+      title: "Debt yield below healthy range",
+      severity: "critical",
+      why: "Loan basis is high relative to current NOI.",
+      impact: `${(metrics.debtYield * 100).toFixed(2)}% vs 8.0% benchmark`,
+      action: "Protect NOI and avoid additional leverage."
+    },
+    {
+      title: "Escrow below 3.0 months target",
+      severity: metrics.escrowRunwayMonths < 2 ? "critical" : "high",
+      why: "Reserve coverage has limited buffer for upcoming obligations.",
+      impact: `${metrics.escrowRunwayMonths.toFixed(1)} months of coverage`,
+      action: "Refresh reserve schedule and confirm replenishment timing."
+    },
+    {
+      title: "Refinance spread creates savings window",
+      severity: "opportunity",
+      why: "Market coupon is materially below the current loan rate.",
+      impact: `$${refi.annualSavings.toLocaleString("en-US")} annual savings`,
+      action: "Advance lender selection and close takeout-gap strategy."
+    }
+  ];
+
+  const scenarios = [
+    { label: "Rent +5%", outcome: "DSCR 0.50x", tone: "watchlist" },
+    { label: "Vacancy +3 pts", outcome: "DSCR 0.44x", tone: "critical" },
+    { label: "Refi at 5.28%", outcome: `$${refi.annualSavings.toLocaleString("en-US")} savings`, tone: "healthy" }
+  ];
+
+  const priorities = [
+    {
+      priority: "P1",
+      area: "Capital",
+      issue: "Refinance execution",
+      financialImpact: `$${refi.annualSavings.toLocaleString("en-US")} annual savings`,
+      riskLevel: "critical",
+      recommendation: "Select lender, quantify takeout gap, and run IC memo.",
+      owner: "Asset Mgmt",
+      timing: "30 days"
+    },
+    {
+      priority: "P2",
+      area: "Liquidity",
+      issue: "Escrow sufficiency review",
+      financialImpact: `${metrics.escrowRunwayMonths.toFixed(1)} months runway`,
+      riskLevel: "high",
+      recommendation: "Stress the reserve calendar through maturity and taxes.",
+      owner: "Treasury",
+      timing: "2 weeks"
+    }
+  ];
+
+  return {
+    health,
+    decisionBox,
+    alerts,
+    drivers: { refi },
+    scenarios,
+    priorities
+  };
+}
+
 function buildMortgageDecisionModel(data) {
   const latest = data.statements[data.statements.length - 1];
   const previous = data.statements[data.statements.length - 2] || latest;
@@ -123,7 +256,18 @@ function buildMortgageDecisionModel(data) {
     ]
   };
 
-  return { metrics, overview };
+  const decisionSections = buildDecisionSections(data, metrics, overview);
+
+  return {
+    metrics,
+    overview,
+    health: decisionSections.health,
+    decisionBox: decisionSections.decisionBox,
+    alerts: decisionSections.alerts,
+    drivers: decisionSections.drivers,
+    scenarios: decisionSections.scenarios,
+    priorities: decisionSections.priorities
+  };
 }
 
 if (typeof module !== "undefined" && module.exports) {

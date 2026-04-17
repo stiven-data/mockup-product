@@ -84,6 +84,22 @@ test("buildMortgageDecisionModel returns mortgage-health KPIs with benchmark sta
   assert.equal(model.overview.kpis[3].state, "critical");
 });
 
+test("buildMortgageDecisionModel returns decision-support sections", () => {
+  const model = buildMortgageDecisionModel(fixture);
+
+  assert.equal(model.health.score, 38);
+  assert.equal(model.health.status, "critical");
+  assert.equal(model.decisionBox.recommendation, "Refinance in next 90 days");
+  assert.equal(model.decisionBox.impact.annualSavings, 410845);
+  assert.equal(model.alerts[0].title, "DSCR below 1.25x threshold");
+  assert.equal(model.alerts[0].severity, "critical");
+  assert.equal(model.drivers.refi.spreadBps, 322);
+  assert.equal(model.drivers.refi.status, "act-now");
+  assert.equal(model.scenarios[0].label, "Rent +5%");
+  assert.equal(model.priorities[0].area, "Capital");
+  assert.equal(model.priorities[0].riskLevel, "critical");
+});
+
 test("evaluateBenchmark uses inclusive threshold boundaries", () => {
   assert.equal(evaluateBenchmark("dscr", 1.25), "healthy");
   assert.equal(evaluateBenchmark("dscr", 1.1), "watchlist");
