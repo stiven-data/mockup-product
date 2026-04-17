@@ -144,7 +144,7 @@ function buildRefiAlert(refi) {
 
   if (!isPositiveNumber(refi.annualSavings) || refi.status === "monitor") {
     const impact =
-      typeof refi.annualSavings === "number"
+      typeof refi.annualSavings === "number" && Number.isFinite(refi.annualSavings)
         ? `${formatCurrency(Math.abs(refi.annualSavings))} annual drag at current quotes`
         : "No positive debt-service savings identified";
 
@@ -166,7 +166,7 @@ function buildRefiAlert(refi) {
   };
 }
 
-function buildDecisionSections(data, metrics, benchmarkStates, overview) {
+function buildDecisionSections(data, metrics, benchmarkStates) {
   const health = buildHealth(benchmarkStates);
   const refi = buildRefiDriver(data);
   const shouldActOnRefi = refi.status === "act-now" || refi.status === "evaluate";
@@ -377,7 +377,7 @@ function buildMortgageDecisionModel(data) {
     ]
   };
 
-  const decisionSections = buildDecisionSections(data, metrics, benchmarkStates, overview);
+  const decisionSections = buildDecisionSections(data, metrics, benchmarkStates);
 
   return {
     metrics,
