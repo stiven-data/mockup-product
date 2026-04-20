@@ -101,6 +101,29 @@ function buildFieldSet(source = {}) {
   }));
 }
 
+function buildChartSeries(latest) {
+  const hasTaxes = !isMissing(latest?.taxEscrow);
+  const hasInsurance = !isMissing(latest?.insuranceEscrow);
+
+  return [
+    {
+      key: "interest",
+      label: "Interest",
+      state: "missing"
+    },
+    {
+      key: "taxEscrow",
+      label: "Taxes",
+      state: hasTaxes ? "available" : "missing"
+    },
+    {
+      key: "insuranceEscrow",
+      label: "Insurance",
+      state: hasInsurance ? "available" : "missing"
+    }
+  ];
+}
+
 function buildServicerSection(data) {
   const currentDebt = safeObject(data.currentDebt);
   const servicerSource = safeObject(data.servicer);
@@ -156,9 +179,11 @@ function buildLoanOverview(data, latest) {
     buildField("Statement date", latest?.statementDate, (value) => value),
     buildField("Due date", currentDebt.latestDueDate ?? metadata.dueDate, (value) => value),
     buildField("Monthly total due", latest?.totalDue, formatMoney),
-    buildField("Other escrow", latest?.endingEscrowBalance, formatMoney),
-    buildField("Interest rate", currentDebt.interestRate ?? metadata.interestRate, formatPercent),
-    buildField("Principal balance", latest?.principalBalance, formatMoney),
+    buildField("Outstanding balance", latest?.principalBalance, formatMoney),
+    buildField("Interest amount", null, formatMoney),
+    buildField("Tax escrow", latest?.taxEscrow, formatMoney),
+    buildField("Insurance escrow", latest?.insuranceEscrow, formatMoney),
+    buildField("Other escrow", latest?.otherEscrow, formatMoney),
     buildField("Loan amount", metadata.loanAmount, formatMoney),
     buildField("Loan term", metadata.loanTerm, (value) => value),
     buildField("Start date", metadata.startDate, (value) => value),
@@ -174,9 +199,11 @@ function buildDetailRows(selected, data) {
     buildField("Statement date", selected?.statementDate, (value) => value),
     buildField("Due date", currentDebt.latestDueDate ?? metadata.dueDate, (value) => value),
     buildField("Monthly total due", selected?.totalDue, formatMoney),
-    buildField("Other escrow", selected?.endingEscrowBalance, formatMoney),
-    buildField("Interest rate", currentDebt.interestRate ?? metadata.interestRate, formatPercent),
-    buildField("Principal balance", selected?.principalBalance, formatMoney),
+    buildField("Outstanding balance", selected?.principalBalance, formatMoney),
+    buildField("Interest amount", null, formatMoney),
+    buildField("Tax escrow", selected?.taxEscrow, formatMoney),
+    buildField("Insurance escrow", selected?.insuranceEscrow, formatMoney),
+    buildField("Other escrow", selected?.otherEscrow, formatMoney),
     buildField("Source file", selected?.sourceFile, (value) => value)
   ];
 }
@@ -206,9 +233,9 @@ function buildLatestInsight(latest, gapSummary) {
   }
 
   const components = [
-    { label: "Principal balance", value: latest.principalBalance },
-    { label: "Monthly total due", value: latest.totalDue },
-    { label: "Other escrow", value: latest.endingEscrowBalance }
+    { label: "Tax escrow", value: latest.taxEscrow },
+    { label: "Insurance escrow", value: latest.insuranceEscrow },
+    { label: "Other escrow", value: latest.otherEscrow }
   ]
     .filter((component) => typeof component.value === "number" && Number.isFinite(component.value))
     .sort((a, b) => b.value - a.value);
@@ -217,8 +244,8 @@ function buildLatestInsight(latest, gapSummary) {
 
   return {
     primary: leadingComponent
-      ? `${leadingComponent.label} is the largest tracked component in the latest statement.`
-      : "Latest statement values are limited to the fields present in the source data.",
+      ? `${leadingComponent.label} is the largest supported component in the latest statement.`
+      : "Latest statement values are limited to the supported escrow components present in the source data.",
     secondary: `${gapSummary.length} fields remain unavailable in statements.`
   };
 }
@@ -242,13 +269,11 @@ function buildStatementDashboardModel(data = fallbackStatementData, options = {}
           statementDate: row.statementDate,
           principalBalance: row.principalBalance,
           totalDue: row.totalDue,
-          endingEscrowBalance: row.endingEscrowBalance
+          taxEscrow: row.taxEscrow,
+          insuranceEscrow: row.insuranceEscrow,
+          otherEscrow: row.otherEscrow
         })),
-        series: [
-          { key: "principalBalance", label: "Principal balance" },
-          { key: "totalDue", label: "Monthly total due" },
-          { key: "endingEscrowBalance", label: "Other escrow" }
-        ]
+        series: buildChartSeries(latest)
       },
       loanOverview,
       servicer,
@@ -266,8 +291,11 @@ function buildStatementDashboardModel(data = fallbackStatementData, options = {}
         .map((row) => ({
           statementDate: row.statementDate,
           principalBalance: row.principalBalance,
+          interestAmount: null,
+          taxEscrow: row.taxEscrow,
+          insuranceEscrow: row.insuranceEscrow,
+          otherEscrow: row.otherEscrow,
           totalDue: row.totalDue,
-          endingEscrowBalance: row.endingEscrowBalance,
           sourceLabel: row.sourceFile || "Not available in statements"
         })),
       selectedStatement: selected || null,
@@ -329,7 +357,7 @@ function buildLegacyCompatibilityModel(statementModel) {
         chipTone: "watchlist",
         series: points.map((point) => ({
           label: point.label,
-          value: point.endingEscrowBalance || 0,
+          value: point.otherEscrow || 0,
           anomaly: false
         })),
         insight: "Escrow values are sourced only from the available statements."
