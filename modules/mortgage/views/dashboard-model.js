@@ -102,22 +102,22 @@ function buildFieldSet(source = {}) {
 }
 
 function buildChartSeries(latest) {
-  const hasTaxes = !isMissing(latest?.taxEscrow);
-  const hasInsurance = !isMissing(latest?.insuranceEscrow);
+  const hasTaxes = !isMissing(latest?.taxes);
+  const hasInsurance = !isMissing(latest?.insurance);
 
   return [
     {
-      key: "interest",
+      key: "interestPaid",
       label: "Interest",
       state: "missing"
     },
     {
-      key: "taxEscrow",
+      key: "taxes",
       label: "Taxes",
       state: hasTaxes ? "available" : "missing"
     },
     {
-      key: "insuranceEscrow",
+      key: "insurance",
       label: "Insurance",
       state: hasInsurance ? "available" : "missing"
     }
@@ -125,13 +125,10 @@ function buildChartSeries(latest) {
 }
 
 function buildServicerSection(data) {
-  const currentDebt = safeObject(data.currentDebt);
   const servicerSource = safeObject(data.servicer);
-  const nameValue =
-    currentDebt.servicer ?? servicerSource.name ?? servicerSource.servicer ?? null;
 
   const fields = buildFieldSet({
-    name: nameValue,
+    name: servicerSource.name,
     role: servicerSource.role,
     email: servicerSource.email,
     phone: servicerSource.phone,
@@ -172,17 +169,16 @@ function buildKeyContactsSection(data) {
 }
 
 function buildLoanOverview(data, latest) {
-  const currentDebt = safeObject(data.currentDebt);
   const metadata = safeObject(data.metadata);
 
   return [
     buildField("Outstanding balance", latest?.principalBalance, formatMoney),
     buildField("Interest amount", null, formatMoney),
-    buildField("Tax escrow", latest?.taxEscrow, formatMoney),
-    buildField("Insurance escrow", latest?.insuranceEscrow, formatMoney),
+    buildField("Tax escrow", latest?.taxes, formatMoney),
+    buildField("Insurance escrow", latest?.insurance, formatMoney),
     buildField("Other escrow", latest?.otherEscrow, formatMoney),
     buildField("Statement date", latest?.statementDate, (value) => value),
-    buildField("Due date", currentDebt.latestDueDate ?? metadata.dueDate, (value) => value),
+    buildField("Due date", metadata.dueDate, (value) => value),
     buildField("Monthly total due", latest?.totalDue, formatMoney),
     buildField("Loan amount", metadata.loanAmount, formatMoney),
     buildField("Loan term", metadata.loanTerm, (value) => value),
@@ -192,34 +188,37 @@ function buildLoanOverview(data, latest) {
 }
 
 function buildDetailRows(selected, data) {
-  const currentDebt = safeObject(data.currentDebt);
   const metadata = safeObject(data.metadata);
 
   return [
     buildField("Outstanding balance", selected?.principalBalance, formatMoney),
     buildField("Interest amount", null, formatMoney),
-    buildField("Tax escrow", selected?.taxEscrow, formatMoney),
-    buildField("Insurance escrow", selected?.insuranceEscrow, formatMoney),
+    buildField("Tax escrow", selected?.taxes, formatMoney),
+    buildField("Insurance escrow", selected?.insurance, formatMoney),
     buildField("Other escrow", selected?.otherEscrow, formatMoney),
     buildField("Statement date", selected?.statementDate, (value) => value),
-    buildField("Due date", currentDebt.latestDueDate ?? metadata.dueDate, (value) => value),
+    buildField("Due date", metadata.dueDate, (value) => value),
     buildField("Monthly total due", selected?.totalDue, formatMoney),
     buildField("Source file", selected?.sourceFile, (value) => value)
   ];
 }
 
-function buildGapSummary(loanOverview, servicerSection, keyContactsSection) {
-  const gaps = loanOverview
-    .filter((item) => item.state === "missing")
-    .map((item) => item.label);
+function buildGapSummary(data) {
+  const metadata = safeObject(data.metadata);
+  const servicer = safeObject(data.servicer);
+  const keyContacts = safeArray(data.keyContacts);
 
-  servicerSection.fields
-    .filter((field) => field.state === "missing")
-    .forEach((field) => gaps.push(`Servicer ${field.label.toLowerCase()}`));
+  const gaps = [];
 
-  keyContactsSection.fields
-    .filter((field) => field.state === "missing")
-    .forEach((field) => gaps.push(`Key contact ${field.label.toLowerCase()}`));
+  if (isMissing(metadata.loanAmount)) gaps.push("Loan amount");
+  if (isMissing(metadata.loanTerm)) gaps.push("Loan term");
+  if (isMissing(metadata.startDate)) gaps.push("Start date");
+  if (isMissing(metadata.maturityDate)) gaps.push("Maturity date");
+  if (isMissing(metadata.dueDate)) gaps.push("Due date");
+  if (isMissing(servicer.name) && isMissing(servicer.role) && isMissing(servicer.email) && isMissing(servicer.phone) && isMissing(servicer.contact)) {
+    gaps.push("Servicer");
+  }
+  if (keyContacts.length === 0) gaps.push("Key contacts");
 
   return gaps;
 }
@@ -233,8 +232,8 @@ function buildLatestInsight(latest, gapSummary) {
   }
 
   const components = [
-    { label: "Tax escrow", value: latest.taxEscrow },
-    { label: "Insurance escrow", value: latest.insuranceEscrow },
+    { label: "Tax escrow", value: latest.taxes },
+    { label: "Insurance escrow", value: latest.insurance },
     { label: "Other escrow", value: latest.otherEscrow }
   ]
     .filter((component) => typeof component.value === "number" && Number.isFinite(component.value))
@@ -257,9 +256,9 @@ function buildStatementDashboardModel(data = fallbackStatementData, options = {}
   const selectedStatementDate = options.selectedStatementDate || latest?.statementDate || null;
   const selected = ordered.find((row) => row.statementDate === selectedStatementDate) || latest;
   const loanOverview = buildLoanOverview(source, latest);
-  const servicer = buildServicerSection(source);
-  const keyContacts = buildKeyContactsSection(source);
-  const gapSummary = buildGapSummary(loanOverview, servicer, keyContacts);
+  const servicerCard = buildServicerSection(source);
+  const keyContactsCard = buildKeyContactsSection(source);
+  const gapSummary = buildGapSummary(source);
 
   return {
     strategic: {
@@ -268,18 +267,17 @@ function buildStatementDashboardModel(data = fallbackStatementData, options = {}
           label: formatStatementMonth(row.statementDate),
           statementDate: row.statementDate,
           principalBalance: row.principalBalance,
+          interestPaid: row.interestPaid,
           totalDue: row.totalDue,
-          taxEscrow: row.taxEscrow,
-          insuranceEscrow: row.insuranceEscrow,
+          taxes: row.taxes,
+          insurance: row.insurance,
           otherEscrow: row.otherEscrow
         })),
         series: buildChartSeries(latest)
       },
       loanOverview,
-      servicerCard: servicer,
-      keyContactsCard: keyContacts,
-      servicer,
-      keyContacts,
+      servicerCard,
+      keyContactsCard,
       latestInsight: buildLatestInsight(latest, gapSummary),
       cta: {
         label: "View operational detail",
@@ -293,9 +291,9 @@ function buildStatementDashboardModel(data = fallbackStatementData, options = {}
         .map((row) => ({
           statementDate: row.statementDate,
           principalBalance: row.principalBalance,
-          interestAmount: null,
-          taxEscrow: row.taxEscrow,
-          insuranceEscrow: row.insuranceEscrow,
+          interestPaid: row.interestPaid,
+          taxes: row.taxes,
+          insurance: row.insurance,
           otherEscrow: row.otherEscrow,
           totalDue: row.totalDue,
           sourceLabel: row.sourceFile || "Not available in statements"
@@ -341,13 +339,13 @@ function buildLegacyCompatibilityModel(statementModel) {
     },
     trends: {
       coverage: {
-        cardKey: "statement-total-due",
-        headline: "Monthly total due",
+        cardKey: "statement-taxes",
+        headline: "Taxes",
         chipLabel: "Statement only",
         chipTone: "watchlist",
         series: points.map((point) => ({
           label: point.label,
-          value: point.totalDue || 0,
+          value: point.taxes || 0,
           anomaly: false
         })),
         insight: "Statement-only compatibility bridge."
