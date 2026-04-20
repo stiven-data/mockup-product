@@ -1,470 +1,215 @@
-const mortgageData = {
-  property: {
-    name: "Oasis at San Marco",
-    city: "Jacksonville, FL"
-  },
-  analysis: {
-    marketValue: 14970243.296551725,
-    priorNoi: 498300
-  },
-  currentDebt: {
-    principalBalance: 10853176.39,
-    interestRate: 0.085,
-    monthlyInterestOnly: 79439.22,
-    monthlyWithEscrow: 112158.22,
-    latestDueDate: "2026-02-09"
-  },
-  rentRoll: {
-    asOf: "2025-09-30",
-    units: 129,
-    occupiedRate: 0.953,
-    currentUnits: 113,
-    vacantRentedUnits: 4,
-    noticeUnits: 4,
-    evictUnits: 4,
-    vacantUnrentedUnits: 2,
-    marketRentTotal: 413769,
-    actualRentTotal: 394425
-  },
-  budget: {
-    totalRentalIncomeYtd: 897404.61,
-    totalRentalIncomeBudgetYtd: 993345,
-    grossPotentialRentYtd: 1323426.84,
-    vacancyYtd: -240058.09,
-    badDebtYtd: -91015.06,
-    concessionsYtd: -30208.5,
-    t12Noi: 455428.84
-  },
-  statements: [
-    { statementDate: "2024-03-09", principalBalance: 10130000, totalDue: 101665.26, endingEscrowBalance: null, sourceFile: "CBRE March 2024 Statement.pdf / Manual" },
-    { statementDate: "2024-04-01", principalBalance: 10130000, totalDue: 101665.26, endingEscrowBalance: 641972.72, sourceFile: "CBRE April Statement 2024.pdf" },
-    { statementDate: "2024-04-24", principalBalance: 10130000, totalDue: 104057.07, endingEscrowBalance: 674096.16, sourceFile: "CBRE May Statement 2024.pdf" },
-    { statementDate: "2024-05-23", principalBalance: 10130000, totalDue: 106448.87, endingEscrowBalance: 706679.38, sourceFile: "CBRE June Statement 2024.pdf" },
-    { statementDate: "2024-06-24", principalBalance: 10130000, totalDue: 104057.07, endingEscrowBalance: 739281.02, sourceFile: "2024.06- June Statement.pdf / CBRE June Statement 2024.pdf" },
-    { statementDate: "2024-07-24", principalBalance: 10130000, totalDue: 106448.87, endingEscrowBalance: 771868.93, sourceFile: "2024.07 - July Statement.pdf / CBRE July Statement 2024.pdf" },
-    { statementDate: "2024-08-23", principalBalance: 10143176.39, totalDue: 106578.43, endingEscrowBalance: 611989.83, sourceFile: "2024.08 - August Statement.pdf / CBRE August Statement 2024.pdf" },
-    { statementDate: "2024-09-24", principalBalance: 10143064.86, totalDue: 104149.61, endingEscrowBalance: 644470.03, sourceFile: "2024.09 - September Statement.pdf / CBRE September Statement 2024.pdf" },
-    { statementDate: "2024-10-24", principalBalance: 10143064.86, totalDue: 106544.5, endingEscrowBalance: 676944.6, sourceFile: "2024.10 - October Statement.pdf / CBRE October Statement 2024.pdf" },
-    { statementDate: "2024-11-22", principalBalance: 10143064.86, totalDue: 104149.61, endingEscrowBalance: 552535.93, sourceFile: "2024.11 - November Statement.pdf / CBRE November Statement 2024.pdf" },
-    { statementDate: "2024-12-23", principalBalance: 10143064.86, totalDue: 32302.9, endingEscrowBalance: 510758.34, sourceFile: "2024.12 - December Statement.pdf / 2025-01- January Statement.pdf" },
-    { statementDate: "2025-02-21", principalBalance: 10401402.81, totalDue: 103758.76, endingEscrowBalance: 337312.89, sourceFile: "2025-02-February Statement.pdf" },
-    { statementDate: "2025-03-24", principalBalance: 10401402.81, totalDue: 109967.49, endingEscrowBalance: 326865.29, sourceFile: "2025-03- March Statement.pdf" },
-    { statementDate: "2025-04-22", principalBalance: 10401402.81, totalDue: 107511.6, endingEscrowBalance: 358315.12, sourceFile: "2025-04-  April Statement.pdf" },
-    { statementDate: "2025-05-23", principalBalance: 10764854.41, totalDue: 112799.38, endingEscrowBalance: 332275.88, sourceFile: "2025-05-May Statement.pdf" },
-    { statementDate: "2025-06-26", principalBalance: 10764854.41, totalDue: 110086.05, endingEscrowBalance: 366196.76, sourceFile: "2025-06-June Statement.pdf" },
-    { statementDate: "2025-07-24", principalBalance: 10853176.39, totalDue: 113545.32, endingEscrowBalance: 399851.86, sourceFile: "2025-07- July Statement.pdf" },
-    { statementDate: "2025-08-25", principalBalance: 10853176.39, totalDue: 113274.22, endingEscrowBalance: 393901.86, sourceFile: "2025-08-August Statement.pdf" },
-    { statementDate: "2025-09-24", principalBalance: 10853176.39, totalDue: 110711.67, endingEscrowBalance: 388471.33, sourceFile: "2025-09 - September Statement.pdf" },
-    { statementDate: "2025-10-23", principalBalance: 10853176.39, totalDue: 113274.22, endingEscrowBalance: 422347.04, sourceFile: "2025-10-October Statement.pdf" },
-    { statementDate: "2025-11-21", principalBalance: 10853176.39, totalDue: 110711.67, endingEscrowBalance: 214251.98, sourceFile: "2025-11- November Statement.pdf" },
-    { statementDate: "2025-12-23", principalBalance: 10853176.39, totalDue: 113274.22, endingEscrowBalance: 248087.47, sourceFile: "2025-12-  December Statement.pdf / 2026-01- January Statement.pdf" },
-    { statementDate: "2026-01-23", principalBalance: 10853176.39, totalDue: 112158.22, endingEscrowBalance: 281922.98, sourceFile: "2026-02- February Statement.pdf" }
-  ],
-  promissoryNotes: [
-    { lender: "Bliss Group, LLC", principalAmount: 13500 },
-    { lender: "CRRE, LLC", principalAmount: 12000 },
-    { lender: "Severn Consulting Solutions, LLC", principalAmount: 20000 },
-    { lender: "Jayant Patel", principalAmount: 20000 },
-    { lender: "ETC Custodian FBO Paul Landman IRA", principalAmount: 5000 },
-    { lender: "Virendra \"Vinnie\" Patel", principalAmount: 50000 }
-  ],
-  refinancing: [
-    { lender: "CBRE", product: "3-Year UST", proposedLoanAmount: 10500000, noteRate: 0.0555, ltv: 0.701 },
-    { lender: "LUMENT", product: "5-Year FNMA", proposedLoanAmount: 9702000, noteRate: 0.0528, ltv: 0.75, annualIoPayment: 511675 },
-    { lender: "LUMENT", product: "7-Year FNMA", proposedLoanAmount: 9607000, noteRate: 0.0536, ltv: 0.75, annualIoPayment: 515031 },
-    { lender: "LUMENT", product: "10-Year FNMA", proposedLoanAmount: 9436000, noteRate: 0.0552, ltv: 0.75, annualIoPayment: 521150 }
-  ]
-};
+const api = window.statementDashboardModel;
+const source = window.mortgageStatementData;
+const model = api.buildStatementDashboardModel(source);
 
-const state = {
-  priorityFilter: "all"
-};
-
-const currency = new Intl.NumberFormat("en-US", {
+const money = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
-  maximumFractionDigits: 0
-});
-
-const currencyExact = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
+  minimumFractionDigits: 2,
   maximumFractionDigits: 2
 });
 
-function formatCurrency(value, exact = false) {
-  if (value === null || value === undefined || Number.isNaN(value)) {
-    return "N/A";
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function formatMoney(value) {
+  return money.format(value);
+}
+
+function formatStateLabel(state) {
+  if (state === "available") {
+    return "Available";
   }
-  return exact ? currencyExact.format(value) : currency.format(value);
-}
 
-function formatPercent(value, digits = 1) {
-  return `${(value * 100).toFixed(digits)}%`;
-}
-
-function formatDate(value) {
-  const date = new Date(`${value}T00:00:00`);
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric"
-  });
-}
-
-function compactMonth(value) {
-  const date = new Date(`${value}T00:00:00`);
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    year: "2-digit"
-  });
-}
-
-function capitalizeLabel(value) {
-  return value.charAt(0).toUpperCase() + value.slice(1);
-}
-
-function compareChipClass(tone) {
-  if (tone === "healthy") {
-    return "good";
+  if (state === "partial") {
+    return "Partial";
   }
-  if (tone === "critical") {
-    return "bad";
+
+  return "Gap in statements";
+}
+
+function buildOperationalHref(statementDate) {
+  return `operational_view.html?statementDate=${encodeURIComponent(statementDate)}`;
+}
+
+function renderHeader() {
+  const latestPoint = model.strategic.chart.points[model.strategic.chart.points.length - 1];
+  const property = source.asset || {};
+
+  document.getElementById("property-name").textContent = property.name || "Mortgage statement dashboard";
+  document.getElementById("property-subtitle").textContent = `${property.location || "Location unavailable"} | Statement-only view`;
+  document.getElementById("statement-window").textContent = `${model.strategic.chart.points.length} statements`;
+  document.getElementById("latest-cycle").textContent = latestPoint
+    ? api.formatStatementDate(latestPoint.statementDate)
+    : "No statements available";
+  document.getElementById("detail-cta").href = model.strategic.cta.href;
+  document.getElementById("detail-cta").textContent = model.strategic.cta.label;
+}
+
+function renderLegend() {
+  const legend = document.getElementById("chart-legend");
+
+  legend.innerHTML = model.strategic.chart.series.map((series) => {
+    const toneClass = series.state === "missing" ? "gap" : `series-${series.key}`;
+
+    return `
+      <span class="chart-legend-item ${toneClass}">
+        <span class="chart-legend-swatch ${series.state === "missing" ? "missing" : series.key}"></span>
+        <span>${escapeHtml(series.label)}</span>
+        <span class="chart-legend-state">${formatStateLabel(series.state)}</span>
+      </span>
+    `;
+  }).join("");
+}
+
+function buildChartPath(points, key, xFor, yFor) {
+  let started = false;
+
+  return points.reduce((path, point, index) => {
+    const value = point[key];
+
+    if (value === null || value === undefined || Number.isNaN(value)) {
+      return path;
+    }
+
+    const command = started ? "L" : "M";
+    started = true;
+    return `${path}${path ? " " : ""}${command} ${xFor(index).toFixed(2)} ${yFor(value).toFixed(2)}`;
+  }, "");
+}
+
+function renderChart() {
+  const container = document.getElementById("strategic-chart");
+  const timeline = document.getElementById("statement-timeline");
+  const points = model.strategic.chart.points;
+  const series = model.strategic.chart.series.filter((item) => item.state === "available");
+
+  if (points.length === 0 || series.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <strong>No statement data available</strong>
+        <p>There are no statement-backed metrics to plot yet.</p>
+      </div>
+    `;
+    timeline.innerHTML = "";
+    return;
   }
-  return "flat";
-}
 
-function renderDecisionPanel(model) {
-  const el = document.getElementById("decision-panel");
-  el.innerHTML = `
-    <div class="decision-header">
-      <p class="panel-label">Executive recommendation</p>
-      <h3>${model.decisionBox.recommendation}</h3>
-      <span class="risk-chip risk-${model.health.status}">${model.health.status}</span>
-    </div>
-    <div class="decision-why">
-      ${model.decisionBox.why.map((item) => `<p class="micro-insight">${item}</p>`).join("")}
-    </div>
-    <div class="decision-impact">
-      <strong>${formatCurrency(model.decisionBox.impact.annualSavings, true)} annual savings</strong>
-      <span>${model.decisionBox.impact.riskReduction} unstable units still pressure collections.</span>
-    </div>
-  `;
-}
-
-function renderHealthPanel(model) {
-  const el = document.getElementById("health-panel");
-  el.innerHTML = `
-    <div class="health-head">
-      <p class="panel-label">Mortgage health score</p>
-      <h3>${model.health.score}/100</h3>
-      <span class="risk-chip risk-${model.health.status}">${model.health.status}</span>
-    </div>
-    <div class="health-gauge">
-      <div class="health-bar">
-        <span class="health-bar-fill" style="width:${100 - model.health.score}%"></span>
-      </div>
-      <p class="micro-insight">Driven by DSCR, debt yield, LTV, escrow strength, and trend direction.</p>
-    </div>
-  `;
-}
-
-function renderScenarioPanel(model) {
-  const el = document.getElementById("scenario-panel");
-  el.innerHTML = `
-    <p class="panel-label">Scenario check</p>
-    <div class="scenario-list">
-      ${model.scenarios.map((scenario) => `
-        <div class="scenario-item">
-          <strong>${scenario.label}</strong>
-          <span class="risk-chip risk-${scenario.tone}">${scenario.outcome}</span>
-        </div>
-      `).join("")}
-    </div>
-  `;
-}
-
-function renderOverview(model) {
-  document.getElementById("overview-kpis").innerHTML = model.overview.kpis.map((card) => `
-    <article class="kpi-card state-${card.state}">
-      <div class="kpi-head">
-        <span class="kpi-label">${card.label}</span>
-        <span class="risk-chip risk-${card.state}">${card.state}</span>
-      </div>
-      <strong class="kpi-value">${card.value}</strong>
-      <div class="kpi-delta trend-${card.direction.tone === "healthy" ? "up" : card.direction.tone === "critical" ? "down" : "flat"}">
-        ${card.direction.arrow} ${card.benchmark}
-      </div>
-    </article>
-  `).join("");
-
-  document.getElementById("critical-strip").innerHTML = model.overview.criticalPoints.map((item) => `
-    <article class="critical-card">
-      <span class="critical-label">Critical point</span>
-      <div class="critical-value">${item}</div>
-    </article>
-  `).join("");
-}
-
-function buildLineChartMarkup(series, options = {}) {
-  const width = 520;
-  const height = options.compact ? 200 : 240;
-  const padding = { top: 22, right: 18, bottom: 34, left: 18 };
+  const width = 920;
+  const height = 320;
+  const padding = { top: 24, right: 20, bottom: 40, left: 42 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
-  const primarySeries = Array.isArray(series) ? series : [];
-  const secondarySeries = Array.isArray(options.secondarySeries) ? options.secondarySeries : [];
-  const threshold = options.threshold && Number.isFinite(options.threshold.value) ? options.threshold : null;
-  const values = [
-    ...primarySeries.map((item) => item.value || 0),
-    ...secondarySeries.map((item) => item.value || 0),
-    ...(threshold ? [threshold.value] : [])
-  ];
+  const xFor = (index) => padding.left + (chartWidth * index) / Math.max(points.length - 1, 1);
+
+  const values = series.flatMap((item) => points
+    .map((point) => point[item.key])
+    .filter((value) => typeof value === "number" && Number.isFinite(value)));
   const maxValue = Math.max(...values, 1);
-  const minValue = Math.min(...values, 0);
+  const minValue = 0;
   const range = Math.max(maxValue - minValue, 1);
-  const getX = (index, count) => padding.left + ((chartWidth / Math.max(count - 1, 1)) * index);
-  const getY = (value) => padding.top + ((maxValue - value) / range) * chartHeight;
-  const buildPoints = (inputSeries) => inputSeries.map((item, index) => ({
-    ...item,
-    x: getX(index, inputSeries.length),
-    y: getY(item.value || 0)
-  }));
-  const buildPath = (points) => points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
-  const buildAreaPath = (points, path) => `${path} L ${points[points.length - 1].x} ${height - padding.bottom} L ${points[0].x} ${height - padding.bottom} Z`;
-  const primaryPoints = buildPoints(primarySeries);
-  const secondaryPoints = buildPoints(secondarySeries);
-  const primaryPath = buildPath(primaryPoints);
-  const primaryAreaPath = buildAreaPath(primaryPoints, primaryPath);
-  const secondaryPath = secondaryPoints.length > 0 ? buildPath(secondaryPoints) : "";
-  const secondaryAreaPath = secondaryPoints.length > 0 ? buildAreaPath(secondaryPoints, secondaryPath) : "";
-  const variantClass = options.variant || "";
-  const gridMarkup = Array.from({ length: 4 }, (_, index) => {
+  const yFor = (value) => padding.top + chartHeight - ((value - minValue) / range) * chartHeight;
+
+  const gridLines = Array.from({ length: 4 }, (_, index) => {
     const y = padding.top + (chartHeight / 3) * index;
-    return `<line class="line-grid" x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}"></line>`;
+    return `<line class="chart-grid-line" x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}"></line>`;
   }).join("");
-  const renderPoints = (points, pointClass = "") => points.map((point) => `
-    <circle class="line-point ${pointClass} ${point.anomaly ? "anomaly" : ""}" cx="${point.x}" cy="${point.y}" r="${point.anomaly ? 5 : 4}"></circle>
+
+  const seriesMarkup = series.map((item) => {
+    const path = buildChartPath(points, item.key, xFor, yFor);
+    return `
+      <path class="chart-path ${item.key}" d="${path}"></path>
+      ${points.map((point, index) => {
+        const value = point[item.key];
+        if (value === null || value === undefined || Number.isNaN(value)) {
+          return "";
+        }
+        return `
+          <circle class="chart-point ${item.key}" cx="${xFor(index)}" cy="${yFor(value)}" r="4.5"></circle>
+        `;
+      }).join("")}
+    `;
+  }).join("");
+
+  const pointLabels = points.map((point, index) => `
+    <a class="timeline-point ${index === points.length - 1 ? "is-active" : ""}" href="${buildOperationalHref(point.statementDate)}">
+      <span class="timeline-month">${escapeHtml(point.label)}</span>
+      <span class="timeline-date">${escapeHtml(api.formatStatementDate(point.statementDate))}</span>
+    </a>
   `).join("");
-  const labelsMarkup = primaryPoints
-    .filter((_, index) => index === 0 || index === primaryPoints.length - 1 || index % 3 === 0)
-    .map((point) => `<text class="line-label" x="${point.x}" y="${height - 12}" text-anchor="middle">${point.label}</text>`)
-    .join("");
-  const secondaryMarkup = secondaryPoints.length > 0
-    ? `
-      <path class="line-area secondary" d="${secondaryAreaPath}"></path>
-      <path class="line-path secondary" d="${secondaryPath}"></path>
-      ${renderPoints(secondaryPoints, "secondary")}
-    `
-    : "";
-  const thresholdY = threshold ? getY(threshold.value) : null;
-  const thresholdMarkup = threshold
-    ? `
-      <line class="threshold-line" x1="${padding.left}" y1="${thresholdY}" x2="${width - padding.right}" y2="${thresholdY}"></line>
-      ${threshold.label ? `<text class="line-threshold-label" x="${width - padding.right}" y="${Math.max(thresholdY - 8, padding.top + 8)}" text-anchor="end">${threshold.label}</text>` : ""}
-    `
-    : "";
-  const legendMarkup = Array.isArray(options.legend) && options.legend.length > 0
-    ? `
-      <div class="chart-legend">
-        ${options.legend.map((item) => `
-          <span class="legend-key">
-            <span class="legend-line ${item.variant || ""}"></span>
-            <span>${item.label}</span>
-          </span>
-        `).join("")}
-      </div>
-    `
-    : "";
 
-  return `
-    <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
-      ${gridMarkup}
-      ${thresholdMarkup}
-      ${secondaryMarkup}
-      <path class="line-area ${variantClass}" d="${primaryAreaPath}"></path>
-      <path class="line-path ${variantClass}" d="${primaryPath}"></path>
-      ${renderPoints(primaryPoints, variantClass)}
-      ${labelsMarkup}
+  container.innerHTML = `
+    <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="Monthly statement component chart">
+      ${gridLines}
+      ${seriesMarkup}
+      ${points.map((point, index) => `
+        <text class="chart-label" x="${xFor(index)}" y="${height - 14}" text-anchor="middle">${escapeHtml(point.label)}</text>
+      `).join("")}
     </svg>
-    ${legendMarkup}
   `;
+
+  timeline.innerHTML = pointLabels;
 }
 
-function renderLineChart(containerId, series, options = {}) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = buildLineChartMarkup(series, options);
-}
+function renderOverview() {
+  const grid = document.getElementById("loan-overview-grid");
 
-function renderTrends(model) {
-  const { coverage, escrow, leverage } = model.trends;
-  const monthlyNoiRunRate = model.metrics.noi / 12;
-  const healthyBalanceTarget = model.metrics.marketValue * 0.65;
-  const watchlistBalanceThreshold = model.metrics.marketValue * 0.75;
-
-  const debtChip = document.getElementById("debt-trend-chip");
-  debtChip.className = `compare-chip ${compareChipClass(coverage.chipTone)}`;
-  debtChip.innerHTML = coverage.chipLabel;
-  document.getElementById("debt-trend-headline").textContent = coverage.headline;
-  renderLineChart("debt-trend-chart", coverage.series, {
-    variant: "warn",
-    secondarySeries: coverage.series.map((item) => ({
-      label: item.label,
-      value: monthlyNoiRunRate
-    })),
-    legend: [
-      { label: "Debt service", variant: "warn" },
-      { label: "NOI run-rate", variant: "secondary" }
-    ]
-  });
-  document.getElementById("debt-trend-insight").textContent = coverage.insight;
-
-  const escrowChip = document.getElementById("escrow-trend-chip");
-  escrowChip.className = `compare-chip ${compareChipClass(escrow.chipTone)}`;
-  escrowChip.innerHTML = escrow.chipLabel;
-  document.getElementById("escrow-trend-headline").textContent = escrow.headline;
-  renderLineChart("escrow-trend-chart", escrow.series, { variant: "danger" });
-  document.getElementById("escrow-trend-insight").textContent = escrow.insight;
-
-  const principalChip = document.getElementById("principal-trend-chip");
-  principalChip.className = `compare-chip ${compareChipClass(leverage.chipTone)}`;
-  principalChip.innerHTML = leverage.chipLabel;
-  document.getElementById("principal-trend-headline").textContent = leverage.headline;
-  renderLineChart("principal-trend-chart", leverage.series, {
-    variant: "danger",
-    compact: true,
-    secondarySeries: leverage.series.map((item) => ({
-      label: item.label,
-      value: healthyBalanceTarget
-    })),
-    threshold: {
-      value: watchlistBalanceThreshold,
-      label: "75% watchlist"
-    },
-    legend: [
-      { label: "Principal balance", variant: "danger" },
-      { label: "Healthy max balance", variant: "secondary" },
-      { label: "Watchlist cap", variant: "threshold" }
-    ]
-  });
-  document.getElementById("principal-trend-insight").textContent = leverage.insight;
-}
-
-function renderAlerts(model) {
-  document.getElementById("alert-grid").innerHTML = model.alerts.map((alert) => `
-    <article class="alert-card">
-      <div class="alert-head">
-        <strong>${alert.title}</strong>
-        <span class="risk-chip risk-${alert.severity}">${capitalizeLabel(alert.severity)}</span>
-      </div>
-      <div class="alert-metric">${alert.impact}</div>
-      <p class="alert-foot">${alert.action}</p>
+  grid.innerHTML = model.strategic.loanOverview.map((item) => `
+    <article class="overview-card ${item.state === "missing" ? "is-missing" : ""}">
+      <span class="overview-label">${escapeHtml(item.label)}</span>
+      <strong class="overview-value">${escapeHtml(item.value)}</strong>
     </article>
   `).join("");
 }
 
-function renderDrivers(model) {
-  document.getElementById("leakage-list").innerHTML = model.drivers.leakageDrivers.map((item) => `
-    <div class="rank-item">
-      <div class="rank-head">
-        <strong>${item.label}</strong>
-        <span>${formatCurrency(item.value, true)} &middot; ${formatPercent(item.share, 1)}</span>
-      </div>
-      <div class="meter">
-        <div class="meter-fill ${item.className}" style="width:${item.widthPercent}%"></div>
-      </div>
-    </div>
-  `).join("");
-  document.getElementById("leakage-insight").textContent = model.drivers.leakageInsight;
+function renderFieldList(elementId, section) {
+  const container = document.getElementById(elementId);
+  const note =
+    section.state === "missing"
+      ? "These fields are not present in the available statements."
+      : section.state === "partial"
+        ? "Only some of these fields appear in the available statements."
+        : "These fields are available in the current statements.";
 
-  document.getElementById("status-segment-bar").innerHTML = model.drivers.statusSegments.map((status) => `
-    <span class="segment-piece ${status.key}" style="width:${status.widthPercent}%"></span>
-  `).join("");
-
-  document.getElementById("status-legend").innerHTML = model.drivers.statusSegments.map((status) => `
-    <div class="legend-item">
-      <div class="legend-label">
-        <span class="legend-swatch ${status.key}"></span>
-        <strong>${status.label}</strong>
+  container.innerHTML = section.fields.map((field) => `
+    <article class="field-row ${field.state === "missing" ? "is-missing" : ""}">
+      <div>
+        <span class="field-label">${escapeHtml(field.label)}</span>
+        <strong class="field-value">${escapeHtml(field.value)}</strong>
       </div>
-      <span>${status.value}</span>
-    </div>
-  `).join("");
-  document.getElementById("status-insight").textContent = model.drivers.statusInsight;
-
-  document.getElementById("capital-options").innerHTML = model.drivers.refiOptions.map((quote) => `
-    <div class="option-card">
-      <div class="option-head">
-        <strong>${quote.lender} &middot; ${quote.product}</strong>
-        <span class="risk-chip ${quote.isBestOption ? "risk-opportunity" : "risk-medium"}">${quote.isBestOption ? "best" : "alt"}</span>
-      </div>
-      <div class="option-metrics">
-        <span>Rate ${formatPercent(quote.noteRate, 2)} &middot; LTV ${formatPercent(quote.ltv, 1)}</span>
-        <span>Savings ${formatCurrency(quote.monthlySavings, true)} &middot; Gap ${formatCurrency(Math.abs(quote.takeoutGap), true)}</span>
-      </div>
-    </div>
-  `).join("");
-  document.getElementById("capital-insight").textContent = model.drivers.capitalInsight;
+      <span class="field-state">${formatStateLabel(field.state)}</span>
+    </article>
+  `).join("") + `<p class="card-note">${note}</p>`;
 }
 
-function renderPriorities(model) {
-  const filtered = model.priorities.filter((item) => state.priorityFilter === "all" || item.riskLevel === state.priorityFilter);
+function renderSideCards() {
+  const servicer = model.strategic.servicerCard;
+  const contacts = model.strategic.keyContactsCard;
 
-  document.getElementById("priority-table-body").innerHTML = filtered.map((item) => `
-    <tr>
-      <td>
-        <div class="priority-title">
-          <span class="table-chip ${item.riskLevel}">${item.priority}</span>
-          <strong>${item.displayTitle}</strong>
-        </div>
-      </td>
-      <td>${item.area}</td>
-      <td>${item.issue}</td>
-      <td>${item.financialImpact}</td>
-      <td><span class="risk-chip risk-${item.riskLevel}">${item.riskLevel}</span></td>
-      <td>${item.recommendation}</td>
-      <td>${item.owner}</td>
-      <td>${item.timing}</td>
-    </tr>
-  `).join("");
+  document.getElementById("servicer-state").textContent = formatStateLabel(servicer.state);
+  document.getElementById("servicer-state").className = `risk-chip ${servicer.state === "available" ? "risk-opportunity" : "risk-watchlist"}`;
+
+  document.getElementById("contacts-state").textContent = formatStateLabel(contacts.state);
+  document.getElementById("contacts-state").className = `risk-chip ${contacts.state === "available" ? "risk-opportunity" : "risk-watchlist"}`;
+
+  renderFieldList("servicer-card", servicer);
+  renderFieldList("contacts-card", contacts);
 }
 
-function bindFilters(model) {
-  document.querySelectorAll(".filter-chip").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.priorityFilter = button.dataset.filter;
-      document.querySelectorAll(".filter-chip").forEach((chip) => {
-        chip.classList.toggle("active", chip.dataset.filter === state.priorityFilter);
-      });
-      renderPriorities(model);
-    });
-  });
+function renderInsights() {
+  document.getElementById("insight-primary").textContent = model.strategic.latestInsight.primary;
+  document.getElementById("insight-secondary").textContent = model.strategic.latestInsight.secondary;
 }
 
-function initHeader(model) {
-  document.getElementById("portfolio-status").textContent = capitalizeLabel(model.header.status);
-  document.getElementById("latest-cycle").textContent = model.header.latestCycle;
-}
-
-function init() {
-  const model = window.mortgageDashboardModel.buildMortgageDecisionModel(mortgageData);
-
-  initHeader(model);
-  renderDecisionPanel(model);
-  renderHealthPanel(model);
-  renderScenarioPanel(model);
-  renderOverview(model);
-  renderTrends(model);
-  renderAlerts(model);
-  renderDrivers(model);
-  renderPriorities(model);
-  bindFilters(model);
-
-  console.info("Mortgage executive dashboard ready", {
-    asset: mortgageData.property.name,
-    latestDue: mortgageData.currentDebt.monthlyWithEscrow,
-    recommendation: model.decisionBox.recommendation
-  });
-}
-
-init();
+renderHeader();
+renderLegend();
+renderChart();
+renderOverview();
+renderSideCards();
+renderInsights();

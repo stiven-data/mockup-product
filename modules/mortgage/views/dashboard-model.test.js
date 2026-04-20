@@ -125,7 +125,10 @@ test("buildStatementDashboardModel exposes approved high level gap summary", () 
     "Servicer",
     "Key contacts"
   ]);
+  assert.equal(model.strategic.latestInsight.primary, "Insurance escrow is the largest supported component in the latest statement.");
   assert.equal(model.strategic.latestInsight.secondary, "7 high-level gaps remain unavailable in statements.");
+  assert.equal(model.strategic.cta.label, "View operational detail");
+  assert.equal(model.strategic.cta.href, "operational_view.html?statementDate=2026-01-23");
 });
 
 test("buildStatementDashboardModel supports selected statement detail and navigation", () => {
