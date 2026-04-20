@@ -174,6 +174,7 @@ function buildLoanOverview(data, latest) {
   return [
     buildField("Outstanding balance", latest?.principalBalance, formatMoney),
     buildField("Interest amount", null, formatMoney),
+    buildField("Interest rate", metadata.interestRate, formatPercent),
     buildField("Tax escrow", latest?.taxes, formatMoney),
     buildField("Insurance escrow", latest?.insurance, formatMoney),
     buildField("Other escrow", latest?.otherEscrow, formatMoney),
@@ -245,7 +246,7 @@ function buildLatestInsight(latest, gapSummary) {
     primary: leadingComponent
       ? `${leadingComponent.label} is the largest supported component in the latest statement.`
       : "Latest statement values are limited to the supported escrow components present in the source data.",
-    secondary: `${gapSummary.length} fields remain unavailable in statements.`
+    secondary: `${gapSummary.length} high-level gaps remain unavailable in statements.`
   };
 }
 
@@ -339,13 +340,13 @@ function buildLegacyCompatibilityModel(statementModel) {
     },
     trends: {
       coverage: {
-        cardKey: "statement-taxes",
-        headline: "Taxes",
+        cardKey: "statement-total-due",
+        headline: "Monthly total due",
         chipLabel: "Statement only",
         chipTone: "watchlist",
         series: points.map((point) => ({
           label: point.label,
-          value: point.taxes || 0,
+          value: point.totalDue || 0,
           anomaly: false
         })),
         insight: "Statement-only compatibility bridge."

@@ -76,6 +76,7 @@ test("buildStatementDashboardModel surfaces the approved overview and card contr
 
   assert.equal(overview["Outstanding balance"].state, "available");
   assert.equal(overview["Interest amount"].state, "missing");
+  assert.equal(overview["Interest rate"].state, "missing");
   assert.equal(overview["Tax escrow"].state, "available");
   assert.equal(overview["Insurance escrow"].state, "available");
   assert.equal(overview["Other escrow"].state, "available");
@@ -124,7 +125,7 @@ test("buildStatementDashboardModel exposes approved high level gap summary", () 
     "Servicer",
     "Key contacts"
   ]);
-  assert.equal(model.strategic.latestInsight.secondary, "7 fields remain unavailable in statements.");
+  assert.equal(model.strategic.latestInsight.secondary, "7 high-level gaps remain unavailable in statements.");
 });
 
 test("buildStatementDashboardModel supports selected statement detail and navigation", () => {
@@ -142,6 +143,8 @@ test("buildMortgageDecisionModel returns a browser-safe compatibility shell", ()
   assert.equal(model.decisionBox.recommendation, "Statement dashboard compatibility bridge");
   assert.equal(Array.isArray(model.overview.kpis), true);
   assert.equal(Array.isArray(model.trends.coverage.series), true);
+  assert.equal(model.trends.coverage.cardKey, "statement-total-due");
+  assert.equal(model.trends.coverage.headline, "Monthly total due");
   assert.equal(Array.isArray(model.alerts), true);
   assert.equal(Array.isArray(model.drivers.refiOptions), true);
   assert.equal(model.drivers.refiOptions.length, 0);
