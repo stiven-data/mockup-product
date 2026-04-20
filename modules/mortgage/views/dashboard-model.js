@@ -176,14 +176,14 @@ function buildLoanOverview(data, latest) {
   const metadata = safeObject(data.metadata);
 
   return [
-    buildField("Statement date", latest?.statementDate, (value) => value),
-    buildField("Due date", currentDebt.latestDueDate ?? metadata.dueDate, (value) => value),
-    buildField("Monthly total due", latest?.totalDue, formatMoney),
     buildField("Outstanding balance", latest?.principalBalance, formatMoney),
     buildField("Interest amount", null, formatMoney),
     buildField("Tax escrow", latest?.taxEscrow, formatMoney),
     buildField("Insurance escrow", latest?.insuranceEscrow, formatMoney),
     buildField("Other escrow", latest?.otherEscrow, formatMoney),
+    buildField("Statement date", latest?.statementDate, (value) => value),
+    buildField("Due date", currentDebt.latestDueDate ?? metadata.dueDate, (value) => value),
+    buildField("Monthly total due", latest?.totalDue, formatMoney),
     buildField("Loan amount", metadata.loanAmount, formatMoney),
     buildField("Loan term", metadata.loanTerm, (value) => value),
     buildField("Start date", metadata.startDate, (value) => value),
@@ -196,14 +196,14 @@ function buildDetailRows(selected, data) {
   const metadata = safeObject(data.metadata);
 
   return [
-    buildField("Statement date", selected?.statementDate, (value) => value),
-    buildField("Due date", currentDebt.latestDueDate ?? metadata.dueDate, (value) => value),
-    buildField("Monthly total due", selected?.totalDue, formatMoney),
     buildField("Outstanding balance", selected?.principalBalance, formatMoney),
     buildField("Interest amount", null, formatMoney),
     buildField("Tax escrow", selected?.taxEscrow, formatMoney),
     buildField("Insurance escrow", selected?.insuranceEscrow, formatMoney),
     buildField("Other escrow", selected?.otherEscrow, formatMoney),
+    buildField("Statement date", selected?.statementDate, (value) => value),
+    buildField("Due date", currentDebt.latestDueDate ?? metadata.dueDate, (value) => value),
+    buildField("Monthly total due", selected?.totalDue, formatMoney),
     buildField("Source file", selected?.sourceFile, (value) => value)
   ];
 }
@@ -276,6 +276,8 @@ function buildStatementDashboardModel(data = fallbackStatementData, options = {}
         series: buildChartSeries(latest)
       },
       loanOverview,
+      servicerCard: servicer,
+      keyContactsCard: keyContacts,
       servicer,
       keyContacts,
       latestInsight: buildLatestInsight(latest, gapSummary),

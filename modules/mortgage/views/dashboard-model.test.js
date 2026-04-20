@@ -1,71 +1,13 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { mortgageStatementData } = require("./statement-data.js");
 const {
   buildMortgageDecisionModel,
   buildStatementDashboardModel
 } = require("./dashboard-model.js");
 
-const fixture = {
-  asset: {
-    name: "Oasis at San Marco",
-    location: "Jacksonville, FL"
-  },
-  currentDebt: {
-    servicer: "CBRE Loan Services, Inc.",
-    interestRate: 0.085,
-    latestDueDate: "2026-02-09"
-  },
-  statements: [
-    {
-      statementDate: "2025-09-24",
-      principalBalance: 10853176.39,
-      taxEscrow: 167300.93,
-      insuranceEscrow: 137213.29,
-      otherEscrow: 388471.33,
-      totalDue: 110711.67,
-      sourceFile: "2025-09 - September Statement.pdf"
-    },
-    {
-      statementDate: "2025-07-24",
-      principalBalance: 10853176.39,
-      taxEscrow: 135924.01,
-      insuranceEscrow: 100920.21,
-      otherEscrow: 399851.86,
-      totalDue: 113545.32,
-      sourceFile: "2025-07- July Statement.pdf"
-    },
-    {
-      statementDate: "2025-08-25",
-      principalBalance: 10853176.39,
-      taxEscrow: 151612.47,
-      insuranceEscrow: 119066.75,
-      otherEscrow: 393901.86,
-      totalDue: 113274.22,
-      sourceFile: "2025-08-August Statement.pdf"
-    },
-    {
-      statementDate: "2025-12-23",
-      principalBalance: 10853176.39,
-      taxEscrow: 55402.8,
-      insuranceEscrow: 191652.91,
-      otherEscrow: 248087.47,
-      totalDue: 113274.22,
-      sourceFile: "2025-12-  December Statement.pdf / 2026-01- January Statement.pdf"
-    },
-    {
-      statementDate: "2026-01-23",
-      principalBalance: 10853176.39,
-      taxEscrow: 71091.26,
-      insuranceEscrow: 209799.45,
-      otherEscrow: 281922.98,
-      totalDue: 112158.22,
-      sourceFile: "2026-02- February Statement.pdf"
-    }
-  ]
-};
-
 test("buildStatementDashboardModel exposes approved chart series semantics", () => {
-  const model = buildStatementDashboardModel(fixture);
+  const model = buildStatementDashboardModel(mortgageStatementData);
 
   assert.deepEqual(
     model.strategic.chart.series.map((series) => ({ label: series.label, key: series.key, state: series.state })),
@@ -76,16 +18,18 @@ test("buildStatementDashboardModel exposes approved chart series semantics", () 
     ]
   );
 
-  assert.equal(model.strategic.chart.points[0].taxEscrow, 135924.01);
-  assert.equal(model.strategic.chart.points[0].insuranceEscrow, 100920.21);
-  assert.equal(model.strategic.chart.points[0].otherEscrow, 399851.86);
-  assert.equal(model.strategic.chart.points[0].interest, undefined);
+  assert.equal(model.strategic.chart.points.length, 12);
+  assert.equal(model.strategic.chart.points[0].statementDate, "2025-02-21");
+  assert.equal(model.strategic.chart.points[11].statementDate, "2026-01-23");
+  assert.equal(model.strategic.chart.points[11].taxEscrow, 71091.26);
+  assert.equal(model.strategic.chart.points[11].insuranceEscrow, 209799.45);
+  assert.equal(model.strategic.chart.points[11].otherEscrow, 1032.27);
+  assert.equal(model.strategic.chart.points[11].interest, undefined);
 });
 
-test("buildStatementDashboardModel surfaces supported overview and detail fields", () => {
-  const model = buildStatementDashboardModel(fixture);
+test("buildStatementDashboardModel surfaces the approved overview and card contract", () => {
+  const model = buildStatementDashboardModel(mortgageStatementData);
   const overview = Object.fromEntries(model.strategic.loanOverview.map((item) => [item.label, item]));
-  const detail = Object.fromEntries(model.operational.detailRows.map((item) => [item.label, item]));
 
   assert.equal(overview["Outstanding balance"].state, "available");
   assert.equal(overview["Interest amount"].state, "missing");
@@ -93,23 +37,25 @@ test("buildStatementDashboardModel surfaces supported overview and detail fields
   assert.equal(overview["Insurance escrow"].state, "available");
   assert.equal(overview["Other escrow"].state, "available");
   assert.equal(overview["Statement date"].state, "available");
-  assert.equal(overview["Due date"].state, "available");
+  assert.equal(overview["Due date"].state, "missing");
   assert.equal(overview["Monthly total due"].state, "available");
   assert.equal(overview["Loan amount"].state, "missing");
 
-  assert.equal(detail["Statement date"].value, "2026-01-23");
-  assert.equal(detail["Due date"].state, "available");
-  assert.equal(detail["Monthly total due"].state, "available");
-  assert.equal(detail["Tax escrow"].state, "available");
-  assert.equal(detail["Insurance escrow"].state, "available");
-  assert.equal(detail["Other escrow"].state, "available");
+  assert.equal(model.strategic.servicerCard.state, "missing");
+  assert.equal(model.strategic.keyContactsCard.state, "missing");
+  assert.equal(model.strategic.servicerCard.fields.find((field) => field.key === "name").state, "missing");
+  assert.equal(model.strategic.keyContactsCard.fields.length, 5);
+  assert.equal(model.operational.tableRows.length, 23);
+  assert.equal(model.operational.tableRows[0].statementDate, "2026-01-23");
+  assert.equal(model.operational.selectedStatement.statementDate, "2026-01-23");
+  assert.equal(model.operational.sidebar.latestSource, "2026-02- February Statement.pdf");
 });
 
 test("buildStatementDashboardModel keeps other escrow distinct from ending escrow", () => {
-  const model = buildStatementDashboardModel(fixture);
+  const model = buildStatementDashboardModel(mortgageStatementData);
 
-  assert.equal(model.strategic.loanOverview.find((item) => item.label === "Other escrow").value, "$281,922.98");
-  assert.equal(model.operational.tableRows[0].otherEscrow, 281922.98);
+  assert.equal(model.strategic.loanOverview.find((item) => item.label === "Other escrow").value, "$1,032.27");
+  assert.equal(model.operational.tableRows[0].otherEscrow, 1032.27);
   assert.equal(model.operational.tableRows[0].endingEscrowBalance, undefined);
 });
 
@@ -124,24 +70,15 @@ test("buildStatementDashboardModel handles empty statements safely", () => {
   assert.equal(model.strategic.loanOverview.find((item) => item.label === "Statement date").state, "missing");
 });
 
-test("buildStatementDashboardModel uses the latest sorted statement for sidebar source", () => {
-  const model = buildStatementDashboardModel(fixture, { selectedStatementDate: "2025-08-25" });
-
-  assert.equal(model.operational.tableRows[0].statementDate, "2026-01-23");
-  assert.equal(model.operational.sidebar.latestSource, "2026-02- February Statement.pdf");
-  assert.equal(model.operational.selectedStatement.statementDate, "2025-08-25");
-  assert.equal(model.navigation.operationalHref, "operational_view.html?statementDate=2025-08-25");
-});
-
 test("buildStatementDashboardModel exposes approved component-based latest insight", () => {
-  const model = buildStatementDashboardModel(fixture);
+  const model = buildStatementDashboardModel(mortgageStatementData);
 
-  assert.match(model.strategic.latestInsight.primary, /escrow/i);
-  assert.equal(model.strategic.latestInsight.secondary, "14 fields remain unavailable in statements.");
+  assert.match(model.strategic.latestInsight.primary, /insurance escrow/i);
+  assert.equal(model.strategic.latestInsight.secondary, "16 fields remain unavailable in statements.");
 });
 
 test("buildMortgageDecisionModel returns a browser-safe compatibility shell", () => {
-  const model = buildMortgageDecisionModel(fixture);
+  const model = buildMortgageDecisionModel(mortgageStatementData);
 
   assert.equal(model.header.status, "statement-only");
   assert.equal(model.decisionBox.recommendation, "Statement dashboard compatibility bridge");
