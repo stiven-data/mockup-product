@@ -1,65 +1,83 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { buildStatementDashboardModel } = require("./dashboard-model.js");
+const {
+  buildMortgageDecisionModel,
+  buildStatementDashboardModel
+} = require("./dashboard-model.js");
 
 const fixture = {
   asset: {
     name: "Oasis at San Marco",
     location: "Jacksonville, FL"
   },
+  currentDebt: {
+    interestRate: 0.085,
+    latestDueDate: "2026-02-09",
+    servicer: "CBRE Loan Services, Inc."
+  },
   statements: [
-    { statementDate: "2025-01-23", principalBalance: 10401402.81, interestPaid: 73676.33, taxes: 41800.12, insurance: 53410.44, otherEscrow: 919.27, totalDue: 169806.16, sourceFile: "2025-01-01 - Statement.pdf" },
-    { statementDate: "2025-02-21", principalBalance: 10401402.81, interestPaid: 73676.33, taxes: 57481.71, insurance: 70144.87, otherEscrow: 209686.31, totalDue: 411989.22, sourceFile: "2025-02-01 - Statement.pdf" },
-    { statementDate: "2025-03-24", principalBalance: 10401402.81, interestPaid: 73676.33, taxes: 73170.17, insurance: 88291.41, otherEscrow: 165403.71, totalDue: 400541.62, sourceFile: "2025-03-01 - Statement.pdf" },
-    { statementDate: "2025-04-22", principalBalance: 10401402.81, interestPaid: 73676.33, taxes: 88858.63, insurance: 106437.95, otherEscrow: 163018.54, totalDue: 431991.45, sourceFile: "2025-04-01 - Statement.pdf" },
-    { statementDate: "2025-05-23", principalBalance: 10764854.41, interestPaid: 76251.05, taxes: 104547.09, insurance: 64627.13, otherEscrow: 163101.66, totalDue: 408526.93, sourceFile: "2025-05-01 - Statement.pdf" },
-    { statementDate: "2025-06-26", principalBalance: 10764854.41, interestPaid: 76251.05, taxes: 120235.55, insurance: 82773.67, otherEscrow: 163187.54, totalDue: 442447.81, sourceFile: "2025-06-01 - Statement.pdf" },
-    { statementDate: "2025-07-24", principalBalance: 10853176.39, interestPaid: 76876.66, taxes: 135924.01, insurance: 100920.21, otherEscrow: 163007.64, totalDue: 476728.52, sourceFile: "2025-07-01 - Statement.pdf" },
-    { statementDate: "2025-08-25", principalBalance: 10853176.39, interestPaid: 76876.66, taxes: 151612.47, insurance: 119066.75, otherEscrow: 123222.64, totalDue: 470778.52, sourceFile: "2025-08-01 - Statement.pdf" },
-    { statementDate: "2025-09-24", principalBalance: 10853176.39, interestPaid: 76876.66, taxes: 167300.93, insurance: 137213.29, otherEscrow: 83957.11, totalDue: 465347.99, sourceFile: "2025-09-01 - Statement.pdf" },
-    { statementDate: "2025-10-23", principalBalance: 10853176.39, interestPaid: 76876.66, taxes: 182989.39, insurance: 155359.83, otherEscrow: 83997.82, totalDue: 499223.70, sourceFile: "2025-10-01 - Statement.pdf" },
-    { statementDate: "2025-11-21", principalBalance: 10853176.39, interestPaid: 76876.66, taxes: 39714.34, insurance: 173506.37, otherEscrow: 1031.27, totalDue: 291128.64, sourceFile: "2025-11-01 - Statement.pdf" },
-    { statementDate: "2025-12-23", principalBalance: 10853176.39, interestPaid: 76876.66, taxes: 55402.80, insurance: 191652.91, otherEscrow: 1031.76, totalDue: 324964.13, sourceFile: "2025-12-01 - Statement.pdf" },
-    { statementDate: "2026-01-23", principalBalance: 10853176.39, interestPaid: 76876.66, taxes: 71091.26, insurance: 209799.45, otherEscrow: 1032.27, totalDue: 358799.64, sourceFile: "2026-01-01 - Statement.pdf" }
-  ],
-  metadata: {
-    loanAmount: null,
-    loanTerm: null,
-    startDate: null,
-    maturityDate: null,
-    dueDate: null
-  },
-  servicer: {
-    name: null,
-    phone: null,
-    email: null
-  },
-  keyContacts: []
+    { statementDate: "2025-09-24", principalBalance: 10853176.39, totalDue: 110711.67, endingEscrowBalance: 388471.33, sourceFile: "2025-09 - September Statement.pdf" },
+    { statementDate: "2025-07-24", principalBalance: 10853176.39, totalDue: 113545.32, endingEscrowBalance: 399851.86, sourceFile: "2025-07- July Statement.pdf" },
+    { statementDate: "2025-08-25", principalBalance: 10853176.39, totalDue: 113274.22, endingEscrowBalance: 393901.86, sourceFile: "2025-08-August Statement.pdf" },
+    { statementDate: "2025-12-23", principalBalance: 10853176.39, totalDue: 113274.22, endingEscrowBalance: 248087.47, sourceFile: "2025-12-  December Statement.pdf / 2026-01- January Statement.pdf" },
+    { statementDate: "2026-01-23", principalBalance: 10853176.39, totalDue: 112158.22, endingEscrowBalance: 281922.98, sourceFile: "2026-02- February Statement.pdf" }
+  ]
 };
 
-test("buildStatementDashboardModel returns strategic and operational models from statement-only data", () => {
+test("buildStatementDashboardModel returns available-or-missing statement coverage", () => {
   const model = buildStatementDashboardModel(fixture);
+  const loanOverview = Object.fromEntries(model.strategic.loanOverview.map((item) => [item.label, item]));
 
   assert.equal(model.strategic.chart.series.length, 3);
-  assert.equal(model.strategic.chart.points.length, 12);
-  assert.equal(model.strategic.chart.points[0].label, "Feb 25");
-  assert.equal(model.strategic.chart.points[11].label, "Jan 26");
-  assert.equal(model.strategic.loanOverview[0].label, "Outstanding balance");
-  assert.equal(model.strategic.loanOverview[0].value, "$10,853,176.39");
-  assert.equal(model.strategic.loanOverview[4].label, "Loan amount");
-  assert.equal(model.strategic.loanOverview[4].state, "missing");
-  assert.equal(model.strategic.servicerCard.state, "missing");
-  assert.equal(model.strategic.keyContactsCard.state, "missing");
-  assert.equal(model.operational.tableRows.length, 13);
-  assert.equal(model.operational.tableRows[0].statementDate, "2026-01-23");
-  assert.equal(model.operational.selectedStatement.statementDate, "2026-01-23");
-  assert.equal(model.operational.gapSummary.length, 7);
+  assert.equal(model.strategic.chart.points.length, 5);
+  assert.equal(model.strategic.chart.points[0].label, "Jul 25");
+  assert.equal(model.strategic.chart.points[4].label, "Jan 26");
+  assert.equal(model.strategic.chart.points[4].totalDue, 112158.22);
+
+  assert.equal(loanOverview["Statement date"].state, "available");
+  assert.equal(loanOverview["Statement date"].value, "2026-01-23");
+  assert.equal(loanOverview["Due date"].state, "available");
+  assert.equal(loanOverview["Monthly total due"].state, "available");
+  assert.equal(loanOverview["Other escrow"].state, "available");
+  assert.equal(loanOverview["Interest rate"].state, "available");
+  assert.equal(loanOverview["Loan amount"].state, "missing");
+
+  assert.equal(model.strategic.servicer.fields.find((field) => field.key === "name").state, "available");
+  assert.equal(model.strategic.servicer.fields.find((field) => field.key === "role").state, "missing");
+  assert.equal(model.strategic.servicer.fields.find((field) => field.key === "email").state, "missing");
+  assert.equal(model.strategic.servicer.fields.find((field) => field.key === "phone").state, "missing");
+  assert.equal(model.strategic.servicer.fields.find((field) => field.key === "contact").state, "missing");
+  assert.equal(model.strategic.keyContacts.fields.every((field) => field.state === "missing"), true);
 });
 
-test("buildStatementDashboardModel supports selected statement detail", () => {
-  const model = buildStatementDashboardModel(fixture, { selectedStatementDate: "2025-09-24" });
+test("buildStatementDashboardModel handles empty statements safely", () => {
+  const model = buildStatementDashboardModel({ statements: [] });
 
-  assert.equal(model.operational.selectedStatement.statementDate, "2025-09-24");
-  assert.equal(model.operational.selectedStatement.sourceFile, "2025-09-01 - Statement.pdf");
-  assert.equal(model.navigation.operationalHref, "operational_view.html?statementDate=2025-09-24");
+  assert.equal(model.strategic.chart.points.length, 0);
+  assert.equal(model.operational.tableRows.length, 0);
+  assert.equal(model.operational.selectedStatement, null);
+  assert.equal(model.operational.sidebar.latestSource, null);
+  assert.equal(model.strategic.loanOverview.find((item) => item.label === "Statement date").state, "missing");
+});
+
+test("buildStatementDashboardModel uses the latest sorted statement for sidebar source", () => {
+  const model = buildStatementDashboardModel(fixture, { selectedStatementDate: "2025-08-25" });
+
+  assert.equal(model.operational.tableRows[0].statementDate, "2026-01-23");
+  assert.equal(model.operational.sidebar.latestSource, "2026-02- February Statement.pdf");
+  assert.equal(model.operational.selectedStatement.statementDate, "2025-08-25");
+  assert.equal(model.navigation.operationalHref, "operational_view.html?statementDate=2025-08-25");
+});
+
+test("buildMortgageDecisionModel returns a browser-safe compatibility shell", () => {
+  const model = buildMortgageDecisionModel(fixture);
+
+  assert.equal(model.header.status, "statement-only");
+  assert.equal(model.decisionBox.recommendation, "Statement dashboard compatibility bridge");
+  assert.equal(Array.isArray(model.overview.kpis), true);
+  assert.equal(Array.isArray(model.trends.coverage.series), true);
+  assert.equal(Array.isArray(model.alerts), true);
+  assert.equal(Array.isArray(model.drivers.refiOptions), true);
+  assert.equal(model.drivers.refiOptions.length, 0);
+  assert.equal(Array.isArray(model.priorities), true);
 });
