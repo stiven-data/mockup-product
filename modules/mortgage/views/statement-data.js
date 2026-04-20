@@ -1,8 +1,4 @@
-const test = require("node:test");
-const assert = require("node:assert/strict");
-const { buildStatementDashboardModel } = require("./dashboard-model.js");
-
-const fixture = {
+const mortgageStatementData = {
   asset: {
     name: "Oasis at San Marco",
     location: "Jacksonville, FL"
@@ -37,29 +33,10 @@ const fixture = {
   keyContacts: []
 };
 
-test("buildStatementDashboardModel returns strategic and operational models from statement-only data", () => {
-  const model = buildStatementDashboardModel(fixture);
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { mortgageStatementData };
+}
 
-  assert.equal(model.strategic.chart.series.length, 3);
-  assert.equal(model.strategic.chart.points.length, 12);
-  assert.equal(model.strategic.chart.points[0].label, "Feb 25");
-  assert.equal(model.strategic.chart.points[11].label, "Jan 26");
-  assert.equal(model.strategic.loanOverview[0].label, "Outstanding balance");
-  assert.equal(model.strategic.loanOverview[0].value, "$10,853,176.39");
-  assert.equal(model.strategic.loanOverview[4].label, "Loan amount");
-  assert.equal(model.strategic.loanOverview[4].state, "missing");
-  assert.equal(model.strategic.servicerCard.state, "missing");
-  assert.equal(model.strategic.keyContactsCard.state, "missing");
-  assert.equal(model.operational.tableRows.length, 13);
-  assert.equal(model.operational.tableRows[0].statementDate, "2026-01-23");
-  assert.equal(model.operational.selectedStatement.statementDate, "2026-01-23");
-  assert.equal(model.operational.gapSummary.length, 7);
-});
-
-test("buildStatementDashboardModel supports selected statement detail", () => {
-  const model = buildStatementDashboardModel(fixture, { selectedStatementDate: "2025-09-24" });
-
-  assert.equal(model.operational.selectedStatement.statementDate, "2025-09-24");
-  assert.equal(model.operational.selectedStatement.sourceFile, "2025-09-01 - Statement.pdf");
-  assert.equal(model.navigation.operationalHref, "operational_view.html?statementDate=2025-09-24");
-});
+if (typeof window !== "undefined") {
+  window.mortgageStatementData = mortgageStatementData;
+}

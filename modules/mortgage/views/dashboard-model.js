@@ -1,80 +1,14 @@
-const BENCHMARKS = {
-  dscr: {
-    healthy: 1.25,
-    watchlist: 1.1,
-    betterDirection: "up",
-    formatter: (value) => `${value.toFixed(2)}x`,
-    target: ">= 1.25x"
-  },
-  ltv: {
-    healthy: 0.65,
-    watchlist: 0.75,
-    betterDirection: "down",
-    formatter: (value) => `${(value * 100).toFixed(1)}%`,
-    target: "<= 65%"
-  },
-  debtYield: {
-    healthy: 0.08,
-    watchlist: 0.065,
-    betterDirection: "up",
-    formatter: (value) => `${(value * 100).toFixed(2)}%`,
-    target: ">= 8.0%"
-  },
-  escrowRunway: {
-    healthy: 3,
-    watchlist: 2,
-    betterDirection: "up",
-    formatter: (value) => `${value.toFixed(1)} mo`,
-    target: ">= 3.0 mo"
-  }
-};
+let fallbackStatementData = null;
 
-const HEALTH_POINTS = {
-  healthy: 25,
-  watchlist: 12,
-  critical: 7
-};
+if (typeof module !== "undefined" && module.exports) {
+  ({ mortgageStatementData: fallbackStatementData } = require("./statement-data.js"));
+}
 
-function evaluateBenchmark(metricKey, value) {
-  const metric = BENCHMARKS[metricKey];
-
-  if (metric.betterDirection === "up") {
-    if (value >= metric.healthy) return "healthy";
-    if (value >= metric.watchlist) return "watchlist";
-    return "critical";
+function formatMoney(value) {
+  if (value === null || value === undefined || Number.isNaN(value)) {
+    return "Not available in statements";
   }
 
-  if (value <= metric.healthy) return "healthy";
-  if (value <= metric.watchlist) return "watchlist";
-  return "critical";
-}
-
-function calculateDirection(current, previous, inverseGood = false) {
-  const delta = current - previous;
-  const arrow = Math.abs(delta) < 0.0005 ? "\u2192" : delta > 0 ? "\u2191" : "\u2193";
-  const improving = inverseGood ? delta < 0 : delta > 0;
-  const tone = Math.abs(delta) < 0.0005 ? "watchlist" : improving ? "healthy" : "critical";
-
-  return { delta, arrow, tone };
-}
-
-function buildHealth(benchmarkStates) {
-  const score = benchmarkStates.reduce((sum, state) => sum + HEALTH_POINTS[state], 0);
-  const normalized = Math.max(0, Math.min(100, score));
-  const status = normalized >= 75 ? "healthy" : normalized >= 55 ? "watchlist" : "critical";
-
-  return { score: normalized, status };
-}
-
-function isPositiveNumber(value) {
-  return typeof value === "number" && Number.isFinite(value) && value > 0;
-}
-
-function formatCurrency(value) {
-  return `$${Math.round(value).toLocaleString("en-US")}`;
-}
-
-function formatCurrencyExact(value) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -83,483 +17,188 @@ function formatCurrencyExact(value) {
   }).format(value);
 }
 
-function formatDate(value) {
-  const date = new Date(`${value}T00:00:00`);
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric"
-  });
-}
-
-function compactMonth(value) {
-  const date = new Date(`${value}T00:00:00`);
-  return date.toLocaleDateString("en-US", {
+function formatStatementMonth(value) {
+  return new Intl.DateTimeFormat("en-US", {
     month: "short",
     year: "2-digit"
-  });
+  }).format(new Date(`${value}T00:00:00`));
 }
 
-function formatRefiScenarioLabel(rate) {
-  if (typeof rate !== "number" || !Number.isFinite(rate)) {
-    return "Refi watch";
-  }
-
-  return `Refi at ${(rate * 100).toFixed(2)}%`;
+function sortStatements(statements) {
+  return [...statements].sort((a, b) => a.statementDate.localeCompare(b.statementDate));
 }
 
-function buildRefiDriver(data) {
-  const quotes = Array.isArray(data.refinancing) ? data.refinancing : [];
+function latestWindow(statements, size = 12) {
+  const ordered = sortStatements(statements);
+  return ordered.slice(Math.max(ordered.length - size, 0));
+}
 
-  if (quotes.length === 0) {
-    return {
-      lender: null,
-      product: null,
-      currentRate: data.currentDebt.interestRate,
-      marketRate: null,
-      spreadBps: null,
-      annualSavings: null,
-      takeoutGap: null,
-      status: "unavailable",
-      available: false
-    };
+function buildField(label, value) {
+  if (value === null || value === undefined) {
+    return { label, value: "Not available in statements", state: "missing" };
   }
 
-  const marketOption = quotes
-    .map((quote) => ({
-      ...quote,
-      spreadBps: Math.round((data.currentDebt.interestRate - quote.noteRate) * 10000),
-      annualSavings: Math.round(
-        data.currentDebt.principalBalance * data.currentDebt.interestRate - quote.annualIoPayment
-      ),
-      takeoutGap: Math.round(data.currentDebt.principalBalance - quote.proposedLoanAmount)
-    }))
-    .sort((a, b) => b.annualSavings - a.annualSavings || b.spreadBps - a.spreadBps)[0];
+  const formattedValue = typeof value === "number" ? formatMoney(value) : value;
 
-  const hasSavings = isPositiveNumber(marketOption.annualSavings);
-  const status =
-    hasSavings && marketOption.spreadBps >= 200
-      ? "act-now"
-      : hasSavings && marketOption.spreadBps >= 100
-        ? "evaluate"
-        : "monitor";
+  return { label, value: formattedValue, state: "available" };
+}
 
+function buildGapSummary(data) {
+  const gaps = [];
+
+  if (data.metadata.loanAmount === null) gaps.push("Loan amount");
+  if (data.metadata.loanTerm === null) gaps.push("Loan term");
+  if (data.metadata.startDate === null) gaps.push("Start date");
+  if (data.metadata.maturityDate === null) gaps.push("Maturity date");
+  if (data.servicer.name === null) gaps.push("Servicer");
+  if (data.keyContacts.length === 0) gaps.push("Key contacts");
+  if (data.metadata.dueDate === null) gaps.push("Due date");
+
+  return gaps;
+}
+
+function buildDetailRows(selected) {
+  return [
+    { label: "Statement date", value: selected.statementDate },
+    { label: "Source file", value: selected.sourceFile },
+    { label: "Outstanding balance", value: formatMoney(selected.principalBalance) },
+    { label: "Interest", value: formatMoney(selected.interestPaid) },
+    { label: "Taxes", value: formatMoney(selected.taxes) },
+    { label: "Insurance", value: formatMoney(selected.insurance) },
+    { label: "Other escrow", value: formatMoney(selected.otherEscrow) },
+    { label: "Total due", value: formatMoney(selected.totalDue) }
+  ];
+}
+
+function buildSidebar(data) {
   return {
-    lender: marketOption.lender,
-    product: marketOption.product,
-    currentRate: data.currentDebt.interestRate,
-    marketRate: marketOption.noteRate,
-    spreadBps: marketOption.spreadBps,
-    annualSavings: marketOption.annualSavings,
-    takeoutGap: marketOption.takeoutGap,
-    status,
-    available: true
+    available: [
+      "Statement date",
+      "Outstanding balance",
+      "Interest",
+      "Taxes",
+      "Insurance",
+      "Other escrow",
+      "Total due",
+      "Source file"
+    ],
+    missing: buildGapSummary(data),
+    latestSource: data.statements[data.statements.length - 1].sourceFile
   };
 }
 
-function buildRefiAlert(refi) {
-  if (refi.status === "unavailable") {
-    return {
-      title: "No refinance quotes available",
-      severity: "watchlist",
-      why: "Current lender options have not been sized for the asset.",
-      impact: "Refinance path cannot be underwritten yet.",
-      action: "Request fresh lender quotes before advancing a capital recommendation."
-    };
-  }
-
-  if (!isPositiveNumber(refi.annualSavings) || refi.status === "monitor") {
-    const impact =
-      typeof refi.annualSavings === "number" && Number.isFinite(refi.annualSavings)
-        ? `${formatCurrency(Math.abs(refi.annualSavings))} annual drag at current quotes`
-        : "No positive debt-service savings identified";
-
-    return {
-      title: "Refinance market not yet compelling",
-      severity: "watchlist",
-      why: "Available quotes do not currently create an actionable savings case.",
-      impact,
-      action: "Revisit the market after NOI improves or new lender quotes are available."
-    };
-  }
+function buildLatestInsight(latest, gapSummary) {
+  const components = [
+    { label: "Interest", value: latest.interestPaid },
+    { label: "Taxes", value: latest.taxes },
+    { label: "Insurance", value: latest.insurance }
+  ].sort((a, b) => b.value - a.value);
 
   return {
-    title: "Refinance spread creates savings window",
-    severity: "opportunity",
-    why: "Market coupon is materially below the current loan rate.",
-    impact: `${formatCurrency(refi.annualSavings)} annual savings`,
-    action: "Advance lender selection and close takeout-gap strategy."
+    primary: `${components[0].label} is the largest tracked component in the latest statement.`,
+    secondary: `${gapSummary.length} summary fields remain unavailable in statements.`
   };
 }
 
-function buildDecisionSections(data, metrics, benchmarkStates) {
-  const health = buildHealth(benchmarkStates);
-  const refi = buildRefiDriver(data);
-  const shouldActOnRefi = refi.status === "act-now" || refi.status === "evaluate";
-  const annualSavings = isPositiveNumber(refi.annualSavings) ? refi.annualSavings : 0;
-  const occupancyRiskUnits =
-    data.rentRoll.noticeUnits +
-    data.rentRoll.vacantRentedUnits +
-    data.rentRoll.evictUnits +
-    data.rentRoll.vacantUnrentedUnits;
+function buildStatementDashboardModel(data = fallbackStatementData, options = {}) {
+  if (!data || !Array.isArray(data.statements)) {
+    throw new Error("buildStatementDashboardModel requires statement data");
+  }
 
-  const decisionBox = {
-    recommendation:
-      refi.status === "act-now"
-        ? "Refinance in next 90 days"
-        : refi.status === "evaluate"
-          ? "Evaluate refinance options this quarter"
-          : "Stabilize NOI and liquidity before refinancing",
-    why:
-      shouldActOnRefi
-        ? [
-            "DSCR below target",
-            "Current rate materially above market",
-            "Escrow cushion remains below preferred range"
-          ]
-        : [
-            "DSCR remains below target",
-            refi.status === "unavailable"
-              ? "No refinance quotes are available yet"
-              : "Current refinance quotes do not create compelling savings",
-            "Escrow cushion remains below preferred range"
-          ],
-    impact: {
-      annualSavings,
-      riskReduction: occupancyRiskUnits
+  const ordered = sortStatements(data.statements);
+  const latest = ordered[ordered.length - 1];
+  const selectedStatementDate = options.selectedStatementDate || latest.statementDate;
+  const selected = ordered.find((row) => row.statementDate === selectedStatementDate) || latest;
+  const strategicWindow = latestWindow(ordered, 12);
+  const gapSummary = buildGapSummary(data);
+
+  return {
+    strategic: {
+      chart: {
+        points: strategicWindow.map((row) => ({
+          label: formatStatementMonth(row.statementDate),
+          statementDate: row.statementDate,
+          interestPaid: row.interestPaid,
+          taxes: row.taxes,
+          insurance: row.insurance
+        })),
+        series: [
+          { key: "interestPaid", label: "Interest" },
+          { key: "taxes", label: "Taxes" },
+          { key: "insurance", label: "Insurance" }
+        ]
+      },
+      loanOverview: [
+        buildField("Outstanding balance", latest.principalBalance),
+        buildField("Interest amount", latest.interestPaid),
+        buildField("Taxes", latest.taxes),
+        buildField("Insurance", latest.insurance),
+        buildField("Loan amount", data.metadata.loanAmount),
+        buildField("Loan term", data.metadata.loanTerm),
+        buildField("Start date", data.metadata.startDate),
+        buildField("Maturity date", data.metadata.maturityDate)
+      ],
+      servicerCard: {
+        state: data.servicer.name ? "available" : "missing",
+        name: data.servicer.name || "Not available in statements",
+        phone: data.servicer.phone || "Not available in statements",
+        email: data.servicer.email || "Not available in statements"
+      },
+      keyContactsCard: {
+        state: data.keyContacts.length > 0 ? "available" : "missing",
+        contacts: data.keyContacts.length > 0 ? data.keyContacts : []
+      },
+      latestInsight: buildLatestInsight(latest, gapSummary),
+      cta: {
+        label: "View operational detail",
+        href: `operational_view.html?statementDate=${latest.statementDate}`
+      }
+    },
+    operational: {
+      tableRows: [...ordered]
+        .sort((a, b) => b.statementDate.localeCompare(a.statementDate))
+        .map((row) => ({
+          ...row,
+          sourceLabel: row.sourceFile
+        })),
+      selectedStatement: selected,
+      detailRows: buildDetailRows(selected),
+      sidebar: buildSidebar(data),
+      gapSummary
+    },
+    navigation: {
+      operationalHref: `operational_view.html?statementDate=${selected.statementDate}`,
+      strategicHref: "index.html"
     }
-  };
-
-  const alerts = [
-    {
-      title: "DSCR below 1.25x threshold",
-      severity: "critical",
-      why: "Current NOI does not adequately cover annual debt service.",
-      impact: `Coverage gap ${(1.25 - metrics.dscr).toFixed(2)}x`,
-      action: "Run refinance path and NOI recovery plan in parallel."
-    },
-    {
-      title: "Debt yield below healthy range",
-      severity: "critical",
-      why: "Loan basis is high relative to current NOI.",
-      impact: `${(metrics.debtYield * 100).toFixed(2)}% vs 8.0% benchmark`,
-      action: "Protect NOI and avoid additional leverage."
-    },
-    {
-      title: "Escrow below 3.0 months target",
-      severity: metrics.escrowRunwayMonths < 2 ? "critical" : "high",
-      why: "Reserve coverage has limited buffer for upcoming obligations.",
-      impact: `${metrics.escrowRunwayMonths.toFixed(1)} months of coverage`,
-      action: "Refresh reserve schedule and confirm replenishment timing."
-    },
-    buildRefiAlert(refi)
-  ];
-
-  const scenarios = [
-    { label: "Rent +5%", outcome: "DSCR 0.50x", tone: "watchlist" },
-    { label: "Vacancy +3 pts", outcome: "DSCR 0.44x", tone: "critical" },
-    refi.status === "unavailable"
-      ? { label: "Refi watch", outcome: "Await lender quotes", tone: "watchlist" }
-      : {
-          label: formatRefiScenarioLabel(refi.marketRate),
-          outcome: isPositiveNumber(refi.annualSavings)
-            ? `${formatCurrency(refi.annualSavings)} savings`
-            : `${formatCurrency(Math.abs(refi.annualSavings || 0))} higher annual debt service`,
-          tone: isPositiveNumber(refi.annualSavings) ? "healthy" : "critical"
-        }
-  ];
-
-  const priorities = shouldActOnRefi
-    ? [
-        {
-          priority: "P1",
-          displayTitle: "Refinance execution",
-          area: "Capital",
-          issue: "Refinance execution",
-          financialImpact: `${formatCurrency(refi.annualSavings)} annual savings`,
-          riskLevel: "critical",
-          recommendation: "Select lender, quantify takeout gap, and run IC memo.",
-          owner: "Asset Mgmt",
-          timing: "30 days"
-        },
-        {
-          priority: "P2",
-          displayTitle: "Escrow sufficiency review",
-          area: "Liquidity",
-          issue: "Escrow sufficiency review",
-          financialImpact: `${metrics.escrowRunwayMonths.toFixed(1)} months runway`,
-          riskLevel: "high",
-          recommendation: "Stress the reserve calendar through maturity and taxes.",
-          owner: "Treasury",
-          timing: "2 weeks"
-        }
-      ]
-    : [
-        {
-          priority: "P1",
-          displayTitle: "NOI recovery plan",
-          area: "Operations",
-          issue: "NOI recovery plan",
-          financialImpact: `${formatCurrency(metrics.noi)} current T12 NOI`,
-          riskLevel: "critical",
-          recommendation: "Focus on rent, collections, and occupancy before pursuing takeout execution.",
-          owner: "Asset Mgmt",
-          timing: "30 days"
-        },
-        {
-          priority: "P2",
-          displayTitle: "Escrow sufficiency review",
-          area: "Liquidity",
-          issue: "Escrow sufficiency review",
-          financialImpact: `${metrics.escrowRunwayMonths.toFixed(1)} months runway`,
-          riskLevel: "high",
-          recommendation: "Stress the reserve calendar through maturity and taxes.",
-          owner: "Treasury",
-          timing: "2 weeks"
-        }
-      ];
-
-  return {
-    health,
-    decisionBox,
-    alerts,
-    drivers: { refi },
-    scenarios,
-    priorities
-  };
-}
-
-function buildKpiMap(kpis) {
-  return Object.fromEntries(kpis.map((kpi) => [kpi.key, kpi]));
-}
-
-function buildOverview(kpis) {
-  const kpiMap = buildKpiMap(kpis);
-
-  return {
-    kpis,
-    kpiMap,
-    criticalPoints: [
-      `DSCR ${kpiMap.dscr.value} vs ${kpiMap.dscr.benchmark}`,
-      `Debt yield ${kpiMap.debtYield.value} trails healthy range`,
-      `Escrow runway ${kpiMap.escrowRunway.value} remains below target`
-    ]
-  };
-}
-
-function buildTrends(data, kpiMap) {
-  const statements = data.statements;
-  const latest = statements[statements.length - 1];
-  const previous = statements[statements.length - 2] || latest;
-  const first = statements[0];
-  const last12 = statements.slice(-12);
-  const escrowPeak = Math.max(...statements.map((row) => row.endingEscrowBalance || 0), 1);
-  const escrowDelta = latest.endingEscrowBalance - previous.endingEscrowBalance;
-  const principalDelta = latest.principalBalance - first.principalBalance;
-
-  return {
-    coverage: {
-      cardKey: "dscr",
-      headline: `${kpiMap.dscr.label} ${kpiMap.dscr.value}`,
-      chipLabel: `${kpiMap.dscr.direction.arrow} ${kpiMap.dscr.benchmark}`,
-      chipTone: kpiMap.dscr.direction.tone,
-      series: last12.map((row) => ({
-        label: compactMonth(row.statementDate),
-        value: row.totalDue,
-        anomaly: row.totalDue >= 113000 || row.totalDue <= 104000
-      })),
-      insight: `${kpiMap.dscr.value} coverage remains below ${kpiMap.dscr.benchmark}; monthly debt service still peaks above ${formatCurrencyExact(latest.totalDue)}.`
-    },
-    escrow: {
-      cardKey: "escrowRunway",
-      headline: `${kpiMap.escrowRunway.label} ${kpiMap.escrowRunway.value}`,
-      chipLabel: `${kpiMap.escrowRunway.direction.arrow} ${kpiMap.escrowRunway.benchmark}`,
-      chipTone: kpiMap.escrowRunway.direction.tone,
-      series: last12.map((row) => ({
-        label: compactMonth(row.statementDate),
-        value: row.endingEscrowBalance || 0,
-        anomaly: (row.endingEscrowBalance || 0) < escrowPeak * 0.45
-      })),
-      insight: `${kpiMap.escrowRunway.value} of runway leaves limited reserve buffer even after a ${formatCurrencyExact(Math.abs(escrowDelta))} sequential move.`
-    },
-    leverage: {
-      cardKey: "ltv",
-      headline: `${kpiMap.ltv.label} ${kpiMap.ltv.value}`,
-      chipLabel: `${kpiMap.ltv.direction.arrow} ${kpiMap.ltv.benchmark}`,
-      chipTone: kpiMap.ltv.direction.tone,
-      series: statements.map((row, index) => {
-        const prior = statements[index - 1];
-        return {
-          label: compactMonth(row.statementDate),
-          value: row.principalBalance,
-          anomaly: prior ? Math.abs(row.principalBalance - prior.principalBalance) > 1000 : false
-        };
-      }),
-      insight: `${kpiMap.ltv.value} leverage sits above the ${kpiMap.ltv.benchmark} target, with principal still up ${formatCurrencyExact(principalDelta)} from the starting balance.`
-    }
-  };
-}
-
-function buildDrivers(data, metrics, refiDriver, decisionBox) {
-  const leakageDrivers = [
-    { label: "Vacancy", value: Math.abs(data.budget.vacancyYtd), className: "danger" },
-    { label: "Bad debt", value: Math.abs(data.budget.badDebtYtd), className: "warn" },
-    { label: "Concessions", value: Math.abs(data.budget.concessionsYtd), className: "" }
-  ]
-    .sort((a, b) => b.value - a.value)
-    .map((item, index, all) => ({
-      ...item,
-      share: item.value / data.budget.grossPotentialRentYtd,
-      widthPercent: all[0].value === 0 ? 0 : (item.value / all[0].value) * 100
-    }));
-
-  const statusSegments = [
-    { label: "Current", key: "current", value: data.rentRoll.currentUnits },
-    { label: "Notice", key: "notice", value: data.rentRoll.noticeUnits },
-    { label: "Vacant-Rented", key: "vacant-rented", value: data.rentRoll.vacantRentedUnits },
-    { label: "Evict", key: "evict", value: data.rentRoll.evictUnits },
-    { label: "Vacant-Unrented", key: "vacant-unrented", value: data.rentRoll.vacantUnrentedUnits }
-  ].map((segment) => ({
-    ...segment,
-    widthPercent: (segment.value / data.rentRoll.units) * 100
-  }));
-
-  const refiOptions = data.refinancing.map((quote) => {
-    const annualIoPayment = quote.annualIoPayment || (quote.proposedLoanAmount * quote.noteRate);
-    const monthlySavings = data.currentDebt.monthlyInterestOnly - (annualIoPayment / 12);
-    const takeoutGap = data.currentDebt.principalBalance - quote.proposedLoanAmount;
-
-    return {
-      lender: quote.lender,
-      product: quote.product,
-      noteRate: quote.noteRate,
-      ltv: quote.ltv,
-      monthlySavings,
-      takeoutGap,
-      isBestOption: refiDriver.available && quote.lender === refiDriver.lender && quote.product === refiDriver.product
-    };
-  });
-
-  return {
-    refi: refiDriver,
-    leakageDrivers,
-    leakageInsight: `${formatCurrencyExact(metrics.noi)} T12 NOI is still weighed down by vacancy and bad debt leakage.`,
-    statusSegments,
-    statusInsight: `${decisionBox.impact.riskReduction} units sit outside the stable current bucket.`,
-    refiOptions,
-    capitalInsight: refiDriver.available
-      ? `${formatCurrencyExact(refiDriver.annualSavings)} annual savings is available, but the ${formatCurrencyExact(Math.abs(refiDriver.takeoutGap))} takeout gap remains the gating item.`
-      : "Lower-rate execution cannot be underwritten until fresh lender quotes are available."
-  };
-}
-
-function buildMortgageDecisionModel(data) {
-  const latest = data.statements[data.statements.length - 1];
-  const previous = data.statements[data.statements.length - 2] || latest;
-  const marketValue = data.analysis.marketValue;
-  const annualDebtService = data.currentDebt.monthlyInterestOnly * 12;
-  const priorNoi = data.analysis.priorNoi;
-
-  if (!marketValue) {
-    throw new Error("buildMortgageDecisionModel requires data.analysis.marketValue");
-  }
-
-  const metrics = {
-    marketValue,
-    annualDebtService,
-    dscr: data.budget.t12Noi / annualDebtService,
-    ltv: data.currentDebt.principalBalance / marketValue,
-    noi: data.budget.t12Noi,
-    debtYield: data.budget.t12Noi / data.currentDebt.principalBalance,
-    escrowRunwayMonths: latest.endingEscrowBalance / data.currentDebt.monthlyWithEscrow,
-    priorNoi
-  };
-
-  const benchmarkStates = [
-    evaluateBenchmark("dscr", metrics.dscr),
-    evaluateBenchmark("ltv", metrics.ltv),
-    evaluateBenchmark("debtYield", metrics.debtYield),
-    evaluateBenchmark("escrowRunway", metrics.escrowRunwayMonths)
-  ];
-
-  const dscrDirection = calculateDirection(metrics.dscr, priorNoi / annualDebtService);
-  const ltvDirection = calculateDirection(metrics.ltv, previous.principalBalance / marketValue, true);
-  const noiDirection = calculateDirection(metrics.noi, priorNoi);
-  const debtYieldDirection = calculateDirection(metrics.debtYield, priorNoi / data.currentDebt.principalBalance);
-  const runwayDirection = calculateDirection(
-    metrics.escrowRunwayMonths,
-    previous.endingEscrowBalance / data.currentDebt.monthlyWithEscrow
-  );
-
-  const kpis = [
-    {
-      key: "dscr",
-      label: "DSCR",
-      value: BENCHMARKS.dscr.formatter(metrics.dscr),
-      benchmark: BENCHMARKS.dscr.target,
-      state: benchmarkStates[0],
-      direction: dscrDirection
-    },
-    {
-      key: "ltv",
-      label: "LTV",
-      value: BENCHMARKS.ltv.formatter(metrics.ltv),
-      benchmark: BENCHMARKS.ltv.target,
-      state: benchmarkStates[1],
-      direction: ltvDirection
-    },
-    {
-      key: "noi",
-      label: "NOI",
-      value: `$${Math.round(metrics.noi).toLocaleString("en-US")}`,
-      benchmark: "vs prior T12",
-      state: noiDirection.tone,
-      direction: noiDirection
-    },
-    {
-      key: "debtYield",
-      label: "Debt Yield",
-      value: BENCHMARKS.debtYield.formatter(metrics.debtYield),
-      benchmark: BENCHMARKS.debtYield.target,
-      state: benchmarkStates[2],
-      direction: debtYieldDirection
-    },
-    {
-      key: "escrowRunway",
-      label: "Escrow Runway",
-      value: BENCHMARKS.escrowRunway.formatter(metrics.escrowRunwayMonths),
-      benchmark: BENCHMARKS.escrowRunway.target,
-      state: benchmarkStates[3],
-      direction: runwayDirection
-    }
-  ];
-  const overview = buildOverview(kpis);
-
-  const decisionSections = buildDecisionSections(data, metrics, benchmarkStates);
-  const trends = buildTrends(data, overview.kpiMap);
-  const drivers = buildDrivers(data, metrics, decisionSections.drivers.refi, decisionSections.decisionBox);
-
-  return {
-    header: {
-      status: decisionSections.health.status,
-      latestCycle: formatDate(data.currentDebt.latestDueDate)
-    },
-    metrics,
-    overview,
-    trends,
-    health: decisionSections.health,
-    decisionBox: decisionSections.decisionBox,
-    alerts: decisionSections.alerts,
-    drivers,
-    scenarios: decisionSections.scenarios,
-    priorities: decisionSections.priorities
   };
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { BENCHMARKS, buildMortgageDecisionModel, calculateDirection, evaluateBenchmark };
+  module.exports = {
+    buildStatementDashboardModel,
+    buildDetailRows,
+    buildField,
+    buildGapSummary,
+    buildLatestInsight,
+    buildSidebar,
+    formatMoney,
+    formatStatementMonth,
+    latestWindow,
+    sortStatements
+  };
 }
 
 if (typeof window !== "undefined") {
-  window.mortgageDashboardModel = { BENCHMARKS, buildMortgageDecisionModel, calculateDirection, evaluateBenchmark };
+  window.statementDashboardModel = {
+    buildStatementDashboardModel,
+    buildDetailRows,
+    buildField,
+    buildGapSummary,
+    buildLatestInsight,
+    buildSidebar,
+    formatMoney,
+    formatStatementMonth,
+    latestWindow,
+    sortStatements
+  };
 }
