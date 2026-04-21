@@ -1,0 +1,10 @@
+Raw sources included:
+- New Oasis Dashboard ? Insurance Overview range A1:Z120
+- New Oasis Dashboard ? Income Statement DB header A2:AB2 + row 6310-01 A425:AB425
+- Insurance Policies for 4800 Atlantic Blvd ? Sheet1 range A1:AB200
+- Renewal Invoice - Excess Property Invoice.pdf (text extract)
+
+Drive addresses:
+- https://docs.google.com/spreadsheets/d/1Ncn2qzT6scuXkbtzxP0asj_7J_fKh7mE_6j2fpgUo80
+- https://docs.google.com/spreadsheets/d/1-PHt2JtrmvQRJrkHM0U_edD5Ezjhg6Q6mwPIk3cvHBU
+- https://drive.google.com/file/d/1g8cO3p9Y9Y5yAR5ulHTFrhFTYvnwP2CM/view

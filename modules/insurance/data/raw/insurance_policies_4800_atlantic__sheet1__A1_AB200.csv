@@ -1,0 +1,33 @@
+
+Insurance Coverage,Insurer,Policy Period,Premium,Policy #,Notes
+Property - Multi Peril ,Underwriters a Lloyd's of London.,"January 18. 2026 - January 18, 2027","$40,144",09-7591197243-S-00
+Property - Multi Peril  - Excess,Fortegra Specialty Insurance Company,"January 18. 2026 - January 18, 2027","$15,275",CAT1000952-00
+General Liability,Concert Specialty Insurance Company,"October 16, 2026 - October 16, 2027","$30,970",CSHGL000006800
+Umbrella,Evanston Insurance Company,01/18/2026 to 10/16/2026,"13,230.00",EZXS3230029,Currently prorated for 9 months at 
+
+
+,,Premiums,"$99,619","$10,486"
+
+
+
+
+
+
+Insurance Overpayment ,,,,,,Escrow Analysis
+Description,Amount,,,,Description,Amount,Balance
+"Escrow (As Feb 10, 2026)","$209,799",,,,"Insurance Escrow Balance as of Feb 10, 2026",,"$209,799.00"
+Payments already made in late 2025,"$9,276",,,,Insurance Payments,"-$90,343","$119,455.88"
+Insurance Premiums Due,"-$99,619",,,,Return of funds in escrow,"-$119,456.00",-$0.12
+Overpayment currently in Escrow,"$119,456",,,,March Escrow,"$10,486","$10,486.07"
+,,,,,April Escrow,"$10,486","$20,972.26"
+,,,,,May Escrow,"$10,486","$31,458.45"
+,,,,,June Escrow,"$10,486","$41,944.65"
+,,,,,July Escrow,"$10,486","$52,430.84"
+,,,,,August Escrow,"$10,486","$62,917.03"
+,,,,,Sept Escrow,"$10,486","$73,403.22"
+,,,,,October Escrow,"$10,486","$83,889.41"
+,,,,,Umbrella Insurance payment,"-13,230.00","$70,659.41"
+,,,,,November Escrow,"$10,486","$81,145.60"
+,,,,,December Escrow,"$10,486","$91,631.80"
+,,,,,January Escrow,"$10,486","$102,117.99"
+,,,,,Insurance Payments,"-$99,619","$2,499.17"
