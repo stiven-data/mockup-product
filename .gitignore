@@ -1,9 +1,0 @@
-modules/insurance/data/**
-modules/insurance/views/**
-
-!modules/insurance/data/
-!modules/insurance/data/.gitkeep
-!modules/insurance/data/raw/
-!modules/insurance/data/raw/.gitkeep
-!modules/insurance/views/
-!modules/insurance/views/.gitkeep
