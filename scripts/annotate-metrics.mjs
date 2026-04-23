@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 
-import { annotateHtmlMetrics, moduleFromPath } from "./data-driven-core.mjs";
+import { annotateHtmlMetrics, injectMetricsRuntime, moduleFromPath } from "./data-driven-core.mjs";
 
 const HTML_FILES = [
   "modules/taxes/views/index.html",
@@ -8,17 +8,22 @@ const HTML_FILES = [
   "modules/Gp/views/gp mockups.html",
 ];
 
+const RUNTIME_PATH = "../../../assets/js/supabase-data.js";
+
 for (const sourceFile of HTML_FILES) {
   const html = await readFile(sourceFile, "utf8");
-  if (html.includes("data-metric-key=")) {
-    console.log(`Skipped already annotated file: ${sourceFile}`);
-    continue;
-  }
-
-  const { html: annotatedHtml, metrics } = annotateHtmlMetrics(html, {
-    module: moduleFromPath(sourceFile),
-    sourceFile,
-  });
-  await writeFile(sourceFile, annotatedHtml, "utf8");
-  console.log(`Annotated ${metrics.length} metrics in ${sourceFile}`);
+  const alreadyAnnotated = html.includes("data-metric-key=");
+  const baseHtml = alreadyAnnotated
+    ? html
+    : annotateHtmlMetrics(html, {
+        module: moduleFromPath(sourceFile),
+        sourceFile,
+      }).html;
+  const finalHtml = injectMetricsRuntime(baseHtml, RUNTIME_PATH);
+  await writeFile(sourceFile, finalHtml, "utf8");
+  console.log(
+    alreadyAnnotated
+      ? `Injected runtime into already annotated file: ${sourceFile}`
+      : `Annotated and injected runtime for ${sourceFile}`,
+  );
 }

@@ -77,7 +77,7 @@ export function annotateHtmlMetrics(html, options) {
       return segment.replace(MONEY_OR_PERCENT_PATTERN, (valueDisplay) => {
         const metric = buildMetric(valueDisplay, options, metrics.length + 1, segment);
         metrics.push(metric);
-        return `<span data-metric-key="${metric.metric_key}">${valueDisplay}</span>`;
+        return `<span data-metric-key="${metric.metric_key}" data-metric-missing="Missing in Supabase">${valueDisplay}</span>`;
       });
     });
   });
@@ -86,6 +86,17 @@ export function annotateHtmlMetrics(html, options) {
     html: annotatedParts.join(""),
     metrics,
   };
+}
+
+export function injectMetricsRuntime(html, runtimePath) {
+  if (html.includes(`src="${runtimePath}"`)) return html;
+
+  const scriptTag = `<script src="${runtimePath}"></script>`;
+  if (html.includes("</body>")) {
+    return html.replace("</body>", `${scriptTag}</body>`);
+  }
+
+  return `${html}${scriptTag}`;
 }
 
 export function moduleFromPath(sourceFile) {

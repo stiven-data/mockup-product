@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   annotateHtmlMetrics,
+  injectMetricsRuntime,
   extractHtmlMetrics,
   normalizeDisplayValue,
   repairTextArtifacts,
@@ -32,7 +33,7 @@ test("extractHtmlMetrics finds visible financial metrics and ignores CSS", () =>
   assert.equal(metrics[2].value_numeric, 32719);
 });
 
-test("annotateHtmlMetrics wraps matching values with data-metric-key", () => {
+test("annotateHtmlMetrics wraps matching values with missing metric metadata", () => {
   const html = `<main><strong>$8,600,000</strong><span>35%</span></main>`;
   const { html: annotatedHtml, metrics } = annotateHtmlMetrics(html, {
     module: "taxes",
@@ -41,13 +42,28 @@ test("annotateHtmlMetrics wraps matching values with data-metric-key", () => {
 
   assert.match(
     annotatedHtml,
-    /<span data-metric-key="taxes_modules_taxes_views_index_001">\$8,600,000<\/span>/,
+    /<span data-metric-key="taxes_modules_taxes_views_index_001" data-metric-missing="Missing in Supabase">\$8,600,000<\/span>/,
   );
   assert.match(
     annotatedHtml,
-    /<span data-metric-key="taxes_modules_taxes_views_index_002">35%<\/span>/,
+    /<span data-metric-key="taxes_modules_taxes_views_index_002" data-metric-missing="Missing in Supabase">35%<\/span>/,
   );
   assert.equal(metrics.length, 2);
+});
+
+test("injectMetricsRuntime appends the runtime once before the closing body tag", () => {
+  const html = "<html><body><main>Hi</main></body></html>";
+  const injected = injectMetricsRuntime(html, "../../../assets/js/supabase-data.js");
+
+  assert.match(
+    injected,
+    /<script src="\.\.\/\.\.\/\.\.\/assets\/js\/supabase-data\.js"><\/script><\/body><\/html>$/,
+  );
+
+  assert.equal(
+    injectMetricsRuntime(injected, "../../../assets/js/supabase-data.js"),
+    injected,
+  );
 });
 
 test("parseDisplayValue supports currency and percentages", () => {
