@@ -2,9 +2,105 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
+const vm = require("node:vm");
 
 function read(relativePath) {
   return fs.readFileSync(path.join(__dirname, "..", relativePath), "utf8");
+}
+
+const mortgageBridgePath = path.join(
+  __dirname,
+  "..",
+  "modules/mortgage/views/current-debt-supabase.js",
+);
+const mortgageBridgeSource = fs.readFileSync(mortgageBridgePath, "utf8");
+
+function createMortgageField({
+  field,
+  textContent,
+  mortgageMissing = "Missing in Supabase",
+  mortgageScope,
+  closestRow = null,
+}) {
+  const dataset = {
+    mortgageField: field,
+    mortgageMissing,
+  };
+  if (mortgageScope) {
+    dataset.mortgageScope = mortgageScope;
+  }
+
+  return {
+    dataset,
+    textContent,
+    closest(selector) {
+      assert.equal(selector, ".mortgage-loan-row");
+      return closestRow;
+    },
+  };
+}
+
+function createLoanRow(isSelected) {
+  return {
+    getAttribute(name) {
+      assert.equal(name, "aria-selected");
+      return isSelected ? "true" : "false";
+    },
+  };
+}
+
+async function loadMortgageBridge({ elements, rowsByKey }) {
+  const documentEvents = new Map();
+  const subscriptions = [];
+  let refreshCalls = 0;
+
+  const document = {
+    readyState: "complete",
+    addEventListener(type, handler) {
+      documentEvents.set(type, handler);
+    },
+    querySelectorAll(selector) {
+      assert.equal(selector, "[data-mortgage-field]");
+      return elements;
+    },
+  };
+
+  const window = {
+    ValorisMetrics: {
+      getRow(metricKey) {
+        return rowsByKey.get(metricKey) || null;
+      },
+      async refreshMetrics() {
+        refreshCalls += 1;
+      },
+      subscribe(listener) {
+        subscriptions.push(listener);
+        return () => {};
+      },
+    },
+  };
+  window.window = window;
+
+  const context = vm.createContext({
+    console: {
+      warn() {},
+    },
+    document,
+    window,
+  });
+
+  new vm.Script(mortgageBridgeSource, {
+    filename: mortgageBridgePath,
+  }).runInContext(context);
+
+  await new Promise((resolve) => setImmediate(resolve));
+
+  return {
+    bridge: window.currentDebtSupabaseBridge,
+    refreshCalls,
+    subscriptions,
+    window,
+  };
 }
 
 const INSURANCE_METRICS = [
@@ -100,8 +196,55 @@ test("mortgage page loads the shared runtime and mortgage overlay bridge", () =>
   assert.match(html, /"total-due"/);
   assert.match(html, /"ending-escrow-balance"/);
   assert.match(html, /data-mortgage-field="\$\{escapeHtml\(field\)\}"/);
+  assert.match(html, /data-mortgage-scope="\$\{escapeHtml\(scope\)\}"/);
+  assert.match(html, /"selected-row"/);
   assert.match(html, /Missing in Supabase/);
   assert.match(html, /window\.currentDebtSupabaseBridge/);
+});
+
+test("mortgage bridge only overlays selected-row duplicates and keeps other workbook cells intact", async () => {
+  const selectedRow = createLoanRow(true);
+  const unselectedRow = createLoanRow(false);
+  const topCardField = createMortgageField({
+    field: "principal-balance",
+    textContent: "$10,853,176.39",
+  });
+  const selectedTableField = createMortgageField({
+    field: "principal-balance",
+    textContent: "$10,853,176.39",
+    mortgageScope: "selected-row",
+    closestRow: selectedRow,
+  });
+  const unselectedTableField = createMortgageField({
+    field: "principal-balance",
+    textContent: "$9,999,999.99",
+    mortgageScope: "selected-row",
+    closestRow: unselectedRow,
+  });
+
+  const runtime = await loadMortgageBridge({
+    elements: [topCardField, selectedTableField, unselectedTableField],
+    rowsByKey: new Map([
+      [
+        "mortgage_principal_balance",
+        {
+          metric_key: "mortgage_principal_balance",
+          value_display: "$11,000,000.00",
+        },
+      ],
+    ]),
+  });
+
+  assert.equal(runtime.refreshCalls, 1);
+  assert.equal(topCardField.textContent, "$11,000,000.00");
+  assert.equal(selectedTableField.textContent, "$11,000,000.00");
+  assert.equal(unselectedTableField.textContent, "$9,999,999.99");
+
+  runtime.subscriptions[0]({ type: "metric:change" });
+
+  assert.equal(topCardField.textContent, "$11,000,000.00");
+  assert.equal(selectedTableField.textContent, "$11,000,000.00");
+  assert.equal(unselectedTableField.textContent, "$9,999,999.99");
 });
 
 test("gp manual metric bindings stay aligned with seeded outputs", async () => {

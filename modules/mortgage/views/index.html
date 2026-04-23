@@ -358,8 +358,8 @@
         const buildChip = (label, value) =>
           `<div class="stat-card mortgage-meta-card"><div class="meta-label">${escapeHtml(label)}</div><strong>${escapeHtml(value)}</strong></div>`;
 
-        const buildOverlayValue = (field, value) =>
-          `<span data-mortgage-field="${escapeHtml(field)}" data-mortgage-missing="Missing in Supabase">${escapeHtml(value)}</span>`;
+        const buildOverlayValue = (field, value, scope) =>
+          `<span data-mortgage-field="${escapeHtml(field)}" data-mortgage-missing="Missing in Supabase"${scope ? ` data-mortgage-scope="${escapeHtml(scope)}"` : ""}>${escapeHtml(value)}</span>`;
 
         const buildStat = (label, value, field) =>
           `<div class="stat-card"><div class="meta-label">${escapeHtml(label)}</div><strong>${field ? buildOverlayValue(field, value) : escapeHtml(value)}</strong></div>`;
@@ -445,11 +445,11 @@
                 <td><strong>${escapeHtml(cleanText(loan.lender))}</strong></td>
                 <td>${escapeHtml(cleanText(loan.servicer))}</td>
                 <td>${escapeHtml(cleanText(loan.loanNumber))}</td>
-                <td>${buildOverlayValue("principal-balance", formatCurrency(loan.principalBalance))}</td>
-                <td>${buildOverlayValue("interest-rate", formatPercent(loan.interestRate))}</td>
+                <td>${buildOverlayValue("principal-balance", formatCurrency(loan.principalBalance), "selected-row")}</td>
+                <td>${buildOverlayValue("interest-rate", formatPercent(loan.interestRate), "selected-row")}</td>
                 <td>${escapeHtml(cleanText(loan.loanType))}</td>
-                <td>${buildOverlayValue("monthly-payment-io-only", formatCurrency(loan.monthlyPaymentIoOnly))}</td>
-                <td>${buildOverlayValue("monthly-payment-with-escrow", formatCurrency(loan.monthlyPaymentWithEscrow))}</td>
+                <td>${buildOverlayValue("monthly-payment-io-only", formatCurrency(loan.monthlyPaymentIoOnly), "selected-row")}</td>
+                <td>${buildOverlayValue("monthly-payment-with-escrow", formatCurrency(loan.monthlyPaymentWithEscrow), "selected-row")}</td>
               </tr>`
           )
           .join("");

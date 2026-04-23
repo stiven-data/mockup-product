@@ -20,7 +20,33 @@
     return element.dataset.mortgageMissing || "Missing in Supabase";
   }
 
+  function rememberWorkbookValue(element) {
+    if (!Object.prototype.hasOwnProperty.call(element.dataset, "mortgageWorkbookValue")) {
+      element.dataset.mortgageWorkbookValue = element.textContent;
+    }
+    return element.dataset.mortgageWorkbookValue;
+  }
+
+  function clearOverlayMetadata(element) {
+    delete element.dataset.sourceFile;
+    delete element.dataset.sourceContext;
+  }
+
+  function restoreWorkbookValue(element) {
+    element.textContent = rememberWorkbookValue(element);
+    clearOverlayMetadata(element);
+  }
+
+  function isSelectedRowField(element) {
+    return element.dataset.mortgageScope === "selected-row";
+  }
+
+  function isInsideSelectedRow(element) {
+    return element.closest(".mortgage-loan-row")?.getAttribute("aria-selected") === "true";
+  }
+
   function applyFieldValue(element, row) {
+    rememberWorkbookValue(element);
     element.textContent = row?.value_display || getMissingDisplay(element);
 
     if (row?.source_file) {
@@ -41,6 +67,11 @@
     const fields = getBoundFields();
 
     for (const field of fields) {
+      if (isSelectedRowField(field) && !isInsideSelectedRow(field)) {
+        restoreWorkbookValue(field);
+        continue;
+      }
+
       const metricKey = FIELD_TO_METRIC_KEY[field.dataset.mortgageField];
       const row = metricKey && metricsRuntime?.getRow ? metricsRuntime.getRow(metricKey) : null;
       applyFieldValue(field, row);
