@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --app-bg: #f6f6f4;
   --surface: #ffffff;
   --surface-subtle: #fafaf8;
@@ -480,3 +480,225 @@ body {
     min-width: 100%;
   }
 }
+
+/* Taxes Module */
+.taxes-location {
+        margin: 6px 0 0;
+      }
+
+      .taxes-stats,
+      .taxes-overview,
+      .taxes-section-grid,
+      .taxes-two-up,
+      .taxes-reference,
+      .taxes-footer {
+        margin-top: 24px;
+      }
+
+      .taxes-overview,
+      .taxes-section-grid,
+      .taxes-two-up {
+        display: grid;
+        gap: 24px;
+      }
+
+      .taxes-overview {
+        grid-template-columns: minmax(0, 1.45fr) minmax(320px, 1fr);
+      }
+
+      .taxes-section-grid,
+      .taxes-two-up {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .taxes-panel-header {
+        margin-bottom: 18px;
+      }
+
+      .taxes-panel-header h2,
+      .taxes-subsection-title {
+        margin: 8px 0 0;
+        font-size: 24px;
+        line-height: 1.15;
+      }
+
+      .taxes-panel-header p {
+        margin-bottom: 0;
+      }
+
+      .taxes-hero-title {
+        margin: 8px 0 0;
+        font-size: 32px;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+      }
+
+      .taxes-hero-copy {
+        margin: 14px 0 0;
+        color: var(--text-muted);
+        line-height: 1.65;
+      }
+
+      .taxes-chip-grid,
+      .taxes-mini-grid,
+      .taxes-reference-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .taxes-chip-grid,
+      .taxes-mini-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .taxes-mini-grid--compact {
+        margin-bottom: 18px;
+      }
+
+      .taxes-chip,
+      .taxes-mini-card,
+      .taxes-note-card {
+        padding: 16px;
+
+        border-radius: var(--radius-control);
+        background: var(--surface-subtle);
+      }
+
+      .taxes-chip strong,
+      .taxes-mini-card strong,
+      .taxes-note-card strong {
+        display: block;
+      }
+
+      .taxes-note-card--spaced {
+        margin-top: 16px;
+      }
+
+      .taxes-note-copy {
+        margin: 10px 0 0;
+      }
+
+      .taxes-chip .meta-label,
+      .taxes-mini-card .meta-label,
+      .taxes-note-card .meta-label {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .taxes-jump-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .taxes-jump-links .btn {
+        text-decoration: none;
+      }
+
+      .taxes-detail-list {
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+
+      }
+
+      .taxes-detail-row {
+        display: grid;
+        grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+        gap: 16px;
+        padding: 16px 18px;
+        border-top: 1px solid var(--border);
+      }
+
+      .taxes-detail-row:first-child {
+        border-top: 0;
+      }
+
+      .taxes-detail-row:nth-child(even) {
+        background: var(--surface-subtle);
+      }
+
+      .taxes-detail-label,
+      .taxes-detail-value {
+        margin: 0;
+      }
+
+      .taxes-detail-value {
+        word-break: break-word;
+      }
+.taxes-table-secondary {
+        display: block;
+        margin-top: 4px;
+        color: var(--text-soft);
+        font-size: 12px;
+      }
+
+      .taxes-table-scroll .data-table tbody th,
+      .taxes-table-scroll .data-table tbody td,
+      .taxes-table-scroll .data-table tfoot th,
+      .taxes-table-scroll .data-table tfoot td {
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+        text-align: left;
+      }
+
+      .taxes-table-scroll .data-table tbody th,
+      .taxes-table-scroll .data-table tfoot th {
+        font-weight: 600;
+      }
+
+      .taxes-table-scroll .data-table tfoot th,
+      .taxes-table-scroll .data-table tfoot td {
+        background: var(--surface-subtle);
+      }
+
+      .taxes-table-scroll .data-table tbody tr:last-child th,
+      .taxes-table-scroll .data-table tbody tr:last-child td,
+      .taxes-table-scroll .data-table tfoot tr:last-child th,
+      .taxes-table-scroll .data-table tfoot tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .taxes-reference-grid {
+        margin-top: 20px;
+      }
+
+      .taxes-reference-surface {
+        padding: 24px;
+      }
+
+      .taxes-footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .taxes-footer span {
+        display: block;
+      }
+
+      @media (max-width: 1120px) {
+        .taxes-overview,
+        .taxes-section-grid,
+        .taxes-two-up {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .taxes-chip-grid,
+        .taxes-mini-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .taxes-detail-row {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+      }
+
