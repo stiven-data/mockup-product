@@ -2,6 +2,7 @@
   const BATCH_SIZE = 60;
   const API_PATH = "/api/metrics";
   const CONFIG_PATH = "/api/public-config";
+  const RUNTIME_VERSION = "2026-04-23-2";
   const MODULES = ["mortgage", "insurance", "taxes", "gp"];
   const EMPTY_DISPLAY_TOKENS = new Set([
     "",
@@ -32,6 +33,7 @@
     configPromise: null,
     clientPromise: null,
     channel: null,
+    refreshPromise: null,
   };
 
   function chunk(values, size) {
@@ -98,8 +100,14 @@
     }
   }
 
+  function appendRuntimeVersion(url) {
+    url.searchParams.set("_v", RUNTIME_VERSION);
+    return url;
+  }
+
   async function fetchJson(url, options = {}) {
     const response = await fetch(url, {
+      cache: "no-store",
       headers: {
         accept: "application/json",
         ...(options.body ? { "content-type": "application/json" } : {}),
@@ -116,13 +124,13 @@
   }
 
   async function fetchMetricBatch(keys) {
-    const url = new URL(API_PATH, window.location.origin);
+    const url = appendRuntimeVersion(new URL(API_PATH, window.location.origin));
     url.searchParams.set("keys", keys.join(","));
     return fetchJson(url.toString()).then((payload) => (Array.isArray(payload?.data) ? payload.data : []));
   }
 
   async function fetchMetricsByModule(module, limit = 5000) {
-    const url = new URL(API_PATH, window.location.origin);
+    const url = appendRuntimeVersion(new URL(API_PATH, window.location.origin));
     url.searchParams.set("module", module);
     url.searchParams.set("limit", String(limit));
     return fetchJson(url.toString()).then((payload) => (Array.isArray(payload?.data) ? payload.data : []));
@@ -179,7 +187,8 @@
 
   async function getPublicConfig() {
     if (!state.configPromise) {
-      state.configPromise = fetchJson(CONFIG_PATH).catch((error) => {
+      const url = appendRuntimeVersion(new URL(CONFIG_PATH, window.location.origin));
+      state.configPromise = fetchJson(url.toString()).catch((error) => {
         console.warn("[metrics-runtime] Public config unavailable.", error);
         return null;
       });
@@ -276,9 +285,18 @@
     }
   }
 
+  async function refreshMetrics() {
+    if (!state.refreshPromise) {
+      state.refreshPromise = loadDynamicMetrics().finally(() => {
+        state.refreshPromise = null;
+      });
+    }
+    return state.refreshPromise;
+  }
+
   async function init() {
     repairStaticArtifactsInDom();
-    await loadDynamicMetrics();
+    await refreshMetrics();
     await ensureRealtimeSubscription();
   }
 
@@ -292,6 +310,7 @@
       return [...state.rowsByKey.values()];
     },
     loadDynamicMetrics,
+    refreshMetrics,
     normalizeDisplayValue,
     repairStaticArtifactsInDom,
     repairTextArtifacts,
@@ -304,4 +323,13 @@
   } else {
     init();
   }
+
+  window.addEventListener("pageshow", () => {
+    refreshMetrics().catch((error) => console.warn("[metrics-runtime] Refresh on pageshow failed.", error));
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState !== "visible") return;
+    refreshMetrics().catch((error) => console.warn("[metrics-runtime] Refresh on visibility change failed.", error));
+  });
 })();
