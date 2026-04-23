@@ -1,443 +1,918 @@
-<!doctype html>
-<html lang="es">
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>GP Overview — Oasis at San Marco</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GP | Valoris Capital Platform</title>
+    <link rel="stylesheet" href="../../../shared/styles/platform-design-system.css" />
     <style>
-      :root{
-        /* Valoris-inspired (light, minimal, yellow accents) */
-        --bg:#f6f7f9;
-        --panel:#ffffff;
-        --soft:#fbfbfc;
-        --border:#e7e7ea;
-        --border2:#efeff2;
-        --text:#0b1b2b;
-        --muted:#667085;
-        --brand:#f5c400;
-        --brand-soft:#fff7cc;
-        --brand-border:#f3e39b;
-        --brand-ink:#5b4a00;
-        --shadow:0 1px 2px rgba(10,20,30,.06);
-        --radius:26px;
-        --radius2:18px;
-        --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-        --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      .gp-property {
+        margin: 10px 0 0;
       }
 
-      *{box-sizing:border-box}
-      html,body{height:100%}
-      body{
-        margin:0;
-        font-family:var(--sans);
-        background:var(--bg);
-        color:var(--text);
-        line-height:1.4;
-        -webkit-font-smoothing:antialiased;
-        -moz-osx-font-smoothing:grayscale;
+      .gp-location {
+        margin: 6px 0 0;
       }
 
-      .shell{max-width:1240px;margin:0 auto;padding:28px}
-
-      .hero{
-        background:var(--panel);
-        border:1px solid var(--border);
-        border-radius:calc(var(--radius) + 4px);
-        box-shadow:var(--shadow);
-        padding:24px 24px 18px;
-      }
-      .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
-      .eyebrow{
-        text-transform:uppercase;
-        letter-spacing:.14em;
-        font-size:12px;
-        color:var(--muted);
-        font-weight:950;
-      }
-      h1{margin:10px 0 10px;font-size:34px;letter-spacing:-.03em;font-weight:980}
-      .copy{margin:0;max-width:980px;color:var(--muted);font-size:14px;line-height:1.6}
-      .view-pill{
-        display:inline-flex;
-        align-items:center;
-        padding:10px 16px;
-        border-radius:999px;
-        border:1px solid var(--brand-border);
-        background:var(--brand-soft);
-        color:var(--brand-ink);
-        font-weight:950;
-        white-space:nowrap;
+      .gp-stats,
+      .gp-summary-table,
+      .gp-structure-panel,
+      .gp-partners-table {
+        margin-top: 24px;
       }
 
-      .kpis{
-        display:grid;
-        grid-template-columns:repeat(3,minmax(220px,1fr));
-        gap:14px;
-        margin-top:18px;
-      }
-      .kpi{
-        background:var(--panel);
-        border:1px solid var(--border2);
-        border-radius:var(--radius2);
-        box-shadow:var(--shadow);
-        padding:16px 18px 14px;
-      }
-      .kpi .label{
-        text-transform:uppercase;
-        letter-spacing:.14em;
-        font-size:12px;
-        color:var(--muted);
-        font-weight:950;
-      }
-      .kpi .value{margin-top:10px;font-size:26px;font-weight:980;letter-spacing:-.03em}
-      .kpi .unit{margin-left:8px;color:var(--muted);font-size:13px;font-weight:950}
-      .kpi .foot{margin-top:8px;color:var(--muted);font-size:13px}
-
-      .grid{
-        display:grid;
-        grid-template-columns: 2.2fr .8fr;
-        gap:18px;
-        margin-top:18px;
-      }
-      .panel{
-        background:var(--panel);
-        border:1px solid var(--border);
-        border-radius:var(--radius);
-        box-shadow:var(--shadow);
-        padding:18px 18px 16px;
-      }
-      .panel h2{margin:0;font-size:18px;font-weight:980;letter-spacing:-.02em}
-      .panel p{margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.6}
-      .section-label{
-        margin-top:16px;
-        text-transform:uppercase;
-        letter-spacing:.14em;
-        font-size:12px;
-        color:var(--muted);
-        font-weight:980;
+      .gp-section-header {
+        margin-bottom: 18px;
       }
 
-      /* Tables */
-      .table-wrap{margin-top:14px;border:1px solid var(--border);border-radius:var(--radius2);overflow:auto;background:var(--soft)}
-      table{width:100%;border-collapse:collapse;min-width:0;background:var(--panel)}
-      thead th{
-        text-align:left;
-        padding:12px 14px;
-        border-bottom:1px solid var(--border);
-        background:var(--soft);
-        color:var(--muted);
-        text-transform:uppercase;
-        letter-spacing:.14em;
-        font-size:12px;
-        font-weight:980;
-        white-space:nowrap;
+      .gp-section-header h2 {
+        margin: 8px 0 0;
+        font-size: 24px;
+        line-height: 1.15;
       }
-      tbody td{
-        padding:12px 14px;
-        border-bottom:1px solid var(--border2);
-        font-size:14px;
-        white-space:nowrap;
-        vertical-align:top;
-      }
-      tbody tr:nth-child(even){background:#fcfcfd}
-      tbody tr:last-child td{border-bottom:0}
-      .mono{font-variant-numeric:tabular-nums}
 
-      /* Compact table (no horizontal scroll) */
-      .table-compact{
-        table-layout:fixed;
-        width:100%;
+      .gp-section-header p {
+        margin-bottom: 0;
       }
-      .table-compact thead th,
-      .table-compact tbody td{
-        padding:10px 10px;
-        font-size:12px;
-      }
-      .table-compact td,
-      .table-compact th{
-        overflow:hidden;
-        text-overflow:ellipsis;
-      }
-      .wrap{
-        white-space:normal !important;
-        overflow-wrap:anywhere;
-      }
-      .num{white-space:nowrap}
 
-      .kv{margin-top:14px;border:1px solid var(--border);border-radius:var(--radius2);overflow:hidden}
-      .kv .row{display:grid;grid-template-columns:1fr auto}
-      .kv .k,.kv .v{padding:12px 14px;border-bottom:1px solid var(--border2);font-size:14px}
-      .kv .k{background:var(--soft);color:var(--muted);font-weight:980}
-      .kv .v{font-weight:980}
-      .kv .row:last-child .k,.kv .row:last-child .v{border-bottom:0}
+      .gp-detail-list {
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+      }
 
-      .full{margin-top:18px}
+      .gp-detail-row {
+        display: grid;
+        grid-template-columns: minmax(200px, 280px) minmax(0, 1fr);
+        gap: 16px;
+        padding: 16px 18px;
+        border-top: 1px solid var(--border);
+      }
 
-      @media (max-width: 1100px){
-        .grid{grid-template-columns:1fr}
-        .kpis{grid-template-columns:1fr}
-        .table-compact td,
-        .table-compact th{ text-overflow:clip; }
+      .gp-detail-row:first-child {
+        border-top: 0;
+      }
+
+      .gp-detail-row:nth-child(even) {
+        background: var(--surface-subtle);
+      }
+
+      .gp-detail-term,
+      .gp-detail-value {
+        margin: 0;
+      }
+
+      .gp-detail-value {
+        word-break: break-word;
+      }
+
+      .gp-summary-note {
+        margin-top: 16px;
+      }
+
+      .gp-note-cell {
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .gp-group-row th {
+        background: var(--surface-subtle);
+        color: var(--text);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .gp-total-row th,
+      .gp-total-row td {
+        font-weight: 700;
+      }
+
+      .gp-total-row th {
+        color: var(--text);
+      }
+
+      @media (max-width: 720px) {
+        .gp-detail-row {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="shell">
-      <section class="hero" aria-label="Hero">
-        <div class="hero-top">
-          <div>
-            <div class="eyebrow">GP OVERVIEW (OPERATIONAL + DECISION-GRADE)</div>
-            <h1>GP Sponsors Command Center</h1>
-            <p class="copy">
-              Oasis at San Marco · 4800 Atlantic Blvd, Jacksonville FL 32207. Mockup grounded in Sheet data: “GPs Overview” (deal structure + GP sponsors summary + all partners roster).
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <a class="app-brand" href="../../../index.html" aria-label="Valoris Capital Platform home">
+          <div class="app-brand__mark" aria-hidden="true">V</div>
+          <div class="app-brand__copy">
+            <strong>VALORIS</strong>
+            <span>Capital Platform</span>
+          </div>
+        </a>
+
+        <div class="sidebar-group">
+          <p class="sidebar-group__label">Navigation</p>
+          <nav class="sidebar-nav" aria-label="Primary">
+            <a class="sidebar-link" href="../../../index.html">Home</a>
+            <a class="sidebar-link" href="../../mortgage/views/index.html">Mortgage</a>
+            <a class="sidebar-link" href="../../insurance/views/insurance_command_center_oasis_trusted.html">Insurance</a>
+            <a class="sidebar-link is-active" href="./gp%20mockups.html" aria-current="page">GP</a>
+            <a class="sidebar-link" href="../../taxes/views/index.html">Taxes</a>
+          </nav>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="app-topbar">
+          <div class="topbar-pill">Valoris Capital Partners</div>
+          <a class="btn btn--secondary" href="../../../index.html">Home</a>
+          <div class="topbar-avatar" aria-hidden="true"></div>
+        </header>
+
+        <main class="page">
+          <header class="page-header">
+            <p class="eyebrow">Operational + decision-grade</p>
+            <h1 class="page-title">GP</h1>
+            <p class="page-subtitle gp-property">
+              Sponsor participation, capital raise, and partner mapping for Oasis at San Marco.
             </p>
-          </div>
-          <div class="view-pill" aria-label="View badge">Operational View</div>
-        </div>
+            <p class="text-muted gp-location">
+              Oasis at San Marco | 4800 Atlantic Blvd, Jacksonville FL 32207
+            </p>
+          </header>
 
-        <div class="kpis" aria-label="KPI row">
-          <div class="kpi">
-            <div class="label">Total Capital Raise (LP)</div>
-            <div class="value mono">$6,047,500</div>
-            <div class="foot">Deal Structure</div>
-          </div>
-          <div class="kpi">
-            <div class="label">PPC Sponsor Groups</div>
-            <div class="value mono">$2,530,000</div>
-            <div class="foot">Capital raised (6 GPs)</div>
-          </div>
-          <div class="kpi">
-            <div class="label">GP / LP Share</div>
-            <div class="value mono">35% <span class="unit">GP</span></div>
-            <div class="foot">LP share: <span class="mono">65%</span></div>
-          </div>
-        </div>
-      </section>
+          <section class="page-controls" aria-label="GP context">
+            <div class="control-stack">
+              <div class="control-row">
+                <div class="badge badge--selected">Operational View</div>
+                <div class="badge">GPs Overview</div>
+                <div class="badge">Sheet data extract</div>
+              </div>
+            </div>
+          </section>
 
-      <div class="grid" aria-label="Main grid">
-        <section class="panel" aria-label="GP sponsors summary">
-          <h2>GP Sponsors Summary (PPC Investors)</h2>
-          <p>Tabla operativa para rastrear capital raised, % del proyecto y bridge status por sponsor.</p>
+          <section class="gp-stats" aria-label="GP statistics">
+            <div class="stats-grid">
+              <article class="stat-card">
+                <div class="meta-label">Total Capital Raise (LP)</div>
+                <strong>$6,047,500</strong>
+                <p class="text-muted">Deal Structure</p>
+              </article>
+              <article class="stat-card">
+                <div class="meta-label">PPC Sponsor Groups</div>
+                <strong>$2,530,000</strong>
+                <p class="text-muted">Capital raised across 6 GPs</p>
+              </article>
+              <article class="stat-card">
+                <div class="meta-label">GP / LP Share</div>
+                <strong>35% GP</strong>
+                <p class="text-muted">LP share: 65%</p>
+              </article>
+            </div>
+          </section>
 
-          <div class="section-label">Last available (sheet extract)</div>
-          <div class="table-wrap" role="region" aria-label="GP sponsors summary table" tabindex="0">
-            <table class="table-compact" aria-label="GP sponsors summary table">
-              <colgroup>
-                <col style="width:12%" />
-                <col style="width:18%" />
-                <col style="width:12%" />
-                <col style="width:10%" />
-                <col style="width:10%" />
-                <col style="width:8%" />
-                <col style="width:18%" />
-                <col style="width:12%" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>GP Sponsor</th>
-                  <th>Linked Entity</th>
-                  <th>Capital Raised</th>
-                  <th>GP Project %</th>
-                  <th>Est. Acq. Fee</th>
-                  <th># Investors</th>
-                  <th>Bridge Status</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Anne Santos</td>
-                  <td class="wrap">528 Iron Gate LLC</td>
-                  <td class="mono num">$400,000</td>
-                  <td class="mono num">2.3150%</td>
-                  <td class="mono num">$6,528</td>
-                  <td class="mono num">6</td>
-                  <td class="wrap">Direct person-to-entity match</td>
-                  <td class="wrap" style="color:var(--muted);">—</td>
-                </tr>
-                <tr>
-                  <td>Jeanine Witten</td>
-                  <td class="wrap">New Creation Syndications LLC</td>
-                  <td class="mono num">$660,000</td>
-                  <td class="mono num">3.8198%</td>
-                  <td class="mono num">$10,772</td>
-                  <td class="mono num">7</td>
-                  <td class="wrap">Direct person-to-entity match</td>
-                  <td class="wrap" style="color:var(--muted);">—</td>
-                </tr>
-                <tr>
-                  <td>Giulianna Pino</td>
-                  <td class="wrap">FYG Investments LLC / FYG LLC</td>
-                  <td class="mono num">$350,000</td>
-                  <td class="mono num">2.0256%</td>
-                  <td class="mono num">$5,712</td>
-                  <td class="mono num">2</td>
-                  <td class="wrap">No direct K‑1 entity identified</td>
-                  <td class="wrap" style="color:var(--muted);">—</td>
-                </tr>
-                <tr>
-                  <td>Vinod Malik</td>
-                  <td class="wrap">Gravitas Multifamily Partners LLC</td>
-                  <td class="mono num">$410,000</td>
-                  <td class="mono num">2.3729%</td>
-                  <td class="mono num">$6,692</td>
-                  <td class="mono num">6</td>
-                  <td class="wrap">Partial: side-letter evidence only</td>
-                  <td class="wrap" style="color:var(--muted);">—</td>
-                </tr>
-                <tr>
-                  <td>Ayesha Khalid</td>
-                  <td class="wrap">Ayesha Khalid / 4800 Atlantic Blvd LLC</td>
-                  <td class="mono num">$460,000</td>
-                  <td class="mono num">2.6623%</td>
-                  <td class="mono num">$7,508</td>
-                  <td class="mono num">7</td>
-                  <td class="wrap">Direct individual match</td>
-                  <td class="wrap" style="color:var(--muted);">—</td>
-                </tr>
-                <tr>
-                  <td>Paul Landman</td>
-                  <td class="wrap">PELCP LLC</td>
-                  <td class="mono num">$250,000</td>
-                  <td class="mono num">1.4469%</td>
-                  <td class="mono num">$4,080</td>
-                  <td class="mono num">5</td>
-                  <td class="wrap">No direct K‑1 entity identified</td>
-                  <td class="wrap" style="color:var(--muted);">—</td>
-                </tr>
-                <tr>
-                  <td style="font-weight:980;">TOTAL PPC</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td class="mono num" style="font-weight:980;">$2,530,000</td>
-                  <td class="mono num" style="font-weight:980;">14.6425%</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td style="color:var(--muted);">—</td>
-                </tr>
-                <tr>
-                  <td style="font-weight:980;">VCP + Partners</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td class="mono num" style="font-weight:980;">$3,517,500</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td class="wrap">Wired in as single block; individual breakdown per K‑1</td>
-                </tr>
-                <tr>
-                  <td style="font-weight:980;">GRAND TOTAL RAISE</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td class="mono num" style="font-weight:980;">$6,047,500</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td style="color:var(--muted);">—</td>
-                  <td style="color:var(--muted);">—</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+          <section class="panel gp-structure-panel" aria-labelledby="gp-structure-heading">
+            <div class="gp-section-header">
+              <p class="eyebrow">Deal Structure</p>
+              <h2 id="gp-structure-heading">Structure Snapshot</h2>
+              <p class="text-muted">
+                Fields are preserved from the sheet extract and shown without inference. Missing values
+                remain explicit.
+              </p>
+            </div>
 
-        <section class="panel" aria-label="Deal structure">
-          <h2>Deal Structure</h2>
-          <p>Campos visibles en el sheet. Si algo falta, debe mostrarse como “—” (dato no disponible).</p>
-          <div class="kv" role="table" aria-label="Deal structure key-values">
-            <div class="row" role="row"><div class="k" role="cell">Total Capital Raise (LP)</div><div class="v mono" role="cell">$6,047,500</div></div>
-            <div class="row" role="row"><div class="k" role="cell">VCP + Partners (Virendra Patel Group)</div><div class="v mono" role="cell">$3,517,500</div></div>
-            <div class="row" role="row"><div class="k" role="cell">PPC Sponsor Groups (6 GPs)</div><div class="v mono" role="cell">$2,530,000</div></div>
-            <div class="row" role="row"><div class="k" role="cell">GP Carve Out (Project Interest)</div><div class="v mono" role="cell">35%</div></div>
-            <div class="row" role="row"><div class="k" role="cell">LP Share of Project</div><div class="v mono" role="cell">65%</div></div>
-            <div class="row" role="row"><div class="k" role="cell">Total GP Sponsors (PPC)</div><div class="v mono" role="cell">6</div></div>
-            <div class="row" role="row"><div class="k" role="cell">K‑1 Partners in Manager Entity</div><div class="v mono" role="cell">8</div></div>
-            <div class="row" role="row"><div class="k" role="cell">Source K‑1 Year</div><div class="v mono" role="cell">2024</div></div>
-            <div class="row" role="row"><div class="k" role="cell">Property</div><div class="v" role="cell">Oasis at San Marco</div></div>
-            <div class="row" role="row"><div class="k" role="cell">Address</div><div class="v" role="cell">4800 Atlantic Blvd, Jacksonville FL 32207</div></div>
-            <div class="row" role="row"><div class="k" role="cell">Borrower Entity</div><div class="v" role="cell">Red Raider 45 LLC</div></div>
-            <div class="row" role="row"><div class="k" role="cell">Manager Entity</div><div class="v" role="cell">RED RAIDER 45 MGR LLC</div></div>
-          </div>
-        </section>
+            <dl class="content-surface gp-detail-list">
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">Total Capital Raise (LP)</dt>
+                <dd class="gp-detail-value"><strong>$6,047,500</strong></dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">VCP + Partners (Virendra Patel Group)</dt>
+                <dd class="gp-detail-value"><strong>$3,517,500</strong></dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">PPC Sponsor Groups (6 GPs)</dt>
+                <dd class="gp-detail-value"><strong>$2,530,000</strong></dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">GP Carve Out (Project Interest)</dt>
+                <dd class="gp-detail-value"><strong>35%</strong></dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">LP Share of Project</dt>
+                <dd class="gp-detail-value"><strong>65%</strong></dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">Total GP Sponsors (PPC)</dt>
+                <dd class="gp-detail-value"><strong>6</strong></dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">K-1 Partners in Manager Entity</dt>
+                <dd class="gp-detail-value"><strong>8</strong></dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">Source K-1 Year</dt>
+                <dd class="gp-detail-value"><strong>2024</strong></dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">Property</dt>
+                <dd class="gp-detail-value">Oasis at San Marco</dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">Address</dt>
+                <dd class="gp-detail-value">4800 Atlantic Blvd, Jacksonville FL 32207</dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">Borrower Entity</dt>
+                <dd class="gp-detail-value">Red Raider 45 LLC</dd>
+              </div>
+              <div class="gp-detail-row">
+                <dt class="meta-label gp-detail-term">Manager Entity</dt>
+                <dd class="gp-detail-value">RED RAIDER 45 MGR LLC</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="table-card gp-summary-table" aria-labelledby="gp-summary-heading">
+            <div class="gp-section-header">
+              <p class="eyebrow">Sponsor Summary</p>
+              <h2 id="gp-summary-heading">GP Sponsors Summary</h2>
+              <p class="text-muted">
+                Operational summary for capital raised, project share, estimated fee, and bridge status.
+              </p>
+            </div>
+
+            <div class="table-scroll">
+              <table class="data-table" aria-label="GP sponsors summary">
+                <thead>
+                  <tr>
+                    <th scope="col">GP Sponsor</th>
+                    <th scope="col">Linked Entity</th>
+                    <th scope="col">Capital Raised</th>
+                    <th scope="col">GP Project %</th>
+                    <th scope="col">Est. Acq. Fee</th>
+                    <th scope="col"># Investors</th>
+                    <th scope="col">Bridge Status</th>
+                    <th scope="col">Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Anne Santos</th>
+                    <td>528 Iron Gate LLC</td>
+                    <td>$400,000</td>
+                    <td>2.3150%</td>
+                    <td>$6,528</td>
+                    <td>6</td>
+                    <td>Direct person-to-entity match</td>
+                    <td>N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Jeanine Witten</th>
+                    <td>New Creation Syndications LLC</td>
+                    <td>$660,000</td>
+                    <td>3.8198%</td>
+                    <td>$10,772</td>
+                    <td>7</td>
+                    <td>Direct person-to-entity match</td>
+                    <td>N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Giulianna Pino</th>
+                    <td>FYG Investments LLC / FYG LLC</td>
+                    <td>$350,000</td>
+                    <td>2.0256%</td>
+                    <td>$5,712</td>
+                    <td>2</td>
+                    <td>No direct K-1 entity identified</td>
+                    <td>N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Vinod Malik</th>
+                    <td>Gravitas Multifamily Partners LLC</td>
+                    <td>$410,000</td>
+                    <td>2.3729%</td>
+                    <td>$6,692</td>
+                    <td>6</td>
+                    <td>Partial: side-letter evidence only</td>
+                    <td>N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Ayesha Khalid</th>
+                    <td>Ayesha Khalid / 4800 Atlantic Blvd LLC</td>
+                    <td>$460,000</td>
+                    <td>2.6623%</td>
+                    <td>$7,508</td>
+                    <td>7</td>
+                    <td>Direct individual match</td>
+                    <td>N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Paul Landman</th>
+                    <td>PELCP LLC</td>
+                    <td>$250,000</td>
+                    <td>1.4469%</td>
+                    <td>$4,080</td>
+                    <td>5</td>
+                    <td>No direct K-1 entity identified</td>
+                    <td>N/A</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr class="gp-total-row">
+                    <th scope="row">TOTAL PPC</th>
+                    <td>N/A</td>
+                    <td>$2,530,000</td>
+                    <td>14.6425%</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                  </tr>
+                  <tr class="gp-total-row">
+                    <th scope="row">VCP + Partners</th>
+                    <td>N/A</td>
+                    <td>$3,517,500</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">Wired in as single block; individual breakdown per K-1</td>
+                  </tr>
+                  <tr class="gp-total-row">
+                    <th scope="row">GRAND TOTAL RAISE</th>
+                    <td>N/A</td>
+                    <td>$6,047,500</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <p class="text-muted gp-summary-note">
+              Table density and borders follow the shared platform table system used by Mortgage and Insurance.
+            </p>
+          </section>
+
+          <section class="table-card gp-partners-table" aria-labelledby="gp-partners-heading">
+            <div class="gp-section-header">
+              <p class="eyebrow">All Partners</p>
+              <h2 id="gp-partners-heading">All Partners - Oasis at San Marco</h2>
+              <p class="text-muted">
+                Amount invested and percent of total raise. Group separators preserve the original workbook
+                hierarchy.
+              </p>
+            </div>
+
+            <div class="table-scroll">
+              <table class="data-table" aria-label="All partners roster">
+                <thead>
+                  <tr>
+                    <th scope="col">N.</th>
+                    <th scope="col">Partner Name</th>
+                    <th scope="col">GP Group / Category</th>
+                    <th scope="col">Account Type</th>
+                    <th scope="col">Account Name</th>
+                    <th scope="col">Amount Invested</th>
+                    <th scope="col">% of Total Raise</th>
+                    <th scope="col">Accredited</th>
+                    <th scope="col">Wire Date</th>
+                    <th scope="col">Notes</th>
+                  </tr>
+                </thead>
+                <tbody aria-label="GP Group: Anne Santos">
+                  <tr class="gp-group-row">
+                    <th scope="rowgroup" colspan="10">GP GROUP: ANNE SANTOS</th>
+                  </tr>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Anne Santos</td>
+                    <td>Anne Santos</td>
+                    <td>IRA</td>
+                    <td>N/A</td>
+                    <td>$150,000</td>
+                    <td>2.48%</td>
+                    <td>Yes</td>
+                    <td>2024-03-01</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Salvatore Caminito</td>
+                    <td>Anne Santos</td>
+                    <td>IRA</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Elizabeth Tan</td>
+                    <td>Anne Santos</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">4</th>
+                    <td>Michael Kates</td>
+                    <td>Anne Santos</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>Sean Reiter</td>
+                    <td>Anne Santos</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">6</th>
+                    <td>Baqir Jaffery</td>
+                    <td>Anne Santos</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+
+                </tbody>
+                <tbody aria-label="GP Group: Jeanine Witten">
+                  <tr class="gp-group-row">
+                    <th scope="rowgroup" colspan="10">GP GROUP: JEANINE WITTEN</th>
+                  </tr>
+                  <tr>
+                    <th scope="row">7</th>
+                    <td>Tatiana Friderici</td>
+                    <td>Jeanine Witten</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>$60,000</td>
+                    <td>0.99%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">8</th>
+                    <td>Erica Buchan</td>
+                    <td>Jeanine Witten</td>
+                    <td>IRA</td>
+                    <td>N/A</td>
+                    <td>$100,000</td>
+                    <td>1.65%</td>
+                    <td>Pending</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">9</th>
+                    <td>Pamela Kugit</td>
+                    <td>Jeanine Witten</td>
+                    <td>IRA</td>
+                    <td>N/A</td>
+                    <td>$100,000</td>
+                    <td>1.65%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">10</th>
+                    <td>Dawn McCale</td>
+                    <td>Jeanine Witten</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>$250,000</td>
+                    <td>4.13%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">11</th>
+                    <td>Ines Marrinucci</td>
+                    <td>Jeanine Witten</td>
+                    <td>IRA</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Pending</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">12</th>
+                    <td>Jeanine Witten</td>
+                    <td>Jeanine Witten</td>
+                    <td>IRA</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">13</th>
+                    <td>Pamela DeVaughn</td>
+                    <td>Jeanine Witten</td>
+                    <td>IRA</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>2024-03-12</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+
+                </tbody>
+                <tbody aria-label="GP Group: Giulianna Pino">
+                  <tr class="gp-group-row">
+                    <th scope="rowgroup" colspan="10">GP GROUP: GIULIANNA PINO</th>
+                  </tr>
+                  <tr>
+                    <th scope="row">14</th>
+                    <td>Antonio Pino</td>
+                    <td>Giulianna Pino</td>
+                    <td>Entity</td>
+                    <td>N/A</td>
+                    <td>$250,000</td>
+                    <td>4.13%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">15</th>
+                    <td>Grethel Kunkel</td>
+                    <td>Giulianna Pino</td>
+                    <td>Entity</td>
+                    <td>N/A</td>
+                    <td>$100,000</td>
+                    <td>1.65%</td>
+                    <td>Yes</td>
+                    <td>2024-03-12</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+
+                </tbody>
+                <tbody aria-label="GP Group: Vinod Malik">
+                  <tr class="gp-group-row">
+                    <th scope="rowgroup" colspan="10">GP GROUP: VINOD MALIK</th>
+                  </tr>
+                  <tr>
+                    <th scope="row">16</th>
+                    <td>Aruna Gamini</td>
+                    <td>Vinod Malik</td>
+                    <td>Entity</td>
+                    <td>N/A</td>
+                    <td>$100,000</td>
+                    <td>1.65%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">17</th>
+                    <td>Dipti Lodaya</td>
+                    <td>Vinod Malik</td>
+                    <td>Entity</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">18</th>
+                    <td>Vinod Malik</td>
+                    <td>Vinod Malik</td>
+                    <td>Entity</td>
+                    <td>N/A</td>
+                    <td>$100,000</td>
+                    <td>1.65%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">19</th>
+                    <td>Sunjeev Chawla</td>
+                    <td>Vinod Malik</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">20</th>
+                    <td>Girija Murali</td>
+                    <td>Vinod Malik</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>2024-03-15</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">21</th>
+                    <td>Harsha Sharma</td>
+                    <td>Vinod Malik</td>
+                    <td>Entity</td>
+                    <td>N/A</td>
+                    <td>$60,000</td>
+                    <td>0.99%</td>
+                    <td>Yes</td>
+                    <td>2024-03-13</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+
+                </tbody>
+                <tbody aria-label="GP Group: Ayesha Khalid">
+                  <tr class="gp-group-row">
+                    <th scope="rowgroup" colspan="10">GP GROUP: AYESHA KHALID</th>
+                  </tr>
+                  <tr>
+                    <th scope="row">22</th>
+                    <td>Elizabeth Darr</td>
+                    <td>Ayesha Khalid</td>
+                    <td>Entity</td>
+                    <td>MultiNest Investments LLC</td>
+                    <td>$100,000</td>
+                    <td>1.65%</td>
+                    <td>Yes</td>
+                    <td>2024-02-29</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">23</th>
+                    <td>Douglas Dawson</td>
+                    <td>Ayesha Khalid</td>
+                    <td>IRA</td>
+                    <td>SDIRA Directed Trust Company</td>
+                    <td>$100,000</td>
+                    <td>1.65%</td>
+                    <td>Yes</td>
+                    <td>2024-04-01</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">24</th>
+                    <td>Rebanta Chakraborty</td>
+                    <td>Ayesha Khalid</td>
+                    <td>IRA</td>
+                    <td>SDIRA Equity Trust, REF 200646</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>2024-04-05</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">25</th>
+                    <td>Ayesha Khalid</td>
+                    <td>Ayesha Khalid</td>
+                    <td>Entity</td>
+                    <td>4800 Atlantic Blvd LLC</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>2024-03-04</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">26</th>
+                    <td>Ayesha Khalid</td>
+                    <td>Ayesha Khalid</td>
+                    <td>Solo 401K</td>
+                    <td>N/A</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>2024-03-22</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">27</th>
+                    <td>Andrea Metz</td>
+                    <td>Ayesha Khalid</td>
+                    <td>IRA</td>
+                    <td>SDIRA Directed Trust Company</td>
+                    <td>$50,000</td>
+                    <td>0.83%</td>
+                    <td>Yes</td>
+                    <td>2024-03-22</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">28</th>
+                    <td>Abel Contreras</td>
+                    <td>Ayesha Khalid</td>
+                    <td>Entity</td>
+                    <td>Horizon Network Group LLC</td>
+                    <td>$60,000</td>
+                    <td>0.99%</td>
+                    <td>Yes</td>
+                    <td>2024-03-21</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+
+                </tbody>
+                <tbody aria-label="GP Group: Paul Landman">
+                  <tr class="gp-group-row">
+                    <th scope="rowgroup" colspan="10">GP GROUP: PAUL LANDMAN</th>
+                  </tr>
+                  <tr>
+                    <th scope="row">29</th>
+                    <td>Paul Landman</td>
+                    <td>Paul Landman</td>
+                    <td>IRA</td>
+                    <td>N/A</td>
+                    <td>$150,000</td>
+                    <td>2.48%</td>
+                    <td>Pending</td>
+                    <td>2024-03-01</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">30</th>
+                    <td>Anirudh Rathi</td>
+                    <td>Paul Landman</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>$25,000</td>
+                    <td>0.41%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">31</th>
+                    <td>Akshay Shah</td>
+                    <td>Paul Landman</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>$25,000</td>
+                    <td>0.41%</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">32</th>
+                    <td>Ron Landman</td>
+                    <td>Paul Landman</td>
+                    <td>IRA</td>
+                    <td>Equity Trust</td>
+                    <td>$25,000</td>
+                    <td>0.41%</td>
+                    <td>Pending</td>
+                    <td>2024-04-01</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">33</th>
+                    <td>Amit Menipaz</td>
+                    <td>Paul Landman</td>
+                    <td>IRA</td>
+                    <td>N/A</td>
+                    <td>$25,000</td>
+                    <td>0.41%</td>
+                    <td>Yes</td>
+                    <td>2024-03-01</td>
+                    <td class="gp-note-cell">N/A</td>
+                  </tr>
+
+                </tbody>
+                <tbody aria-label="GP Group: VCP + Partners">
+                  <tr class="gp-group-row">
+                    <th scope="rowgroup" colspan="10">GP GROUP: VCP + PARTNERS GROUP (VIRENDRA PATEL GROUP)</th>
+                  </tr>
+                  <tr>
+                    <th scope="row">34</th>
+                    <td>Virendra Patel</td>
+                    <td>VCP + Partners</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>See note</td>
+                    <td>32.88% Mgr Entity</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">32.88% of Manager Entity (RED RAIDER 45 MGR LLC) per 2024 K-1</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">35</th>
+                    <td>BLISS GROUP LLC (Bhavin Parikh)</td>
+                    <td>VCP + Partners</td>
+                    <td>Entity</td>
+                    <td>N/A</td>
+                    <td>See note</td>
+                    <td>4.92% Mgr Entity</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">4.92% of Manager Entity; linked to Bhavin Parikh via EIN notice</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">36</th>
+                    <td>Edward Sittler</td>
+                    <td>VCP + Partners</td>
+                    <td>Individual</td>
+                    <td>N/A</td>
+                    <td>See note</td>
+                    <td>10.00% Mgr Entity</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">10.00% of Manager Entity per 2024 K-1</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">37</th>
+                    <td>4800 Atlantic Blvd VCP Holdings LLC</td>
+                    <td>VCP + Partners</td>
+                    <td>Entity</td>
+                    <td>N/A</td>
+                    <td>See note</td>
+                    <td>41.37% Mgr Entity</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">41.37% of Manager Entity; also holds 12.41% GP project interest per Side Letter</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">38</th>
+                    <td>Bluesurf Holdings, LLC</td>
+                    <td>VCP + Partners</td>
+                    <td>Entity</td>
+                    <td>N/A</td>
+                    <td>See note</td>
+                    <td>2.03% Mgr Entity</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td class="gp-note-cell">2.03% of Manager Entity per 2024 K-1</td>
+                  </tr>
+
+                </tbody>
+                <tfoot>
+                  <tr class="gp-total-row">
+                    <th scope="row">TOTAL VCP + Partners (wired as single block)</th>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>$3,517,500</td>
+                    <td>58.16%</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                  </tr>
+                  <tr class="gp-total-row">
+                    <th scope="row">GRAND TOTAL RAISE</th>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>$6,047,500</td>
+                    <td>100.00%</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </section>
+        </main>
       </div>
-
-      <section class="panel full" aria-label="All partners">
-        <h2>ALL PARTNERS — OASIS AT SAN MARCO</h2>
-        <p>Amount invested and % of total raise (<span class="mono">$6,047,500</span>).</p>
-        <div class="table-wrap" role="region" aria-label="All partners table" tabindex="0">
-          <table style="min-width:1240px">
-            <thead>
-              <tr>
-                <th>N°</th>
-                <th>Partner Name</th>
-                <th>GP Group / Category</th>
-                <th>Account Type</th>
-                <th>Account Name</th>
-                <th>Amount Invested ($)</th>
-                <th>% of Total Raise</th>
-                <th>Accredited</th>
-                <th>Wire Date</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td colspan="10" style="font-weight:980;background:var(--soft)">▶ GP GROUP: ANNE SANTOS</td></tr>
-              <tr><td class="mono">1</td><td>Anne Santos</td><td>Anne Santos</td><td>IRA</td><td style="color:var(--muted);">—</td><td class="mono">$150,000</td><td class="mono">2.48%</td><td>Yes</td><td class="mono">2024-03-01</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">2</td><td>Salvatore Caminito</td><td>Anne Santos</td><td>IRA</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">3</td><td>Elizabeth Tan</td><td>Anne Santos</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">4</td><td>Michael Kates</td><td>Anne Santos</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">5</td><td>Sean Reiter</td><td>Anne Santos</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">6</td><td>Baqir Jaffery</td><td>Anne Santos</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-
-              <tr><td colspan="10" style="font-weight:980;background:var(--soft)">▶ GP GROUP: JEANINE WITTEN</td></tr>
-              <tr><td class="mono">7</td><td>Tatiana Friderici</td><td>Jeanine Witten</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">$60,000</td><td class="mono">0.99%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">8</td><td>Erica Buchan</td><td>Jeanine Witten</td><td>IRA</td><td style="color:var(--muted);">—</td><td class="mono">$100,000</td><td class="mono">1.65%</td><td>Pending</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">9</td><td>Pamela Kugit</td><td>Jeanine Witten</td><td>IRA</td><td style="color:var(--muted);">—</td><td class="mono">$100,000</td><td class="mono">1.65%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">10</td><td>Dawn McCale</td><td>Jeanine Witten</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">$250,000</td><td class="mono">4.13%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">11</td><td>Ines Marrinucci</td><td>Jeanine Witten</td><td>IRA</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Pending</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">12</td><td>Jeanine Witten</td><td>Jeanine Witten</td><td>IRA</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">13</td><td>Pamela DeVaughn</td><td>Jeanine Witten</td><td>IRA</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td class="mono">2024-03-12</td><td style="color:var(--muted);">—</td></tr>
-
-              <tr><td colspan="10" style="font-weight:980;background:var(--soft)">▶ GP GROUP: GIULIANNA PINO</td></tr>
-              <tr><td class="mono">14</td><td>Antonio Pino</td><td>Giulianna Pino</td><td>Entity</td><td style="color:var(--muted);">—</td><td class="mono">$250,000</td><td class="mono">4.13%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">15</td><td>Grethel Kunkel</td><td>Giulianna Pino</td><td>Entity</td><td style="color:var(--muted);">—</td><td class="mono">$100,000</td><td class="mono">1.65%</td><td>Yes</td><td class="mono">2024-03-12</td><td style="color:var(--muted);">—</td></tr>
-
-              <tr><td colspan="10" style="font-weight:980;background:var(--soft)">▶ GP GROUP: VINOD MALIK</td></tr>
-              <tr><td class="mono">16</td><td>Aruna Gamini</td><td>Vinod Malik</td><td>Entity</td><td style="color:var(--muted);">—</td><td class="mono">$100,000</td><td class="mono">1.65%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">17</td><td>Dipti Lodaya</td><td>Vinod Malik</td><td>Entity</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">18</td><td>Vinod Malik</td><td>Vinod Malik</td><td>Entity</td><td style="color:var(--muted);">—</td><td class="mono">$100,000</td><td class="mono">1.65%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">19</td><td>Sunjeev Chawla</td><td>Vinod Malik</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">20</td><td>Girija Murali</td><td>Vinod Malik</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td class="mono">2024-03-15</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">21</td><td>Harsha Sharma</td><td>Vinod Malik</td><td>Entity</td><td style="color:var(--muted);">—</td><td class="mono">$60,000</td><td class="mono">0.99%</td><td>Yes</td><td class="mono">2024-03-13</td><td style="color:var(--muted);">—</td></tr>
-
-              <tr><td colspan="10" style="font-weight:980;background:var(--soft)">▶ GP GROUP: AYESHA KHALID</td></tr>
-              <tr><td class="mono">22</td><td>Elizabeth Darr</td><td>Ayesha Khalid</td><td>Entity</td><td>MultiNest Investments LLC</td><td class="mono">$100,000</td><td class="mono">1.65%</td><td>Yes</td><td class="mono">2024-02-29</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">23</td><td>Douglas Dawson</td><td>Ayesha Khalid</td><td>IRA</td><td>SDIRA Directed Trust Company</td><td class="mono">$100,000</td><td class="mono">1.65%</td><td>Yes</td><td class="mono">2024-04-01</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">24</td><td>Rebanta Chakraborty</td><td>Ayesha Khalid</td><td>IRA</td><td>SDIRA Equity Trust, REF 200646</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td class="mono">2024-04-05</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">25</td><td>Ayesha Khalid</td><td>Ayesha Khalid</td><td>Entity</td><td>4800 Atlantic Blvd LLC</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td class="mono">2024-03-04</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">26</td><td>Ayesha Khalid</td><td>Ayesha Khalid</td><td>Solo 401K</td><td style="color:var(--muted);">—</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td class="mono">2024-03-22</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">27</td><td>Andrea Metz</td><td>Ayesha Khalid</td><td>IRA</td><td>SDIRA Directed Trust Company</td><td class="mono">$50,000</td><td class="mono">0.83%</td><td>Yes</td><td class="mono">2024-03-22</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">28</td><td>Abel Contreras</td><td>Ayesha Khalid</td><td>Entity</td><td>Horizon Network Group LLC</td><td class="mono">$60,000</td><td class="mono">0.99%</td><td>Yes</td><td class="mono">2024-03-21</td><td style="color:var(--muted);">—</td></tr>
-
-              <tr><td colspan="10" style="font-weight:980;background:var(--soft)">▶ GP GROUP: PAUL LANDMAN</td></tr>
-              <tr><td class="mono">29</td><td>Paul Landman</td><td>Paul Landman</td><td>IRA</td><td style="color:var(--muted);">—</td><td class="mono">$150,000</td><td class="mono">2.48%</td><td>Pending</td><td class="mono">2024-03-01</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">30</td><td>Anirudh Rathi</td><td>Paul Landman</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">$25,000</td><td class="mono">0.41%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">31</td><td>Akshay Shah</td><td>Paul Landman</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">$25,000</td><td class="mono">0.41%</td><td>Yes</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">32</td><td>Ron Landman</td><td>Paul Landman</td><td>IRA</td><td>Equity Trust</td><td class="mono">$25,000</td><td class="mono">0.41%</td><td>Pending</td><td class="mono">2024-04-01</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td class="mono">33</td><td>Amit Menipaz</td><td>Paul Landman</td><td>IRA</td><td style="color:var(--muted);">—</td><td class="mono">$25,000</td><td class="mono">0.41%</td><td>Yes</td><td class="mono">2024-03-01</td><td style="color:var(--muted);">—</td></tr>
-
-              <tr><td colspan="10" style="font-weight:980;background:var(--soft)">▶ VCP + PARTNERS GROUP (VIRENDRA PATEL GROUP)</td></tr>
-              <tr><td class="mono">34</td><td>Virendra Patel</td><td>VCP + Partners</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">See note</td><td class="mono">32.88% Mgr Entity</td><td>Yes</td><td style="color:var(--muted);">—</td><td>32.88% of Manager Entity (RED RAIDER 45 MGR LLC) per 2024 K‑1</td></tr>
-              <tr><td class="mono">35</td><td>BLISS GROUP LLC (Bhavin Parikh)</td><td>VCP + Partners</td><td>Entity</td><td style="color:var(--muted);">—</td><td class="mono">See note</td><td class="mono">4.92% Mgr Entity</td><td>Yes</td><td style="color:var(--muted);">—</td><td>4.92% of Manager Entity; linked to Bhavin Parikh via EIN notice</td></tr>
-              <tr><td class="mono">36</td><td>Edward Sittler</td><td>VCP + Partners</td><td>Individual</td><td style="color:var(--muted);">—</td><td class="mono">See note</td><td class="mono">10.00% Mgr Entity</td><td>Yes</td><td style="color:var(--muted);">—</td><td>10.00% of Manager Entity per 2024 K‑1</td></tr>
-              <tr><td class="mono">37</td><td>4800 Atlantic Blvd VCP Holdings LLC</td><td>VCP + Partners</td><td>Entity</td><td style="color:var(--muted);">—</td><td class="mono">See note</td><td class="mono">41.37% Mgr Entity</td><td>Yes</td><td style="color:var(--muted);">—</td><td>41.37% of Manager Entity; also holds 12.41% GP project interest per Side Letter</td></tr>
-              <tr><td class="mono">38</td><td>Bluesurf Holdings, LLC</td><td>VCP + Partners</td><td>Entity</td><td style="color:var(--muted);">—</td><td class="mono">See note</td><td class="mono">2.03% Mgr Entity</td><td>Yes</td><td style="color:var(--muted);">—</td><td>2.03% of Manager Entity per 2024 K‑1</td></tr>
-
-              <tr><td style="color:var(--muted);">—</td><td style="font-weight:980;">TOTAL VCP + Partners (wired as single block)</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td class="mono" style="font-weight:980;">$3,517,500</td><td class="mono" style="font-weight:980;">58.16%</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-              <tr><td style="color:var(--muted);">—</td><td style="font-weight:980;">GRAND TOTAL RAISE</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td class="mono" style="font-weight:980;">$6,047,500</td><td class="mono" style="font-weight:980;">100.00%</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
     </div>
   </body>
 </html>
-
