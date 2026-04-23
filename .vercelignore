@@ -1,0 +1,11 @@
+.merge-backups
+.superpowers
+.worktrees
+.env
+.env.local
+docs
+preview.png
+scripts
+supabase
+tests
+modules/*/data
