@@ -27,6 +27,8 @@ test("insurance page loads the shared metrics runtime and binds insurance metric
   assert.match(html, /data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_001"/);
   assert.match(html, /window\.ValorisMetrics/);
   assert.match(html, /Missing in Supabase/);
+  assert.match(html, /insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010/);
+  assert.doesNotMatch(html, /insurance_expense_[a-z]{3}_[0-9]{4}/);
 });
 
 test("gp manual metric bindings stay aligned with seeded outputs", async () => {
