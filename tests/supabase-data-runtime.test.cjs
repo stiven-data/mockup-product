@@ -43,7 +43,7 @@ function createElement({
   };
 }
 
-async function loadRuntime(metricRows, elements) {
+async function loadRuntime(metricRows, elements, options = {}) {
   const domEvents = new Map();
   const windowEvents = new Map();
   const fakeConsole = {
@@ -88,6 +88,16 @@ async function loadRuntime(metricRows, elements) {
     }
 
     if (pathname === "/api/metrics") {
+      if (options.metricsResponse?.reject) {
+        throw new Error(options.metricsResponse.reject);
+      }
+      if (options.metricsResponse && options.metricsResponse.ok === false) {
+        return createResponse(
+          options.metricsResponse.payload ?? { error: "metrics unavailable" },
+          false,
+          options.metricsResponse.status ?? 500,
+        );
+      }
       return createResponse({ data: metricRows });
     }
 
@@ -169,4 +179,25 @@ test("row values replace the static text with value_display", async () => {
   assert.equal(elements[0].title, "Source file: modules/taxes/views/index.html\nContext: Updated total due");
   assert.equal(elements[0].dataset.sourceFile, "modules/taxes/views/index.html");
   assert.equal(elements[0].dataset.sourceContext, "Updated total due");
+});
+
+test("failed metrics fetch applies missing state to bound fields", async () => {
+  const elements = [
+    createElement({
+      metricKey: "taxes_total_due",
+      textContent: "$8,600,000",
+      metricMissing: "Hidden in Supabase",
+    }),
+  ];
+
+  await loadRuntime([], elements, {
+    metricsResponse: {
+      reject: "network down",
+    },
+  });
+
+  assert.equal(elements[0].textContent, "Hidden in Supabase");
+  assert.equal(elements[0].title, "");
+  assert.equal(elements[0].dataset.sourceFile, undefined);
+  assert.equal(elements[0].dataset.sourceContext, undefined);
 });
