@@ -358,11 +358,14 @@
         const buildChip = (label, value) =>
           `<div class="stat-card mortgage-meta-card"><div class="meta-label">${escapeHtml(label)}</div><strong>${escapeHtml(value)}</strong></div>`;
 
-        const buildStat = (label, value) =>
-          `<div class="stat-card"><div class="meta-label">${escapeHtml(label)}</div><strong>${escapeHtml(value)}</strong></div>`;
+        const buildOverlayValue = (field, value) =>
+          `<span data-mortgage-field="${escapeHtml(field)}" data-mortgage-missing="Missing in Supabase">${escapeHtml(value)}</span>`;
 
-        const buildSnapshotCard = (label, value) =>
-          `<div class="stat-card"><div class="meta-label">${escapeHtml(label)}</div><strong>${escapeHtml(value)}</strong></div>`;
+        const buildStat = (label, value, field) =>
+          `<div class="stat-card"><div class="meta-label">${escapeHtml(label)}</div><strong>${field ? buildOverlayValue(field, value) : escapeHtml(value)}</strong></div>`;
+
+        const buildSnapshotCard = (label, value, field) =>
+          `<div class="stat-card"><div class="meta-label">${escapeHtml(label)}</div><strong>${field ? buildOverlayValue(field, value) : escapeHtml(value)}</strong></div>`;
 
         const renderLoan = (loan) => {
           const details = loan?.details || {};
@@ -375,10 +378,10 @@
           ].join("");
 
           topStats.innerHTML = [
-            buildStat("Principal Balance", formatCurrency(loan.principalBalance)),
-            buildStat("Interest Rate", formatPercent(loan.interestRate)),
+            buildStat("Principal Balance", formatCurrency(loan.principalBalance), "principal-balance"),
+            buildStat("Interest Rate", formatPercent(loan.interestRate), "interest-rate"),
             buildStat("Loan Type", cleanText(loan.loanType)),
-            buildStat("Escrow Amount", cleanText(details.escrowAmount)),
+            buildStat("Escrow Amount", cleanText(details.escrowAmount), "escrow-amount"),
           ].join("");
 
           const noteParts = [
@@ -409,12 +412,16 @@
           snapshotStack.innerHTML = [
             buildSnapshotCard("Snapshot Date", formatDate(snapshot.statementDate)),
             buildSnapshotCard("Due Date", formatDate(snapshot.dueDate)),
-            buildSnapshotCard("Current Interest Due", formatCurrency(snapshot.currentInterestDue)),
-            buildSnapshotCard("Current Tax Due", formatCurrency(snapshot.currentTaxDue)),
-            buildSnapshotCard("Current Insurance Due", formatCurrency(snapshot.currentInsuranceDue)),
-            buildSnapshotCard("Total Due", formatCurrency(snapshot.totalDue)),
-            buildSnapshotCard("Ending Escrow Balance", formatCurrency(snapshot.endingEscrowBalance)),
+            buildSnapshotCard("Current Interest Due", formatCurrency(snapshot.currentInterestDue), "current-interest-due"),
+            buildSnapshotCard("Current Tax Due", formatCurrency(snapshot.currentTaxDue), "current-tax-due"),
+            buildSnapshotCard("Current Insurance Due", formatCurrency(snapshot.currentInsuranceDue), "current-insurance-due"),
+            buildSnapshotCard("Total Due", formatCurrency(snapshot.totalDue), "total-due"),
+            buildSnapshotCard("Ending Escrow Balance", formatCurrency(snapshot.endingEscrowBalance), "ending-escrow-balance"),
           ].join("");
+
+          if (window.currentDebtSupabaseBridge?.refresh) {
+            window.currentDebtSupabaseBridge.refresh();
+          }
 
           if (loans.length > 1) {
             selectionChip.style.display = "inline-flex";
@@ -428,21 +435,21 @@
 
         tableBody.innerHTML = loans
           .map(
-            (loan, index) => `
-              <tr
-                class="mortgage-loan-row${index === 0 ? " is-selected" : ""}"
-                data-index="${index}"
-                tabindex="0"
-                aria-selected="${index === 0 ? "true" : "false"}"
-              >
+                (loan, index) => `
+                  <tr
+                    class="mortgage-loan-row${index === 0 ? " is-selected" : ""}"
+                    data-index="${index}"
+                    tabindex="0"
+                    aria-selected="${index === 0 ? "true" : "false"}"
+                  >
                 <td><strong>${escapeHtml(cleanText(loan.lender))}</strong></td>
                 <td>${escapeHtml(cleanText(loan.servicer))}</td>
                 <td>${escapeHtml(cleanText(loan.loanNumber))}</td>
-                <td>${escapeHtml(formatCurrency(loan.principalBalance))}</td>
-                <td>${escapeHtml(formatPercent(loan.interestRate))}</td>
+                <td>${buildOverlayValue("principal-balance", formatCurrency(loan.principalBalance))}</td>
+                <td>${buildOverlayValue("interest-rate", formatPercent(loan.interestRate))}</td>
                 <td>${escapeHtml(cleanText(loan.loanType))}</td>
-                <td>${escapeHtml(formatCurrency(loan.monthlyPaymentIoOnly))}</td>
-                <td>${escapeHtml(formatCurrency(loan.monthlyPaymentWithEscrow))}</td>
+                <td>${buildOverlayValue("monthly-payment-io-only", formatCurrency(loan.monthlyPaymentIoOnly))}</td>
+                <td>${buildOverlayValue("monthly-payment-with-escrow", formatCurrency(loan.monthlyPaymentWithEscrow))}</td>
               </tr>`
           )
           .join("");
@@ -475,5 +482,7 @@
         selectLoanRow(tableBody.querySelector(".mortgage-loan-row"));
       })();
     </script>
+    <script src="../../../assets/js/supabase-data.js"></script>
+    <script src="./current-debt-supabase.js"></script>
   </body>
 </html>

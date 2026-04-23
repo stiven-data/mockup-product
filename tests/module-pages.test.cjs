@@ -84,6 +84,26 @@ test("insurance metric bindings stay aligned with seeded outputs", () => {
   }
 });
 
+test("mortgage page loads the shared runtime and mortgage overlay bridge", () => {
+  const html = read("modules/mortgage/views/index.html");
+
+  assert.match(html, /supabase-data\.js/);
+  assert.match(html, /current-debt-supabase\.js/);
+  assert.match(html, /"principal-balance"/);
+  assert.match(html, /"interest-rate"/);
+  assert.match(html, /"escrow-amount"/);
+  assert.match(html, /"monthly-payment-io-only"/);
+  assert.match(html, /"monthly-payment-with-escrow"/);
+  assert.match(html, /"current-interest-due"/);
+  assert.match(html, /"current-tax-due"/);
+  assert.match(html, /"current-insurance-due"/);
+  assert.match(html, /"total-due"/);
+  assert.match(html, /"ending-escrow-balance"/);
+  assert.match(html, /data-mortgage-field="\$\{escapeHtml\(field\)\}"/);
+  assert.match(html, /Missing in Supabase/);
+  assert.match(html, /window\.currentDebtSupabaseBridge/);
+});
+
 test("gp manual metric bindings stay aligned with seeded outputs", async () => {
   const { GP_MANUAL_METRICS } = await import("../scripts/extract-ingestion-data.mjs");
   const html = read("modules/Gp/views/gp mockups.html");
