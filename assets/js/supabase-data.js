@@ -148,6 +148,12 @@
     }
   }
 
+  function clearRows(keys) {
+    for (const key of keys) {
+      state.rowsByKey.delete(key);
+    }
+  }
+
   function applyMetricRowToElement(element, row) {
     const missingDisplay = element.dataset.metricMissing || MISSING_DISPLAY_FALLBACK;
     const nextValue = row
@@ -292,6 +298,7 @@
       emit("metric:loaded", rows);
     } catch (error) {
       console.warn("[metrics-runtime] Falling back to static HTML values.", error);
+      clearRows(uniqueKeys);
       applyRowsToPage([], { useCachedRows: false });
     }
   }
