@@ -235,17 +235,17 @@
           <section class="stats-grid" aria-label="Insurance statistics">
             <article class="stat-card">
               <div class="meta-label">Premiums Due (2026)</div>
-              <strong>$99,619 /yr</strong>
+              <strong><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_001" data-metric-missing="Missing in Supabase">$99,619</span> /yr</strong>
               <p class="text-muted">Insurance Overview</p>
             </article>
             <article class="stat-card">
               <div class="meta-label">Escrow Balance</div>
-              <strong>$209,799 balance</strong>
+              <strong><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_002" data-metric-missing="Missing in Supabase">$209,799</span> balance</strong>
               <p class="text-muted">As of Feb 10, 2026</p>
             </article>
             <article class="stat-card">
               <div class="meta-label">Monthly Insurance Escrow</div>
-              <strong>$10,486 /mo</strong>
+              <strong><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_003" data-metric-missing="Missing in Supabase">$10,486</span> /mo</strong>
               <p class="text-muted">Going forward</p>
             </article>
           </section>
@@ -308,7 +308,7 @@
               <div class="insurance-facts">
                 <article class="stat-card">
                   <div class="meta-label">Total Insured Value</div>
-                  <strong>$15,216,508 coverage</strong>
+                  <strong><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_004" data-metric-missing="Missing in Supabase">$15,216,508</span> coverage</strong>
                   <p class="text-muted">Buildings plus business income and extra expense.</p>
                 </article>
                 <article class="stat-card">
@@ -323,7 +323,7 @@
                 </article>
                 <article class="stat-card">
                   <div class="meta-label">Insured Building Value</div>
-                  <strong>$13,542,295 coverage</strong>
+                  <strong><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_005" data-metric-missing="Missing in Supabase">$13,542,295</span> coverage</strong>
                   <p class="text-muted">Total insured building value.</p>
                 </article>
               </div>
@@ -392,32 +392,32 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">Property - Primary Multi-Peril</th>
-                    <td>Underwriters at Lloyd's of London</td>
-                    <td>01/18/2026 - 01/18/2027</td>
-                    <td>$40,144 /yr</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Property - Excess Multi-Peril</th>
-                    <td>Fortegra Specialty Insurance</td>
-                    <td>01/18/2026 - 01/18/2027</td>
-                    <td>$15,275.20 /yr</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">General Liability</th>
-                    <td>Concert Specialty Insurance Co.</td>
-                    <td>10/16/2025 - 10/16/2026</td>
-                    <td>$15,275 /yr</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Umbrella / Excess Liability</th>
-                    <td>Evanston Insurance Company</td>
-                    <td>01/18/2026 - 10/19/2026</td>
-                    <td>$13,230 /yr</td>
-                  </tr>
-                </tbody>
-              </table>
+                    <tr>
+                      <th scope="row">Property - Primary Multi-Peril</th>
+                      <td>Underwriters at Lloyd's of London</td>
+                      <td>01/18/2026 - 01/18/2027</td>
+                      <td><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_006" data-metric-missing="Missing in Supabase">$40,144</span> /yr</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Property - Excess Multi-Peril</th>
+                      <td>Fortegra Specialty Insurance</td>
+                      <td>01/18/2026 - 01/18/2027</td>
+                      <td><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_007" data-metric-missing="Missing in Supabase">$15,275.20</span> /yr</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">General Liability</th>
+                      <td>Concert Specialty Insurance Co.</td>
+                      <td>10/16/2025 - 10/16/2026</td>
+                      <td><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_008" data-metric-missing="Missing in Supabase">$15,275</span> /yr</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Umbrella / Excess Liability</th>
+                      <td>Evanston Insurance Company</td>
+                      <td>01/18/2026 - 10/19/2026</td>
+                      <td><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_009" data-metric-missing="Missing in Supabase">$13,230</span> /yr</td>
+                    </tr>
+                  </tbody>
+                </table>
             </div>
 
             <p class="text-muted insurance-note">
@@ -458,22 +458,24 @@
         </main>
       </div>
     </div>
+    <script src="../../../assets/js/supabase-data.js"></script>
     <script>
       (() => {
         const insuranceTrendData = [
-          { month: "Mar-25", amount: 16496.85, period: "Mar-Jul 2025", variant: "standard" },
-          { month: "Apr-25", amount: 16496.85, period: "Mar-Jul 2025", variant: "standard" },
-          { month: "May-25", amount: 16496.85, period: "Mar-Jul 2025", variant: "standard" },
-          { month: "Jun-25", amount: 16496.85, period: "Mar-Jul 2025", variant: "standard" },
-          { month: "Jul-25", amount: 16496.85, period: "Mar-Jul 2025", variant: "standard" },
-          { month: "Aug-25", amount: 20353.19, period: "Aug-Dec 2025", variant: "standard" },
-          { month: "Sep-25", amount: 20353.19, period: "Aug-Dec 2025", variant: "standard" },
-          { month: "Oct-25", amount: 20353.19, period: "Aug-Dec 2025", variant: "standard" },
-          { month: "Nov-25", amount: 20353.19, period: "Aug-Dec 2025", variant: "standard" },
-          { month: "Dec-25", amount: 20353.19, period: "Aug-Dec 2025", variant: "standard" },
-          { month: "Jan-26", amount: 8500.0, period: "Jan-Feb 2026", variant: "renewal" },
-          { month: "Feb-26", amount: 8500.0, period: "Jan-Feb 2026", variant: "renewal" }
+          { month: "Mar-25", metricKey: "insurance_expense_mar_2025", period: "Mar-Jul 2025", variant: "standard", fallbackDisplay: "$16,496.85" },
+          { month: "Apr-25", metricKey: "insurance_expense_apr_2025", period: "Mar-Jul 2025", variant: "standard", fallbackDisplay: "$16,496.85" },
+          { month: "May-25", metricKey: "insurance_expense_may_2025", period: "Mar-Jul 2025", variant: "standard", fallbackDisplay: "$16,496.85" },
+          { month: "Jun-25", metricKey: "insurance_expense_jun_2025", period: "Mar-Jul 2025", variant: "standard", fallbackDisplay: "$16,496.85" },
+          { month: "Jul-25", metricKey: "insurance_expense_jul_2025", period: "Mar-Jul 2025", variant: "standard", fallbackDisplay: "$16,496.85" },
+          { month: "Aug-25", metricKey: "insurance_expense_aug_2025", period: "Aug-Dec 2025", variant: "standard", fallbackDisplay: "$20,353.19" },
+          { month: "Sep-25", metricKey: "insurance_expense_sep_2025", period: "Aug-Dec 2025", variant: "standard", fallbackDisplay: "$20,353.19" },
+          { month: "Oct-25", metricKey: "insurance_expense_oct_2025", period: "Aug-Dec 2025", variant: "standard", fallbackDisplay: "$20,353.19" },
+          { month: "Nov-25", metricKey: "insurance_expense_nov_2025", period: "Aug-Dec 2025", variant: "standard", fallbackDisplay: "$20,353.19" },
+          { month: "Dec-25", metricKey: "insurance_expense_dec_2025", period: "Aug-Dec 2025", variant: "standard", fallbackDisplay: "$20,353.19" },
+          { month: "Jan-26", metricKey: "insurance_expense_jan_2026", period: "Jan-Feb 2026", variant: "renewal", fallbackDisplay: "$8,500.00" },
+          { month: "Feb-26", metricKey: "insurance_expense_feb_2026", period: "Jan-Feb 2026", variant: "renewal", fallbackDisplay: "$8,500.00" }
         ];
+        const missingDisplay = "Missing in Supabase";
 
         const barsTarget = document.getElementById("insurance-trend-bars");
         const legendTarget = document.getElementById("insurance-trend-legend");
@@ -491,54 +493,86 @@
           minimumFractionDigits: 1,
           maximumFractionDigits: 1
         });
+        const metricsRuntime = window.ValorisMetrics;
 
-        const maxAmount = Math.max(...insuranceTrendData.map((entry) => entry.amount));
-        const groupedLegend = insuranceTrendData.reduce((groups, entry) => {
-          const lastGroup = groups[groups.length - 1];
-          if (lastGroup && lastGroup.period === entry.period) {
+        function getTrendEntryState(entry) {
+          const row = metricsRuntime?.getRow(entry.metricKey) || null;
+          const numericAmount = Number(row?.value_numeric);
+          return {
+            ...entry,
+            amount: Number.isFinite(numericAmount) ? numericAmount : null,
+            displayAmount: row?.value_display || missingDisplay
+          };
+        }
+
+        function renderInsuranceTrend() {
+          const resolvedTrendData = insuranceTrendData.map(getTrendEntryState);
+          const amounts = resolvedTrendData
+            .map((entry) => entry.amount)
+            .filter((amount) => Number.isFinite(amount));
+          const maxAmount = amounts.length ? Math.max(...amounts) : 0;
+          const groupedLegend = resolvedTrendData.reduce((groups, entry) => {
+            const lastGroup = groups[groups.length - 1];
+            if (lastGroup && lastGroup.period === entry.period) {
+              return groups;
+            }
+
+            groups.push({
+              amount: entry.amount,
+              displayAmount: entry.displayAmount,
+              period: entry.period,
+              variant: entry.variant
+            });
             return groups;
-          }
+          }, []);
 
-          groups.push({
-            amount: entry.amount,
-            period: entry.period,
-            variant: entry.variant
+          barsTarget.innerHTML = resolvedTrendData
+            .map((entry) => {
+              const height = entry.amount && maxAmount
+                ? Math.max(24, Math.round((entry.amount / maxAmount) * 100))
+                : 24;
+              const variantClass = entry.variant === "renewal" ? " is-renewal" : "";
+              const barValue = entry.amount === null ? missingDisplay : compactCurrency.format(entry.amount);
+              return `
+                <div class="insurance-bar">
+                  <div class="insurance-bar__value">${barValue}</div>
+                  <div class="insurance-bar__column${variantClass}" style="height: ${height}%;"></div>
+                  <div class="insurance-bar__label">${entry.month}</div>
+                </div>
+              `;
+            })
+            .join("");
+
+          legendTarget.innerHTML = groupedLegend
+            .map((group) => {
+              const badgeClass = group.variant === "renewal" ? "badge badge--selected" : "badge";
+              const displayAmount = group.amount === null ? missingDisplay : currency.format(group.amount);
+              return `<div class="${badgeClass}">${displayAmount} /mo | ${group.period}</div>`;
+            })
+            .join("");
+
+          tableTarget.innerHTML = resolvedTrendData
+            .map(
+              (entry) => `
+                <tr>
+                  <th scope="row">${entry.month}</th>
+                  <td>${entry.displayAmount}</td>
+                  <td>${entry.period}</td>
+                </tr>
+              `
+            )
+            .join("");
+        }
+
+        renderInsuranceTrend();
+
+        if (metricsRuntime?.subscribe) {
+          metricsRuntime.subscribe((event) => {
+            if (event.type === "metric:loaded" || event.type === "metric:change") {
+              renderInsuranceTrend();
+            }
           });
-          return groups;
-        }, []);
-
-        barsTarget.innerHTML = insuranceTrendData
-          .map((entry) => {
-            const height = Math.max(24, Math.round((entry.amount / maxAmount) * 100));
-            const variantClass = entry.variant === "renewal" ? " is-renewal" : "";
-            return `
-              <div class="insurance-bar">
-                <div class="insurance-bar__value">${compactCurrency.format(entry.amount)}</div>
-                <div class="insurance-bar__column${variantClass}" style="height: ${height}%;"></div>
-                <div class="insurance-bar__label">${entry.month}</div>
-              </div>
-            `;
-          })
-          .join("");
-
-        legendTarget.innerHTML = groupedLegend
-          .map((group) => {
-            const badgeClass = group.variant === "renewal" ? "badge badge--selected" : "badge";
-            return `<div class="${badgeClass}">${currency.format(group.amount)} /mo | ${group.period}</div>`;
-          })
-          .join("");
-
-        tableTarget.innerHTML = insuranceTrendData
-          .map(
-            (entry) => `
-              <tr>
-                <th scope="row">${entry.month}</th>
-                <td>${currency.format(entry.amount)}</td>
-                <td>${entry.period}</td>
-              </tr>
-            `
-          )
-          .join("");
+        }
       })();
     </script>
   </body>

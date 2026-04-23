@@ -21,6 +21,14 @@ test("gp page loads the shared metrics runtime and binds manual count fields", (
   assert.match(html, /gp_source_k1_year/);
 });
 
+test("insurance page loads the shared metrics runtime and binds insurance metrics", () => {
+  const html = read("modules/insurance/views/insurance_command_center_oasis_trusted.html");
+  assert.match(html, /supabase-data\.js/);
+  assert.match(html, /data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_001"/);
+  assert.match(html, /window\.ValorisMetrics/);
+  assert.match(html, /Missing in Supabase/);
+});
+
 test("gp manual metric bindings stay aligned with seeded outputs", async () => {
   const { GP_MANUAL_METRICS } = await import("../scripts/extract-ingestion-data.mjs");
   const html = read("modules/Gp/views/gp mockups.html");
