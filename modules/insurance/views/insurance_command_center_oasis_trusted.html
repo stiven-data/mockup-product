@@ -462,18 +462,18 @@
     <script>
       (() => {
         const insuranceTrendData = [
-          { month: "Mar-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010", period: "Mar-Jul 2025", variant: "standard", fallbackDisplay: "$16,496.85" },
-          { month: "Apr-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011", period: "Mar-Jul 2025", variant: "standard", fallbackDisplay: "$16,496.85" },
-          { month: "May-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012", period: "Mar-Jul 2025", variant: "standard", fallbackDisplay: "$16,496.85" },
-          { month: "Jun-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013", period: "Mar-Jul 2025", variant: "standard", fallbackDisplay: "$16,496.85" },
-          { month: "Jul-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014", period: "Mar-Jul 2025", variant: "standard", fallbackDisplay: "$16,496.85" },
-          { month: "Aug-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015", period: "Aug-Dec 2025", variant: "standard", fallbackDisplay: "$20,353.19" },
-          { month: "Sep-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016", period: "Aug-Dec 2025", variant: "standard", fallbackDisplay: "$20,353.19" },
-          { month: "Oct-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017", period: "Aug-Dec 2025", variant: "standard", fallbackDisplay: "$20,353.19" },
-          { month: "Nov-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018", period: "Aug-Dec 2025", variant: "standard", fallbackDisplay: "$20,353.19" },
-          { month: "Dec-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019", period: "Aug-Dec 2025", variant: "standard", fallbackDisplay: "$20,353.19" },
-          { month: "Jan-26", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020", period: "Jan-Feb 2026", variant: "renewal", fallbackDisplay: "$8,500.00" },
-          { month: "Feb-26", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", period: "Jan-Feb 2026", variant: "renewal", fallbackDisplay: "$8,500.00" }
+          { month: "Mar-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010", period: "Mar-Jul 2025", variant: "standard" },
+          { month: "Apr-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011", period: "Mar-Jul 2025", variant: "standard" },
+          { month: "May-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012", period: "Mar-Jul 2025", variant: "standard" },
+          { month: "Jun-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013", period: "Mar-Jul 2025", variant: "standard" },
+          { month: "Jul-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014", period: "Mar-Jul 2025", variant: "standard" },
+          { month: "Aug-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015", period: "Aug-Dec 2025", variant: "standard" },
+          { month: "Sep-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016", period: "Aug-Dec 2025", variant: "standard" },
+          { month: "Oct-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017", period: "Aug-Dec 2025", variant: "standard" },
+          { month: "Nov-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018", period: "Aug-Dec 2025", variant: "standard" },
+          { month: "Dec-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019", period: "Aug-Dec 2025", variant: "standard" },
+          { month: "Jan-26", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020", period: "Jan-Feb 2026", variant: "renewal" },
+          { month: "Feb-26", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", period: "Jan-Feb 2026", variant: "renewal" }
         ];
         const missingDisplay = "Missing in Supabase";
 
@@ -494,6 +494,15 @@
           maximumFractionDigits: 1
         });
         const metricsRuntime = window.ValorisMetrics;
+
+        function escapeHtml(value) {
+          return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        }
 
         function getTrendEntryState(entry) {
           const row = metricsRuntime?.getRow(entry.metricKey) || null;
@@ -535,9 +544,9 @@
               const barValue = entry.amount === null ? missingDisplay : compactCurrency.format(entry.amount);
               return `
                 <div class="insurance-bar">
-                  <div class="insurance-bar__value">${barValue}</div>
+                  <div class="insurance-bar__value">${escapeHtml(barValue)}</div>
                   <div class="insurance-bar__column${variantClass}" style="height: ${height}%;"></div>
-                  <div class="insurance-bar__label">${entry.month}</div>
+                  <div class="insurance-bar__label">${escapeHtml(entry.month)}</div>
                 </div>
               `;
             })
@@ -547,7 +556,7 @@
             .map((group) => {
               const badgeClass = group.variant === "renewal" ? "badge badge--selected" : "badge";
               const displayAmount = group.amount === null ? missingDisplay : currency.format(group.amount);
-              return `<div class="${badgeClass}">${displayAmount} /mo | ${group.period}</div>`;
+              return `<div class="${badgeClass}">${escapeHtml(displayAmount)} /mo | ${escapeHtml(group.period)}</div>`;
             })
             .join("");
 
@@ -555,9 +564,9 @@
             .map(
               (entry) => `
                 <tr>
-                  <th scope="row">${entry.month}</th>
-                  <td>${entry.displayAmount}</td>
-                  <td>${entry.period}</td>
+                  <th scope="row">${escapeHtml(entry.month)}</th>
+                  <td>${escapeHtml(entry.displayAmount)}</td>
+                  <td>${escapeHtml(entry.period)}</td>
                 </tr>
               `
             )

@@ -7,6 +7,30 @@ function read(relativePath) {
   return fs.readFileSync(path.join(__dirname, "..", relativePath), "utf8");
 }
 
+const INSURANCE_METRICS = [
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_001", value_numeric: 99619, value_display: "$99,619", binding: "data" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_002", value_numeric: 209799, value_display: "$209,799", binding: "data" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_003", value_numeric: 10486, value_display: "$10,486", binding: "data" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_004", value_numeric: 15216508, value_display: "$15,216,508", binding: "data" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_005", value_numeric: 13542295, value_display: "$13,542,295", binding: "data" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_006", value_numeric: 40144, value_display: "$40,144", binding: "data" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_007", value_numeric: 15275.2, value_display: "$15,275.20", binding: "data" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_008", value_numeric: 15275, value_display: "$15,275", binding: "data" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_009", value_numeric: 13230, value_display: "$13,230", binding: "data" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020", value_numeric: 8500, value_display: "$8,500.00", binding: "trend" },
+  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", value_numeric: 8500, value_display: "$8,500.00", binding: "trend" },
+];
+
 test("taxes page loads the shared metrics runtime and contains metric bindings", () => {
   const html = read("modules/taxes/views/index.html");
   assert.match(html, /supabase-data\.js/);
@@ -29,6 +53,35 @@ test("insurance page loads the shared metrics runtime and binds insurance metric
   assert.match(html, /Missing in Supabase/);
   assert.match(html, /insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010/);
   assert.doesNotMatch(html, /insurance_expense_[a-z]{3}_[0-9]{4}/);
+  assert.doesNotMatch(html, /fallbackDisplay/);
+  assert.match(html, /function escapeHtml\(value\)/);
+});
+
+test("insurance metric bindings stay aligned with seeded outputs", () => {
+  const html = read("modules/insurance/views/insurance_command_center_oasis_trusted.html");
+  const csv = read("supabase/ingestion_data.csv");
+  const sql = read("supabase/seed_ingestion_data.sql");
+
+  for (const metric of INSURANCE_METRICS) {
+    const escapedDisplay = metric.value_display
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const htmlPattern = metric.binding === "data"
+      ? new RegExp(
+          `data-metric-key="${metric.metric_key}"[^>]*>${escapedDisplay}<`,
+        )
+      : new RegExp(`metricKey: "${metric.metric_key}"`);
+    const csvPattern = new RegExp(
+      `^insurance,${metric.metric_key},.*?,${metric.value_numeric},"?${escapedDisplay}"?,currency,USD,`,
+      "m",
+    );
+    const sqlPattern = new RegExp(
+      `'insurance', '${metric.metric_key}'.*?, ${metric.value_numeric}, '${escapedDisplay}', 'currency'`,
+    );
+
+    assert.match(html, htmlPattern);
+    assert.match(csv, csvPattern);
+    assert.match(sql, sqlPattern);
+  }
 });
 
 test("gp manual metric bindings stay aligned with seeded outputs", async () => {
