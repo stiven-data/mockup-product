@@ -38,7 +38,13 @@ const mortgageMetrics = [
   metric("mortgage", "mortgage_ending_escrow_balance", "Ending Escrow Balance", 281922.98, "$281,922.98", "currency", "modules/mortgage/views/current-debt-data.js"),
 ];
 
-const metrics = [...htmlMetrics, ...mortgageMetrics];
+const gpMetrics = [
+  metric("gp", "gp_total_gp_sponsors", "Total GP Sponsors (PPC)", 6, "6", "number", "modules/Gp/views/gp mockups.html"),
+  metric("gp", "gp_k1_partners_in_manager_entity", "K-1 Partners in Manager Entity", 8, "8", "number", "modules/Gp/views/gp mockups.html"),
+  metric("gp", "gp_source_k1_year", "Source K-1 Year", 2024, "2024", "number", "modules/Gp/views/gp mockups.html"),
+];
+
+const metrics = [...htmlMetrics, ...mortgageMetrics, ...gpMetrics];
 
 await mkdir(OUTPUT_DIR, { recursive: true });
 await writeFile(CSV_OUTPUT, toCsv(metrics), "utf8");

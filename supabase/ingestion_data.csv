@@ -2,357 +2,252 @@ module,metric_key,label,value_numeric,value_display,value_type,currency,source_f
 taxes,taxes_modules_taxes_views_index_001,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
 taxes,taxes_modules_taxes_views_index_002,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
 taxes,taxes_modules_taxes_views_index_003,"$7,348.50",7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50"
-taxes,taxes_modules_taxes_views_index_004,"$14,195.78",14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78"
-taxes,taxes_modules_taxes_views_index_005,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_006,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_007,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
-taxes,taxes_modules_taxes_views_index_008,"$7,348.50",7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50"
-taxes,taxes_modules_taxes_views_index_009,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
-taxes,taxes_modules_taxes_views_index_010,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_011,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_012,"$165,586.99",165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99"
-taxes,taxes_modules_taxes_views_index_013,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
-taxes,taxes_modules_taxes_views_index_014,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
-taxes,taxes_modules_taxes_views_index_015,4%,4,4%,percent,,modules/taxes/views/index.html,4%
-taxes,taxes_modules_taxes_views_index_016,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
-taxes,taxes_modules_taxes_views_index_017,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
-taxes,taxes_modules_taxes_views_index_018,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_019,"$160,038.24",160038.24,"$160,038.24",currency,USD,modules/taxes/views/index.html,"$160,038.24"
-taxes,taxes_modules_taxes_views_index_020,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_021,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
-taxes,taxes_modules_taxes_views_index_022,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_023,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_024,"$162,207.79",162207.79,"$162,207.79",currency,USD,modules/taxes/views/index.html,"$162,207.79"
-taxes,taxes_modules_taxes_views_index_025,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_026,"$165,586.99",165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99"
-taxes,taxes_modules_taxes_views_index_027,"$158,963.51",158963.51,"$158,963.51",currency,USD,modules/taxes/views/index.html,"$158,963.51"
-taxes,taxes_modules_taxes_views_index_028,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_029,"$152,574.32",152574.32,"$152,574.32",currency,USD,modules/taxes/views/index.html,"$152,574.32"
-taxes,taxes_modules_taxes_views_index_030,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_031,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
-taxes,taxes_modules_taxes_views_index_032,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
-taxes,taxes_modules_taxes_views_index_033,"$9,151,600",9151600,"$9,151,600",currency,USD,modules/taxes/views/index.html,"$9,151,600"
-taxes,taxes_modules_taxes_views_index_034,"$162,360.37",162360.37,"$162,360.37",currency,USD,modules/taxes/views/index.html,"$162,360.37"
-taxes,taxes_modules_taxes_views_index_035,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_036,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
-taxes,taxes_modules_taxes_views_index_037,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
-taxes,taxes_modules_taxes_views_index_038,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_039,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_040,"$9,248.13",9248.13,"$9,248.13",currency,USD,modules/taxes/views/index.html,"$9,248.13"
-taxes,taxes_modules_taxes_views_index_041,"$1,849.63",1849.63,"$1,849.63",currency,USD,modules/taxes/views/index.html,"$1,849.63"
-taxes,taxes_modules_taxes_views_index_042,$50.00,50,$50.00,currency,USD,modules/taxes/views/index.html,$50.00
-taxes,taxes_modules_taxes_views_index_043,"$1,899.63",1899.63,"$1,899.63",currency,USD,modules/taxes/views/index.html,"$1,899.63"
-taxes,taxes_modules_taxes_views_index_044,"$7,348.50",7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50"
-taxes,taxes_modules_taxes_views_index_045,"$14,572.46",14572.46,"$14,572.46",currency,USD,modules/taxes/views/index.html,"$14,572.46"
-taxes,taxes_modules_taxes_views_index_046,"$13,259.17",13259.17,"$13,259.17",currency,USD,modules/taxes/views/index.html,"$13,259.17"
-taxes,taxes_modules_taxes_views_index_047,"$158,963.51",158963.51,"$158,963.51",currency,USD,modules/taxes/views/index.html,"$158,963.51"
-taxes,taxes_modules_taxes_views_index_048,"$7,086,090",7086090,"$7,086,090",currency,USD,modules/taxes/views/index.html,"$7,086,090"
-taxes,taxes_modules_taxes_views_index_049,"$127,076.02",127076.02,"$127,076.02",currency,USD,modules/taxes/views/index.html,"$127,076.02"
-taxes,taxes_modules_taxes_views_index_050,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_051,"$130,455.22",130455.22,"$130,455.22",currency,USD,modules/taxes/views/index.html,"$130,455.22"
-taxes,taxes_modules_taxes_views_index_052,"$7,794,699",7794699,"$7,794,699",currency,USD,modules/taxes/views/index.html,"$7,794,699"
-taxes,taxes_modules_taxes_views_index_053,"$139,069.66",139069.66,"$139,069.66",currency,USD,modules/taxes/views/index.html,"$139,069.66"
-taxes,taxes_modules_taxes_views_index_054,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_055,"$142,448.86",142448.86,"$142,448.86",currency,USD,modules/taxes/views/index.html,"$142,448.86"
-taxes,taxes_modules_taxes_views_index_056,"$8,574,168",8574168,"$8,574,168",currency,USD,modules/taxes/views/index.html,"$8,574,168"
-taxes,taxes_modules_taxes_views_index_057,"$157,359.97",157359.97,"$157,359.97",currency,USD,modules/taxes/views/index.html,"$157,359.97"
-taxes,taxes_modules_taxes_views_index_058,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_059,"$160,739.17",160739.17,"$160,739.17",currency,USD,modules/taxes/views/index.html,"$160,739.17"
-taxes,taxes_modules_taxes_views_index_060,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_061,"$160,038.24",160038.24,"$160,038.24",currency,USD,modules/taxes/views/index.html,"$160,038.24"
-taxes,taxes_modules_taxes_views_index_062,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_063,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
-taxes,taxes_modules_taxes_views_index_064,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_065,"$162,207.79",162207.79,"$162,207.79",currency,USD,modules/taxes/views/index.html,"$162,207.79"
-taxes,taxes_modules_taxes_views_index_066,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_067,"$165,586.99",165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99"
-taxes,taxes_modules_taxes_views_index_068,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_069,"$152,574.32",152574.32,"$152,574.32",currency,USD,modules/taxes/views/index.html,"$152,574.32"
-taxes,taxes_modules_taxes_views_index_070,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_071,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
-taxes,taxes_modules_taxes_views_index_072,"$9,151,600",9151600,"$9,151,600",currency,USD,modules/taxes/views/index.html,"$9,151,600"
-taxes,taxes_modules_taxes_views_index_073,"$162,373.47",162373.47,"$162,373.47",currency,USD,modules/taxes/views/index.html,"$162,373.47"
-taxes,taxes_modules_taxes_views_index_074,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_075,"$165,752.67",165752.67,"$165,752.67",currency,USD,modules/taxes/views/index.html,"$165,752.67"
-taxes,taxes_modules_taxes_views_index_076,"$96,212.84",96212.84,"$96,212.84",currency,USD,modules/taxes/views/index.html,"$96,212.84"
-taxes,taxes_modules_taxes_views_index_077,"$26,607.00",26607,"$26,607.00",currency,USD,modules/taxes/views/index.html,"$26,607.00"
-taxes,taxes_modules_taxes_views_index_078,"$12,900.00",12900,"$12,900.00",currency,USD,modules/taxes/views/index.html,"$12,900.00"
-taxes,taxes_modules_taxes_views_index_079,"$8,600.00",8600,"$8,600.00",currency,USD,modules/taxes/views/index.html,"$8,600.00"
-taxes,taxes_modules_taxes_views_index_080,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_081,"$152,574.32",152574.32,"$152,574.32",currency,USD,modules/taxes/views/index.html,"$152,574.32"
-taxes,taxes_modules_taxes_views_index_082,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_083,"$25,000",25000,"$25,000",currency,USD,modules/taxes/views/index.html,"$25,000"
-taxes,taxes_modules_taxes_views_index_084,"$2,452.51",2452.51,"$2,452.51",currency,USD,modules/taxes/views/index.html,"$2,452.51"
-taxes,taxes_modules_taxes_views_index_085,"$36,734.27",36734.27,"$36,734.27",currency,USD,modules/taxes/views/index.html,"$36,734.27"
-taxes,taxes_modules_taxes_views_index_086,"$39,195.78",39195.78,"$39,195.78",currency,USD,modules/taxes/views/index.html,"$39,195.78"
-taxes,taxes_modules_taxes_views_index_087,"$14,195.78",14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78"
-taxes,taxes_modules_taxes_views_index_088,"$25,000",25000,"$25,000",currency,USD,modules/taxes/views/index.html,"$25,000"
-taxes,taxes_modules_taxes_views_index_089,$128.99,128.99,$128.99,currency,USD,modules/taxes/views/index.html,$128.99
-taxes,taxes_modules_taxes_views_index_090,$210.00,210,$210.00,currency,USD,modules/taxes/views/index.html,$210.00
-taxes,taxes_modules_taxes_views_index_091,$799.00,799,$799.00,currency,USD,modules/taxes/views/index.html,$799.00
-taxes,taxes_modules_taxes_views_index_092,$105.00,105,$105.00,currency,USD,modules/taxes/views/index.html,$105.00
-taxes,taxes_modules_taxes_views_index_093,$499.00,499,$499.00,currency,USD,modules/taxes/views/index.html,$499.00
-taxes,taxes_modules_taxes_views_index_094,"$36,743.27",36743.27,"$36,743.27",currency,USD,modules/taxes/views/index.html,"$36,743.27"
-taxes,taxes_modules_taxes_views_index_095,"$7,086,090",7086090,"$7,086,090",currency,USD,modules/taxes/views/index.html,"$7,086,090"
-taxes,taxes_modules_taxes_views_index_096,"$7,794,699",7794699,"$7,794,699",currency,USD,modules/taxes/views/index.html,"$7,794,699"
-taxes,taxes_modules_taxes_views_index_097,"$8,574,168",8574168,"$8,574,168",currency,USD,modules/taxes/views/index.html,"$8,574,168"
-taxes,taxes_modules_taxes_views_index_098,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_099,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_100,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_101,"$9,151,600",9151600,"$9,151,600",currency,USD,modules/taxes/views/index.html,"$9,151,600"
-taxes,taxes_modules_taxes_views_index_102,"$7,086,090",7086090,"$7,086,090",currency,USD,modules/taxes/views/index.html,"$7,086,090"
-taxes,taxes_modules_taxes_views_index_103,"$7,794,699",7794699,"$7,794,699",currency,USD,modules/taxes/views/index.html,"$7,794,699"
-taxes,taxes_modules_taxes_views_index_104,"$8,574,168",8574168,"$8,574,168",currency,USD,modules/taxes/views/index.html,"$8,574,168"
-taxes,taxes_modules_taxes_views_index_105,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_106,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_107,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_108,"$9,151,600",9151600,"$9,151,600",currency,USD,modules/taxes/views/index.html,"$9,151,600"
-taxes,taxes_modules_taxes_views_index_109,"$7,086,090",7086090,"$7,086,090",currency,USD,modules/taxes/views/index.html,"$7,086,090"
-taxes,taxes_modules_taxes_views_index_110,"$7,794,699",7794699,"$7,794,699",currency,USD,modules/taxes/views/index.html,"$7,794,699"
-taxes,taxes_modules_taxes_views_index_111,"$8,574,168",8574168,"$8,574,168",currency,USD,modules/taxes/views/index.html,"$8,574,168"
-taxes,taxes_modules_taxes_views_index_112,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_113,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_114,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_115,"$9,151,600",9151600,"$9,151,600",currency,USD,modules/taxes/views/index.html,"$9,151,600"
-taxes,taxes_modules_taxes_views_index_116,"$7,613,600",7613600,"$7,613,600",currency,USD,modules/taxes/views/index.html,"$7,613,600"
-taxes,taxes_modules_taxes_views_index_117,"$8,947,800",8947800,"$8,947,800",currency,USD,modules/taxes/views/index.html,"$8,947,800"
-taxes,taxes_modules_taxes_views_index_118,"$9,103,200",9103200,"$9,103,200",currency,USD,modules/taxes/views/index.html,"$9,103,200"
-taxes,taxes_modules_taxes_views_index_119,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_120,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_121,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_122,"$9,151,600",9151600,"$9,151,600",currency,USD,modules/taxes/views/index.html,"$9,151,600"
-taxes,taxes_modules_taxes_views_index_123,"$7,613,600",7613600,"$7,613,600",currency,USD,modules/taxes/views/index.html,"$7,613,600"
-taxes,taxes_modules_taxes_views_index_124,"$8,947,800",8947800,"$8,947,800",currency,USD,modules/taxes/views/index.html,"$8,947,800"
-taxes,taxes_modules_taxes_views_index_125,"$9,103,200",9103200,"$9,103,200",currency,USD,modules/taxes/views/index.html,"$9,103,200"
-taxes,taxes_modules_taxes_views_index_126,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_127,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_128,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_129,"$9,151,600",9151600,"$9,151,600",currency,USD,modules/taxes/views/index.html,"$9,151,600"
-taxes,taxes_modules_taxes_views_index_130,"$7,613,600",7613600,"$7,613,600",currency,USD,modules/taxes/views/index.html,"$7,613,600"
-taxes,taxes_modules_taxes_views_index_131,"$8,947,800",8947800,"$8,947,800",currency,USD,modules/taxes/views/index.html,"$8,947,800"
-taxes,taxes_modules_taxes_views_index_132,"$9,103,200",9103200,"$9,103,200",currency,USD,modules/taxes/views/index.html,"$9,103,200"
-taxes,taxes_modules_taxes_views_index_133,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_134,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_135,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_136,"$9,151,600",9151600,"$9,151,600",currency,USD,modules/taxes/views/index.html,"$9,151,600"
-taxes,taxes_modules_taxes_views_index_137,"$9,103,200",9103200,"$9,103,200",currency,USD,modules/taxes/views/index.html,"$9,103,200"
-taxes,taxes_modules_taxes_views_index_138,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_139,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_140,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_141,"$9,151,600",9151600,"$9,151,600",currency,USD,modules/taxes/views/index.html,"$9,151,600"
-taxes,taxes_modules_taxes_views_index_142,"$81,078.33",81078.33,"$81,078.33",currency,USD,modules/taxes/views/index.html,"$81,078.33"
-taxes,taxes_modules_taxes_views_index_143,"$88,211.83",88211.83,"$88,211.83",currency,USD,modules/taxes/views/index.html,"$88,211.83"
-taxes,taxes_modules_taxes_views_index_144,"$97,033.00",97033,"$97,033.00",currency,USD,modules/taxes/views/index.html,"$97,033.00"
-taxes,taxes_modules_taxes_views_index_145,"$101,379.05",101379.05,"$101,379.05",currency,USD,modules/taxes/views/index.html,"$101,379.05"
-taxes,taxes_modules_taxes_views_index_146,"$102,327.54",102327.54,"$102,327.54",currency,USD,modules/taxes/views/index.html,"$102,327.54"
-taxes,taxes_modules_taxes_views_index_147,"$96,212.84",96212.84,"$96,212.84",currency,USD,modules/taxes/views/index.html,"$96,212.84"
-taxes,taxes_modules_taxes_views_index_148,"$102,436.78",102436.78,"$102,436.78",currency,USD,modules/taxes/views/index.html,"$102,436.78"
-taxes,taxes_modules_taxes_views_index_149,"$1,551.15",1551.15,"$1,551.15",currency,USD,modules/taxes/views/index.html,"$1,551.15"
-taxes,taxes_modules_taxes_views_index_150,"$1,538.67",1538.67,"$1,538.67",currency,USD,modules/taxes/views/index.html,"$1,538.67"
-taxes,taxes_modules_taxes_views_index_151,"$1,537.35",1537.35,"$1,537.35",currency,USD,modules/taxes/views/index.html,"$1,537.35"
-taxes,taxes_modules_taxes_views_index_152,"$1,606.21",1606.21,"$1,606.21",currency,USD,modules/taxes/views/index.html,"$1,606.21"
-taxes,taxes_modules_taxes_views_index_153,"$1,639.34",1639.34,"$1,639.34",currency,USD,modules/taxes/views/index.html,"$1,639.34"
-taxes,taxes_modules_taxes_views_index_154,"$1,542.08",1542.08,"$1,542.08",currency,USD,modules/taxes/views/index.html,"$1,542.08"
-taxes,taxes_modules_taxes_views_index_155,"$1,640.86",1640.86,"$1,640.86",currency,USD,modules/taxes/views/index.html,"$1,640.86"
-taxes,taxes_modules_taxes_views_index_156,$226.75,226.75,$226.75,currency,USD,modules/taxes/views/index.html,$226.75
-taxes,taxes_modules_taxes_views_index_157,$249.43,249.43,$249.43,currency,USD,modules/taxes/views/index.html,$249.43
-taxes,taxes_modules_taxes_views_index_158,$246.94,246.94,$246.94,currency,USD,modules/taxes/views/index.html,$246.94
-taxes,taxes_modules_taxes_views_index_159,$258.00,258,$258.00,currency,USD,modules/taxes/views/index.html,$258.00
-taxes,taxes_modules_taxes_views_index_160,$246.86,246.86,$246.86,currency,USD,modules/taxes/views/index.html,$246.86
-taxes,taxes_modules_taxes_views_index_161,$232.20,232.2,$232.20,currency,USD,modules/taxes/views/index.html,$232.20
-taxes,taxes_modules_taxes_views_index_162,$247.09,247.09,$247.09,currency,USD,modules/taxes/views/index.html,$247.09
-taxes,taxes_modules_taxes_views_index_163,"$5,694.97",5694.97,"$5,694.97",currency,USD,modules/taxes/views/index.html,"$5,694.97"
-taxes,taxes_modules_taxes_views_index_164,"$6,692.95",6692.95,"$6,692.95",currency,USD,modules/taxes/views/index.html,"$6,692.95"
-taxes,taxes_modules_taxes_views_index_165,"$6,809.19",6809.19,"$6,809.19",currency,USD,modules/taxes/views/index.html,"$6,809.19"
-taxes,taxes_modules_taxes_views_index_166,"$6,700.73",6700.73,"$6,700.73",currency,USD,modules/taxes/views/index.html,"$6,700.73"
-taxes,taxes_modules_taxes_views_index_167,"$6,838.96",6838.96,"$6,838.96",currency,USD,modules/taxes/views/index.html,"$6,838.96"
-taxes,taxes_modules_taxes_views_index_168,"$6,432.80",6432.8,"$6,432.80",currency,USD,modules/taxes/views/index.html,"$6,432.80"
-taxes,taxes_modules_taxes_views_index_169,"$6,845.44",6845.44,"$6,845.44",currency,USD,modules/taxes/views/index.html,"$6,845.44"
-taxes,taxes_modules_taxes_views_index_170,"$11,420.40",11420.4,"$11,420.40",currency,USD,modules/taxes/views/index.html,"$11,420.40"
-taxes,taxes_modules_taxes_views_index_171,"$13,421.70",13421.7,"$13,421.70",currency,USD,modules/taxes/views/index.html,"$13,421.70"
-taxes,taxes_modules_taxes_views_index_172,"$13,654.80",13654.8,"$13,654.80",currency,USD,modules/taxes/views/index.html,"$13,654.80"
-taxes,taxes_modules_taxes_views_index_173,"$13,437.30",13437.3,"$13,437.30",currency,USD,modules/taxes/views/index.html,"$13,437.30"
-taxes,taxes_modules_taxes_views_index_174,"$13,714.50",13714.5,"$13,714.50",currency,USD,modules/taxes/views/index.html,"$13,714.50"
-taxes,taxes_modules_taxes_views_index_175,"$12,900.00",12900,"$12,900.00",currency,USD,modules/taxes/views/index.html,"$12,900.00"
-taxes,taxes_modules_taxes_views_index_176,"$13,727.40",13727.4,"$13,727.40",currency,USD,modules/taxes/views/index.html,"$13,727.40"
-taxes,taxes_modules_taxes_views_index_177,"$27,104.42",27104.42,"$27,104.42",currency,USD,modules/taxes/views/index.html,"$27,104.42"
-taxes,taxes_modules_taxes_views_index_178,"$28,955.08",28955.08,"$28,955.08",currency,USD,modules/taxes/views/index.html,"$28,955.08"
-taxes,taxes_modules_taxes_views_index_179,"$28,975.49",28975.49,"$28,975.49",currency,USD,modules/taxes/views/index.html,"$28,975.49"
-taxes,taxes_modules_taxes_views_index_180,"$27,698.75",27698.75,"$27,698.75",currency,USD,modules/taxes/views/index.html,"$27,698.75"
-taxes,taxes_modules_taxes_views_index_181,"$28,297.59",28297.59,"$28,297.59",currency,USD,modules/taxes/views/index.html,"$28,297.59"
-taxes,taxes_modules_taxes_views_index_182,"$26,607.00",26607,"$26,607.00",currency,USD,modules/taxes/views/index.html,"$26,607.00"
-taxes,taxes_modules_taxes_views_index_183,"$28,324.30",28324.3,"$28,324.30",currency,USD,modules/taxes/views/index.html,"$28,324.30"
-taxes,taxes_modules_taxes_views_index_184,"$9,103.20",9103.2,"$9,103.20",currency,USD,modules/taxes/views/index.html,"$9,103.20"
-taxes,taxes_modules_taxes_views_index_185,"$8,958.20",8958.2,"$8,958.20",currency,USD,modules/taxes/views/index.html,"$8,958.20"
-taxes,taxes_modules_taxes_views_index_186,"$9,143.00",9143,"$9,143.00",currency,USD,modules/taxes/views/index.html,"$9,143.00"
-taxes,taxes_modules_taxes_views_index_187,"$8,600.00",8600,"$8,600.00",currency,USD,modules/taxes/views/index.html,"$8,600.00"
-taxes,taxes_modules_taxes_views_index_188,"$9,151.60",9151.6,"$9,151.60",currency,USD,modules/taxes/views/index.html,"$9,151.60"
-taxes,taxes_modules_taxes_views_index_189,"$127,076.02",127076.02,"$127,076.02",currency,USD,modules/taxes/views/index.html,"$127,076.02"
-taxes,taxes_modules_taxes_views_index_190,"$139,069.66",139069.66,"$139,069.66",currency,USD,modules/taxes/views/index.html,"$139,069.66"
-taxes,taxes_modules_taxes_views_index_191,"$157,359.97",157359.97,"$157,359.97",currency,USD,modules/taxes/views/index.html,"$157,359.97"
-taxes,taxes_modules_taxes_views_index_192,"$160,038.24",160038.24,"$160,038.24",currency,USD,modules/taxes/views/index.html,"$160,038.24"
-taxes,taxes_modules_taxes_views_index_193,"$162,207.79",162207.79,"$162,207.79",currency,USD,modules/taxes/views/index.html,"$162,207.79"
-taxes,taxes_modules_taxes_views_index_194,"$152,574.32",152574.32,"$152,574.32",currency,USD,modules/taxes/views/index.html,"$152,574.32"
-taxes,taxes_modules_taxes_views_index_195,"$162,373.47",162373.47,"$162,373.47",currency,USD,modules/taxes/views/index.html,"$162,373.47"
-taxes,taxes_modules_taxes_views_index_196,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
-taxes,taxes_modules_taxes_views_index_197,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
-taxes,taxes_modules_taxes_views_index_198,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
-taxes,taxes_modules_taxes_views_index_199,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
-taxes,taxes_modules_taxes_views_index_200,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
-taxes,taxes_modules_taxes_views_index_201,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
-taxes,taxes_modules_taxes_views_index_202,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
-taxes,taxes_modules_taxes_views_index_203,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_204,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_205,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_206,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_207,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_208,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_209,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_210,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_211,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_212,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_213,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_214,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_215,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_216,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_217,"$130,455.22",130455.22,"$130,455.22",currency,USD,modules/taxes/views/index.html,"$130,455.22"
-taxes,taxes_modules_taxes_views_index_218,"$142,448.86",142448.86,"$142,448.86",currency,USD,modules/taxes/views/index.html,"$142,448.86"
-taxes,taxes_modules_taxes_views_index_219,"$160,739.17",160739.17,"$160,739.17",currency,USD,modules/taxes/views/index.html,"$160,739.17"
-taxes,taxes_modules_taxes_views_index_220,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
-taxes,taxes_modules_taxes_views_index_221,"$165,586.99",165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99"
-taxes,taxes_modules_taxes_views_index_222,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
-taxes,taxes_modules_taxes_views_index_223,"$165,752.67",165752.67,"$165,752.67",currency,USD,modules/taxes/views/index.html,"$165,752.67"
-taxes,taxes_modules_taxes_views_index_224,4%,4,4%,percent,,modules/taxes/views/index.html,4%
-taxes,taxes_modules_taxes_views_index_225,"$6,629.58",6629.58,"$6,629.58",currency,USD,modules/taxes/views/index.html,"$6,629.58"
-taxes,taxes_modules_taxes_views_index_226,4%,4,4%,percent,,modules/taxes/views/index.html,4%
-taxes,taxes_modules_taxes_views_index_227,"$158,963.51",158963.51,"$158,963.51",currency,USD,modules/taxes/views/index.html,"$158,963.51"
-taxes,taxes_modules_taxes_views_index_228,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
-taxes,taxes_modules_taxes_views_index_229,"$159,122.89",159122.89,"$159,122.89",currency,USD,modules/taxes/views/index.html,"$159,122.89"
+taxes,taxes_modules_taxes_views_index_004,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
+taxes,taxes_modules_taxes_views_index_005,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
+taxes,taxes_modules_taxes_views_index_006,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
+taxes,taxes_modules_taxes_views_index_007,"$14,195.78",14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78"
+taxes,taxes_modules_taxes_views_index_008,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
+taxes,taxes_modules_taxes_views_index_009,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
+taxes,taxes_modules_taxes_views_index_010,"$7,348.50",7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50"
+taxes,taxes_modules_taxes_views_index_011,4%,4,4%,percent,,modules/taxes/views/index.html,4%
+taxes,taxes_modules_taxes_views_index_012,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
+taxes,taxes_modules_taxes_views_index_013,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
+taxes,taxes_modules_taxes_views_index_014,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
+taxes,taxes_modules_taxes_views_index_015,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_016,"$165,586.99",165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99"
+taxes,taxes_modules_taxes_views_index_017,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
+taxes,taxes_modules_taxes_views_index_018,4%,4,4%,percent,,modules/taxes/views/index.html,4%
+taxes,taxes_modules_taxes_views_index_019,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
+taxes,taxes_modules_taxes_views_index_020,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
+taxes,taxes_modules_taxes_views_index_021,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
+taxes,taxes_modules_taxes_views_index_022,"$160,038.24",160038.24,"$160,038.24",currency,USD,modules/taxes/views/index.html,"$160,038.24"
+taxes,taxes_modules_taxes_views_index_023,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_024,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
+taxes,taxes_modules_taxes_views_index_025,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
+taxes,taxes_modules_taxes_views_index_026,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
+taxes,taxes_modules_taxes_views_index_027,"$162,207.79",162207.79,"$162,207.79",currency,USD,modules/taxes/views/index.html,"$162,207.79"
+taxes,taxes_modules_taxes_views_index_028,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_029,"$165,586.99",165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99"
+taxes,taxes_modules_taxes_views_index_030,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
+taxes,taxes_modules_taxes_views_index_031,"$152,574.32",152574.32,"$152,574.32",currency,USD,modules/taxes/views/index.html,"$152,574.32"
+taxes,taxes_modules_taxes_views_index_032,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_033,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
+taxes,taxes_modules_taxes_views_index_034,4%,4,4%,percent,,modules/taxes/views/index.html,4%
+taxes,taxes_modules_taxes_views_index_035,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
+taxes,taxes_modules_taxes_views_index_036,"$8,780,000",8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000"
+taxes,taxes_modules_taxes_views_index_037,"$162,360.37",162360.37,"$162,360.37",currency,USD,modules/taxes/views/index.html,"$162,360.37"
+taxes,taxes_modules_taxes_views_index_038,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_039,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
+taxes,taxes_modules_taxes_views_index_040,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
+taxes,taxes_modules_taxes_views_index_041,"$543,000",543000,"$543,000",currency,USD,modules/taxes/views/index.html,"$543,000"
+taxes,taxes_modules_taxes_views_index_042,"$7,348.50",7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50"
+taxes,taxes_modules_taxes_views_index_043,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
+taxes,taxes_modules_taxes_views_index_044,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
+taxes,taxes_modules_taxes_views_index_045,"$8,231,200",8231200,"$8,231,200",currency,USD,modules/taxes/views/index.html,"$8,231,200"
+taxes,taxes_modules_taxes_views_index_046,"$146,584.71",146584.71,"$146,584.71",currency,USD,modules/taxes/views/index.html,"$146,584.71"
+taxes,taxes_modules_taxes_views_index_047,"$3,211.10",3211.1,"$3,211.10",currency,USD,modules/taxes/views/index.html,"$3,211.10"
+taxes,taxes_modules_taxes_views_index_048,"$149,795.81",149795.81,"$149,795.81",currency,USD,modules/taxes/views/index.html,"$149,795.81"
+taxes,taxes_modules_taxes_views_index_049,"$8,621,400",8621400,"$8,621,400",currency,USD,modules/taxes/views/index.html,"$8,621,400"
+taxes,taxes_modules_taxes_views_index_050,"$153,499.83",153499.83,"$153,499.83",currency,USD,modules/taxes/views/index.html,"$153,499.83"
+taxes,taxes_modules_taxes_views_index_051,"$3,287.42",3287.42,"$3,287.42",currency,USD,modules/taxes/views/index.html,"$3,287.42"
+taxes,taxes_modules_taxes_views_index_052,"$156,787.25",156787.25,"$156,787.25",currency,USD,modules/taxes/views/index.html,"$156,787.25"
+taxes,taxes_modules_taxes_views_index_053,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
+taxes,taxes_modules_taxes_views_index_054,"$160,038.24",160038.24,"$160,038.24",currency,USD,modules/taxes/views/index.html,"$160,038.24"
+taxes,taxes_modules_taxes_views_index_055,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_056,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
+taxes,taxes_modules_taxes_views_index_057,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
+taxes,taxes_modules_taxes_views_index_058,"$152,574.32",152574.32,"$152,574.32",currency,USD,modules/taxes/views/index.html,"$152,574.32"
+taxes,taxes_modules_taxes_views_index_059,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_060,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
+taxes,taxes_modules_taxes_views_index_061,"$8,780,000",8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000"
+taxes,taxes_modules_taxes_views_index_062,"$162,360.37",162360.37,"$162,360.37",currency,USD,modules/taxes/views/index.html,"$162,360.37"
+taxes,taxes_modules_taxes_views_index_063,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_064,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
+taxes,taxes_modules_taxes_views_index_065,"$18,441.98",18441.98,"$18,441.98",currency,USD,modules/taxes/views/index.html,"$18,441.98"
+taxes,taxes_modules_taxes_views_index_066,"$29,205.09",29205.09,"$29,205.09",currency,USD,modules/taxes/views/index.html,"$29,205.09"
+taxes,taxes_modules_taxes_views_index_067,"$17,461.82",17461.82,"$17,461.82",currency,USD,modules/taxes/views/index.html,"$17,461.82"
+taxes,taxes_modules_taxes_views_index_068,$640.72,640.72,$640.72,currency,USD,modules/taxes/views/index.html,$640.72
+taxes,taxes_modules_taxes_views_index_069,"$19,636.41",19636.41,"$19,636.41",currency,USD,modules/taxes/views/index.html,"$19,636.41"
+taxes,taxes_modules_taxes_views_index_070,"$1,284.46",1284.46,"$1,284.46",currency,USD,modules/taxes/views/index.html,"$1,284.46"
+taxes,taxes_modules_taxes_views_index_071,$299.84,299.84,$299.84,currency,USD,modules/taxes/views/index.html,$299.84
+taxes,taxes_modules_taxes_views_index_072,"$146,220.45",146220.45,"$146,220.45",currency,USD,modules/taxes/views/index.html,"$146,220.45"
+taxes,taxes_modules_taxes_views_index_073,"$58,118.24",58118.24,"$58,118.24",currency,USD,modules/taxes/views/index.html,"$58,118.24"
+taxes,taxes_modules_taxes_views_index_074,"$25,000.00",25000,"$25,000.00",currency,USD,modules/taxes/views/index.html,"$25,000.00"
+taxes,taxes_modules_taxes_views_index_075,"$33,118.24",33118.24,"$33,118.24",currency,USD,modules/taxes/views/index.html,"$33,118.24"
+taxes,taxes_modules_taxes_views_index_076,"$14,892.34",14892.34,"$14,892.34",currency,USD,modules/taxes/views/index.html,"$14,892.34"
+taxes,taxes_modules_taxes_views_index_077,"$6,417.11",6417.11,"$6,417.11",currency,USD,modules/taxes/views/index.html,"$6,417.11"
+taxes,taxes_modules_taxes_views_index_078,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
+taxes,taxes_modules_taxes_views_index_079,"$6,417.11",6417.11,"$6,417.11",currency,USD,modules/taxes/views/index.html,"$6,417.11"
+taxes,taxes_modules_taxes_views_index_080,"$29,581.87",29581.87,"$29,581.87",currency,USD,modules/taxes/views/index.html,"$29,581.87"
+taxes,taxes_modules_taxes_views_index_081,"$12,778.67",12778.67,"$12,778.67",currency,USD,modules/taxes/views/index.html,"$12,778.67"
+taxes,taxes_modules_taxes_views_index_082,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
+taxes,taxes_modules_taxes_views_index_083,"$12,778.67",12778.67,"$12,778.67",currency,USD,modules/taxes/views/index.html,"$12,778.67"
+taxes,taxes_modules_taxes_views_index_084,"$4,220.15",4220.15,"$4,220.15",currency,USD,modules/taxes/views/index.html,"$4,220.15"
+taxes,taxes_modules_taxes_views_index_085,"$1,881.76",1881.76,"$1,881.76",currency,USD,modules/taxes/views/index.html,"$1,881.76"
+taxes,taxes_modules_taxes_views_index_086,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
+taxes,taxes_modules_taxes_views_index_087,"$1,881.76",1881.76,"$1,881.76",currency,USD,modules/taxes/views/index.html,"$1,881.76"
+taxes,taxes_modules_taxes_views_index_088,"$194,914.81",194914.81,"$194,914.81",currency,USD,modules/taxes/views/index.html,"$194,914.81"
+taxes,taxes_modules_taxes_views_index_089,"$79,195.78",79195.78,"$79,195.78",currency,USD,modules/taxes/views/index.html,"$79,195.78"
+taxes,taxes_modules_taxes_views_index_090,"$25,000.00",25000,"$25,000.00",currency,USD,modules/taxes/views/index.html,"$25,000.00"
+taxes,taxes_modules_taxes_views_index_091,"$14,195.78",14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78"
+taxes,taxes_modules_taxes_views_index_092,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
+taxes,taxes_modules_taxes_views_index_093,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
+taxes,taxes_modules_taxes_views_index_094,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
+taxes,taxes_modules_taxes_views_index_095,"$8,780,000",8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000"
+taxes,taxes_modules_taxes_views_index_096,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
+taxes,taxes_modules_taxes_views_index_097,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
+taxes,taxes_modules_taxes_views_index_098,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
+taxes,taxes_modules_taxes_views_index_099,"$8,780,000",8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000"
+taxes,taxes_modules_taxes_views_index_100,"$12,918.42",12918.42,"$12,918.42",currency,USD,modules/taxes/views/index.html,"$12,918.42"
+taxes,taxes_modules_taxes_views_index_101,"$13,604.27",13604.27,"$13,604.27",currency,USD,modules/taxes/views/index.html,"$13,604.27"
+taxes,taxes_modules_taxes_views_index_102,"$14,195.78",14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78"
+taxes,taxes_modules_taxes_views_index_103,"$14,195.78",14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78"
+taxes,taxes_modules_taxes_views_index_104,"$47,195.12",47195.12,"$47,195.12",currency,USD,modules/taxes/views/index.html,"$47,195.12"
+taxes,taxes_modules_taxes_views_index_105,"$48,964.88",48964.88,"$48,964.88",currency,USD,modules/taxes/views/index.html,"$48,964.88"
+taxes,taxes_modules_taxes_views_index_106,"$44,052.79",44052.79,"$44,052.79",currency,USD,modules/taxes/views/index.html,"$44,052.79"
+taxes,taxes_modules_taxes_views_index_107,"$46,729.16",46729.16,"$46,729.16",currency,USD,modules/taxes/views/index.html,"$46,729.16"
+taxes,taxes_modules_taxes_views_index_108,"$17,823.76",17823.76,"$17,823.76",currency,USD,modules/taxes/views/index.html,"$17,823.76"
+taxes,taxes_modules_taxes_views_index_109,"$18,191.38",18191.38,"$18,191.38",currency,USD,modules/taxes/views/index.html,"$18,191.38"
+taxes,taxes_modules_taxes_views_index_110,"$17,461.82",17461.82,"$17,461.82",currency,USD,modules/taxes/views/index.html,"$17,461.82"
+taxes,taxes_modules_taxes_views_index_111,"$17,826.05",17826.05,"$17,826.05",currency,USD,modules/taxes/views/index.html,"$17,826.05"
+taxes,taxes_modules_taxes_views_index_112,"$95,019.36",95019.36,"$95,019.36",currency,USD,modules/taxes/views/index.html,"$95,019.36"
+taxes,taxes_modules_taxes_views_index_113,"$95,051.53",95051.53,"$95,051.53",currency,USD,modules/taxes/views/index.html,"$95,051.53"
+taxes,taxes_modules_taxes_views_index_114,"$91,059.71",91059.71,"$91,059.71",currency,USD,modules/taxes/views/index.html,"$91,059.71"
+taxes,taxes_modules_taxes_views_index_115,"$97,805.16",97805.16,"$97,805.16",currency,USD,modules/taxes/views/index.html,"$97,805.16"
+taxes,taxes_modules_taxes_views_index_116,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_117,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_118,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_119,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
+taxes,taxes_modules_taxes_views_index_120,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
+taxes,taxes_modules_taxes_views_index_121,"$165,586.99",165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99"
+taxes,taxes_modules_taxes_views_index_122,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
+taxes,taxes_modules_taxes_views_index_123,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
+taxes,taxes_modules_taxes_views_index_124,4%,4,4%,percent,,modules/taxes/views/index.html,4%
+taxes,taxes_modules_taxes_views_index_125,"$6,238.14",6238.14,"$6,238.14",currency,USD,modules/taxes/views/index.html,"$6,238.14"
+taxes,taxes_modules_taxes_views_index_126,"$6,629.58",6629.58,"$6,629.58",currency,USD,modules/taxes/views/index.html,"$6,629.58"
+taxes,taxes_modules_taxes_views_index_127,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
+taxes,taxes_modules_taxes_views_index_128,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
 insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_001,"$99,619",99619,"$99,619",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$99,619"
 insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_002,"$209,799",209799,"$209,799",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$209,799"
 insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_003,"$10,486",10486,"$10,486",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$10,486"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_004,"$16,496.85",16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$16,496.85"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_005,"$20,353.19",20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$20,353.19"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_006,"$8,500.00",8500,"$8,500.00",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$8,500.00"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_007,"$15,216,508",15216508,"$15,216,508",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,216,508"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_008,"$13,542,295",13542295,"$13,542,295",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$13,542,295"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_009,"$40,144",40144,"$40,144",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$40,144"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010,"$15,275.20",15275.2,"$15,275.20",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,275.20"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011,"$15,275",15275,"$15,275",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,275"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012,"$13,230",13230,"$13,230",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$13,230"
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_004,"$15,216,508",15216508,"$15,216,508",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,216,508"
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_005,"$13,542,295",13542295,"$13,542,295",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$13,542,295"
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_006,"$40,144",40144,"$40,144",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$40,144"
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_007,"$15,275.20",15275.2,"$15,275.20",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,275.20"
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_008,"$15,275",15275,"$15,275",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,275"
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_009,"$13,230",13230,"$13,230",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$13,230"
 gp,gp_modules_gp_views_gp_mockups_001,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
 gp,gp_modules_gp_views_gp_mockups_002,"$2,530,000",2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000"
-gp,gp_modules_gp_views_gp_mockups_003,35%,35,35%,percent,,modules/Gp/views/gp mockups.html,35%
-gp,gp_modules_gp_views_gp_mockups_004,65%,65,65%,percent,,modules/Gp/views/gp mockups.html,65%
-gp,gp_modules_gp_views_gp_mockups_005,"$400,000",400000,"$400,000",currency,USD,modules/Gp/views/gp mockups.html,"$400,000"
-gp,gp_modules_gp_views_gp_mockups_006,2.3150%,2.315,2.3150%,percent,,modules/Gp/views/gp mockups.html,2.3150%
-gp,gp_modules_gp_views_gp_mockups_007,"$6,528",6528,"$6,528",currency,USD,modules/Gp/views/gp mockups.html,"$6,528"
-gp,gp_modules_gp_views_gp_mockups_008,"$660,000",660000,"$660,000",currency,USD,modules/Gp/views/gp mockups.html,"$660,000"
-gp,gp_modules_gp_views_gp_mockups_009,3.8198%,3.8198,3.8198%,percent,,modules/Gp/views/gp mockups.html,3.8198%
-gp,gp_modules_gp_views_gp_mockups_010,"$10,772",10772,"$10,772",currency,USD,modules/Gp/views/gp mockups.html,"$10,772"
-gp,gp_modules_gp_views_gp_mockups_011,"$350,000",350000,"$350,000",currency,USD,modules/Gp/views/gp mockups.html,"$350,000"
-gp,gp_modules_gp_views_gp_mockups_012,2.0256%,2.0256,2.0256%,percent,,modules/Gp/views/gp mockups.html,2.0256%
-gp,gp_modules_gp_views_gp_mockups_013,"$5,712",5712,"$5,712",currency,USD,modules/Gp/views/gp mockups.html,"$5,712"
-gp,gp_modules_gp_views_gp_mockups_014,"$410,000",410000,"$410,000",currency,USD,modules/Gp/views/gp mockups.html,"$410,000"
-gp,gp_modules_gp_views_gp_mockups_015,2.3729%,2.3729,2.3729%,percent,,modules/Gp/views/gp mockups.html,2.3729%
-gp,gp_modules_gp_views_gp_mockups_016,"$6,692",6692,"$6,692",currency,USD,modules/Gp/views/gp mockups.html,"$6,692"
-gp,gp_modules_gp_views_gp_mockups_017,"$460,000",460000,"$460,000",currency,USD,modules/Gp/views/gp mockups.html,"$460,000"
-gp,gp_modules_gp_views_gp_mockups_018,2.6623%,2.6623,2.6623%,percent,,modules/Gp/views/gp mockups.html,2.6623%
-gp,gp_modules_gp_views_gp_mockups_019,"$7,508",7508,"$7,508",currency,USD,modules/Gp/views/gp mockups.html,"$7,508"
-gp,gp_modules_gp_views_gp_mockups_020,"$250,000",250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000"
-gp,gp_modules_gp_views_gp_mockups_021,1.4469%,1.4469,1.4469%,percent,,modules/Gp/views/gp mockups.html,1.4469%
-gp,gp_modules_gp_views_gp_mockups_022,"$4,080",4080,"$4,080",currency,USD,modules/Gp/views/gp mockups.html,"$4,080"
-gp,gp_modules_gp_views_gp_mockups_023,"$2,530,000",2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000"
-gp,gp_modules_gp_views_gp_mockups_024,14.6425%,14.6425,14.6425%,percent,,modules/Gp/views/gp mockups.html,14.6425%
-gp,gp_modules_gp_views_gp_mockups_025,"$3,517,500",3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500"
-gp,gp_modules_gp_views_gp_mockups_026,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
-gp,gp_modules_gp_views_gp_mockups_027,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
-gp,gp_modules_gp_views_gp_mockups_028,"$3,517,500",3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500"
-gp,gp_modules_gp_views_gp_mockups_029,"$2,530,000",2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000"
-gp,gp_modules_gp_views_gp_mockups_030,35%,35,35%,percent,,modules/Gp/views/gp mockups.html,35%
-gp,gp_modules_gp_views_gp_mockups_031,65%,65,65%,percent,,modules/Gp/views/gp mockups.html,65%
-gp,gp_modules_gp_views_gp_mockups_032,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
-gp,gp_modules_gp_views_gp_mockups_033,"$150,000",150000,"$150,000",currency,USD,modules/Gp/views/gp mockups.html,"$150,000"
-gp,gp_modules_gp_views_gp_mockups_034,2.48%,2.48,2.48%,percent,,modules/Gp/views/gp mockups.html,2.48%
-gp,gp_modules_gp_views_gp_mockups_035,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_036,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_037,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_038,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_039,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_040,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_041,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_042,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_043,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_044,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_045,"$60,000",60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000"
-gp,gp_modules_gp_views_gp_mockups_046,0.99%,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%
-gp,gp_modules_gp_views_gp_mockups_047,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_048,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_049,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_050,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_051,"$250,000",250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000"
-gp,gp_modules_gp_views_gp_mockups_052,4.13%,4.13,4.13%,percent,,modules/Gp/views/gp mockups.html,4.13%
-gp,gp_modules_gp_views_gp_mockups_053,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_054,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_055,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_056,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_057,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_058,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_059,"$250,000",250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000"
-gp,gp_modules_gp_views_gp_mockups_060,4.13%,4.13,4.13%,percent,,modules/Gp/views/gp mockups.html,4.13%
-gp,gp_modules_gp_views_gp_mockups_061,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_062,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_063,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_064,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_065,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_066,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_067,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_068,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_069,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_070,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_071,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_072,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_073,"$60,000",60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000"
-gp,gp_modules_gp_views_gp_mockups_074,0.99%,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%
-gp,gp_modules_gp_views_gp_mockups_075,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_076,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_077,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_078,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_079,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_080,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_081,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_082,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_083,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_084,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_085,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_086,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_087,"$60,000",60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000"
-gp,gp_modules_gp_views_gp_mockups_088,0.99%,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%
-gp,gp_modules_gp_views_gp_mockups_089,"$150,000",150000,"$150,000",currency,USD,modules/Gp/views/gp mockups.html,"$150,000"
-gp,gp_modules_gp_views_gp_mockups_090,2.48%,2.48,2.48%,percent,,modules/Gp/views/gp mockups.html,2.48%
-gp,gp_modules_gp_views_gp_mockups_091,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
-gp,gp_modules_gp_views_gp_mockups_092,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
-gp,gp_modules_gp_views_gp_mockups_093,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
-gp,gp_modules_gp_views_gp_mockups_094,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
-gp,gp_modules_gp_views_gp_mockups_095,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
-gp,gp_modules_gp_views_gp_mockups_096,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
-gp,gp_modules_gp_views_gp_mockups_097,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
-gp,gp_modules_gp_views_gp_mockups_098,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
-gp,gp_modules_gp_views_gp_mockups_099,32.88%,32.88,32.88%,percent,,modules/Gp/views/gp mockups.html,32.88%
-gp,gp_modules_gp_views_gp_mockups_100,32.88%,32.88,32.88%,percent,,modules/Gp/views/gp mockups.html,32.88%
-gp,gp_modules_gp_views_gp_mockups_101,4.92%,4.92,4.92%,percent,,modules/Gp/views/gp mockups.html,4.92%
-gp,gp_modules_gp_views_gp_mockups_102,4.92%,4.92,4.92%,percent,,modules/Gp/views/gp mockups.html,4.92%
-gp,gp_modules_gp_views_gp_mockups_103,10.00%,10,10.00%,percent,,modules/Gp/views/gp mockups.html,10.00%
-gp,gp_modules_gp_views_gp_mockups_104,10.00%,10,10.00%,percent,,modules/Gp/views/gp mockups.html,10.00%
-gp,gp_modules_gp_views_gp_mockups_105,41.37%,41.37,41.37%,percent,,modules/Gp/views/gp mockups.html,41.37%
-gp,gp_modules_gp_views_gp_mockups_106,41.37%,41.37,41.37%,percent,,modules/Gp/views/gp mockups.html,41.37%
-gp,gp_modules_gp_views_gp_mockups_107,12.41%,12.41,12.41%,percent,,modules/Gp/views/gp mockups.html,12.41%
-gp,gp_modules_gp_views_gp_mockups_108,2.03%,2.03,2.03%,percent,,modules/Gp/views/gp mockups.html,2.03%
-gp,gp_modules_gp_views_gp_mockups_109,2.03%,2.03,2.03%,percent,,modules/Gp/views/gp mockups.html,2.03%
-gp,gp_modules_gp_views_gp_mockups_110,"$3,517,500",3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500"
-gp,gp_modules_gp_views_gp_mockups_111,58.16%,58.16,58.16%,percent,,modules/Gp/views/gp mockups.html,58.16%
-gp,gp_modules_gp_views_gp_mockups_112,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
-gp,gp_modules_gp_views_gp_mockups_113,100.00%,100,100.00%,percent,,modules/Gp/views/gp mockups.html,100.00%
+gp,gp_modules_gp_views_gp_mockups_003,GP,35,35%,percent,,modules/Gp/views/gp mockups.html,35% GP
+gp,gp_modules_gp_views_gp_mockups_004,LP share,65,65%,percent,,modules/Gp/views/gp mockups.html,LP share: 65%
+gp,gp_modules_gp_views_gp_mockups_005,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
+gp,gp_modules_gp_views_gp_mockups_006,"$3,517,500",3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500"
+gp,gp_modules_gp_views_gp_mockups_007,"$2,530,000",2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000"
+gp,gp_modules_gp_views_gp_mockups_008,35%,35,35%,percent,,modules/Gp/views/gp mockups.html,35%
+gp,gp_modules_gp_views_gp_mockups_009,65%,65,65%,percent,,modules/Gp/views/gp mockups.html,65%
+gp,gp_modules_gp_views_gp_mockups_010,"$400,000",400000,"$400,000",currency,USD,modules/Gp/views/gp mockups.html,"$400,000"
+gp,gp_modules_gp_views_gp_mockups_011,2.3150%,2.315,2.3150%,percent,,modules/Gp/views/gp mockups.html,2.3150%
+gp,gp_modules_gp_views_gp_mockups_012,"$6,528",6528,"$6,528",currency,USD,modules/Gp/views/gp mockups.html,"$6,528"
+gp,gp_modules_gp_views_gp_mockups_013,"$660,000",660000,"$660,000",currency,USD,modules/Gp/views/gp mockups.html,"$660,000"
+gp,gp_modules_gp_views_gp_mockups_014,3.8198%,3.8198,3.8198%,percent,,modules/Gp/views/gp mockups.html,3.8198%
+gp,gp_modules_gp_views_gp_mockups_015,"$10,772",10772,"$10,772",currency,USD,modules/Gp/views/gp mockups.html,"$10,772"
+gp,gp_modules_gp_views_gp_mockups_016,"$350,000",350000,"$350,000",currency,USD,modules/Gp/views/gp mockups.html,"$350,000"
+gp,gp_modules_gp_views_gp_mockups_017,2.0256%,2.0256,2.0256%,percent,,modules/Gp/views/gp mockups.html,2.0256%
+gp,gp_modules_gp_views_gp_mockups_018,"$5,712",5712,"$5,712",currency,USD,modules/Gp/views/gp mockups.html,"$5,712"
+gp,gp_modules_gp_views_gp_mockups_019,"$410,000",410000,"$410,000",currency,USD,modules/Gp/views/gp mockups.html,"$410,000"
+gp,gp_modules_gp_views_gp_mockups_020,2.3729%,2.3729,2.3729%,percent,,modules/Gp/views/gp mockups.html,2.3729%
+gp,gp_modules_gp_views_gp_mockups_021,"$6,692",6692,"$6,692",currency,USD,modules/Gp/views/gp mockups.html,"$6,692"
+gp,gp_modules_gp_views_gp_mockups_022,"$460,000",460000,"$460,000",currency,USD,modules/Gp/views/gp mockups.html,"$460,000"
+gp,gp_modules_gp_views_gp_mockups_023,2.6623%,2.6623,2.6623%,percent,,modules/Gp/views/gp mockups.html,2.6623%
+gp,gp_modules_gp_views_gp_mockups_024,"$7,508",7508,"$7,508",currency,USD,modules/Gp/views/gp mockups.html,"$7,508"
+gp,gp_modules_gp_views_gp_mockups_025,"$250,000",250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000"
+gp,gp_modules_gp_views_gp_mockups_026,1.4469%,1.4469,1.4469%,percent,,modules/Gp/views/gp mockups.html,1.4469%
+gp,gp_modules_gp_views_gp_mockups_027,"$4,080",4080,"$4,080",currency,USD,modules/Gp/views/gp mockups.html,"$4,080"
+gp,gp_modules_gp_views_gp_mockups_028,"$2,530,000",2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000"
+gp,gp_modules_gp_views_gp_mockups_029,14.6425%,14.6425,14.6425%,percent,,modules/Gp/views/gp mockups.html,14.6425%
+gp,gp_modules_gp_views_gp_mockups_030,"$3,517,500",3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500"
+gp,gp_modules_gp_views_gp_mockups_031,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
+gp,gp_modules_gp_views_gp_mockups_032,"$150,000",150000,"$150,000",currency,USD,modules/Gp/views/gp mockups.html,"$150,000"
+gp,gp_modules_gp_views_gp_mockups_033,2.48%,2.48,2.48%,percent,,modules/Gp/views/gp mockups.html,2.48%
+gp,gp_modules_gp_views_gp_mockups_034,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_035,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_036,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_037,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_038,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_039,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_040,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_041,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_042,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_043,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_044,"$60,000",60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000"
+gp,gp_modules_gp_views_gp_mockups_045,0.99%,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%
+gp,gp_modules_gp_views_gp_mockups_046,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
+gp,gp_modules_gp_views_gp_mockups_047,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
+gp,gp_modules_gp_views_gp_mockups_048,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
+gp,gp_modules_gp_views_gp_mockups_049,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
+gp,gp_modules_gp_views_gp_mockups_050,"$250,000",250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000"
+gp,gp_modules_gp_views_gp_mockups_051,4.13%,4.13,4.13%,percent,,modules/Gp/views/gp mockups.html,4.13%
+gp,gp_modules_gp_views_gp_mockups_052,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_053,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_054,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_055,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_056,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_057,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_058,"$250,000",250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000"
+gp,gp_modules_gp_views_gp_mockups_059,4.13%,4.13,4.13%,percent,,modules/Gp/views/gp mockups.html,4.13%
+gp,gp_modules_gp_views_gp_mockups_060,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
+gp,gp_modules_gp_views_gp_mockups_061,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
+gp,gp_modules_gp_views_gp_mockups_062,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
+gp,gp_modules_gp_views_gp_mockups_063,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
+gp,gp_modules_gp_views_gp_mockups_064,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_065,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_066,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
+gp,gp_modules_gp_views_gp_mockups_067,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
+gp,gp_modules_gp_views_gp_mockups_068,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_069,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_070,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_071,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_072,"$60,000",60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000"
+gp,gp_modules_gp_views_gp_mockups_073,0.99%,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%
+gp,gp_modules_gp_views_gp_mockups_074,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
+gp,gp_modules_gp_views_gp_mockups_075,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
+gp,gp_modules_gp_views_gp_mockups_076,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
+gp,gp_modules_gp_views_gp_mockups_077,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
+gp,gp_modules_gp_views_gp_mockups_078,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_079,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_080,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_081,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_082,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_083,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_084,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
+gp,gp_modules_gp_views_gp_mockups_085,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
+gp,gp_modules_gp_views_gp_mockups_086,"$60,000",60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000"
+gp,gp_modules_gp_views_gp_mockups_087,0.99%,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%
+gp,gp_modules_gp_views_gp_mockups_088,"$150,000",150000,"$150,000",currency,USD,modules/Gp/views/gp mockups.html,"$150,000"
+gp,gp_modules_gp_views_gp_mockups_089,2.48%,2.48,2.48%,percent,,modules/Gp/views/gp mockups.html,2.48%
+gp,gp_modules_gp_views_gp_mockups_090,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
+gp,gp_modules_gp_views_gp_mockups_091,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
+gp,gp_modules_gp_views_gp_mockups_092,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
+gp,gp_modules_gp_views_gp_mockups_093,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
+gp,gp_modules_gp_views_gp_mockups_094,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
+gp,gp_modules_gp_views_gp_mockups_095,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
+gp,gp_modules_gp_views_gp_mockups_096,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
+gp,gp_modules_gp_views_gp_mockups_097,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
+gp,gp_modules_gp_views_gp_mockups_098,Mgr Entity,32.88,32.88%,percent,,modules/Gp/views/gp mockups.html,32.88% Mgr Entity
+gp,gp_modules_gp_views_gp_mockups_099,of Manager Entity (RED RAIDER 45 MGR LLC) per 2024 K-1,32.88,32.88%,percent,,modules/Gp/views/gp mockups.html,32.88% of Manager Entity (RED RAIDER 45 MGR LLC) per 2024 K-1
+gp,gp_modules_gp_views_gp_mockups_100,Mgr Entity,4.92,4.92%,percent,,modules/Gp/views/gp mockups.html,4.92% Mgr Entity
+gp,gp_modules_gp_views_gp_mockups_101,of Manager Entity; linked to Bhavin Parikh via EIN notice,4.92,4.92%,percent,,modules/Gp/views/gp mockups.html,4.92% of Manager Entity; linked to Bhavin Parikh via EIN notice
+gp,gp_modules_gp_views_gp_mockups_102,Mgr Entity,10,10.00%,percent,,modules/Gp/views/gp mockups.html,10.00% Mgr Entity
+gp,gp_modules_gp_views_gp_mockups_103,of Manager Entity per 2024 K-1,10,10.00%,percent,,modules/Gp/views/gp mockups.html,10.00% of Manager Entity per 2024 K-1
+gp,gp_modules_gp_views_gp_mockups_104,Mgr Entity,41.37,41.37%,percent,,modules/Gp/views/gp mockups.html,41.37% Mgr Entity
+gp,gp_modules_gp_views_gp_mockups_105,of Manager Entity; also holds 12.41% GP project interest per Side Letter,41.37,41.37%,percent,,modules/Gp/views/gp mockups.html,41.37% of Manager Entity; also holds 12.41% GP project interest per Side Letter
+gp,gp_modules_gp_views_gp_mockups_106,41.37% of Manager Entity; also holds GP project interest per Side Letter,12.41,12.41%,percent,,modules/Gp/views/gp mockups.html,41.37% of Manager Entity; also holds 12.41% GP project interest per Side Letter
+gp,gp_modules_gp_views_gp_mockups_107,Mgr Entity,2.03,2.03%,percent,,modules/Gp/views/gp mockups.html,2.03% Mgr Entity
+gp,gp_modules_gp_views_gp_mockups_108,of Manager Entity per 2024 K-1,2.03,2.03%,percent,,modules/Gp/views/gp mockups.html,2.03% of Manager Entity per 2024 K-1
+gp,gp_modules_gp_views_gp_mockups_109,"$3,517,500",3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500"
+gp,gp_modules_gp_views_gp_mockups_110,58.16%,58.16,58.16%,percent,,modules/Gp/views/gp mockups.html,58.16%
+gp,gp_modules_gp_views_gp_mockups_111,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
+gp,gp_modules_gp_views_gp_mockups_112,100.00%,100,100.00%,percent,,modules/Gp/views/gp mockups.html,100.00%
 mortgage,mortgage_principal_balance,Principal Balance,10853176.39,"$10,853,176.39",currency,USD,modules/mortgage/views/current-debt-data.js,Principal Balance
 mortgage,mortgage_interest_rate,Interest Rate,8.5,8.50%,percent,,modules/mortgage/views/current-debt-data.js,Interest Rate
 mortgage,mortgage_escrow_amount,Escrow Amount,32719,"$32,719.00 / mo (taxes + insurance impound)",currency,USD,modules/mortgage/views/current-debt-data.js,Escrow Amount
@@ -363,3 +258,6 @@ mortgage,mortgage_current_tax_due,Current Tax Due,14572.46,"$14,572.46",currency
 mortgage,mortgage_current_insurance_due,Current Insurance Due,18146.54,"$18,146.54",currency,USD,modules/mortgage/views/current-debt-data.js,Current Insurance Due
 mortgage,mortgage_total_due,Total Due,112158.22,"$112,158.22",currency,USD,modules/mortgage/views/current-debt-data.js,Total Due
 mortgage,mortgage_ending_escrow_balance,Ending Escrow Balance,281922.98,"$281,922.98",currency,USD,modules/mortgage/views/current-debt-data.js,Ending Escrow Balance
+gp,gp_total_gp_sponsors,Total GP Sponsors (PPC),6,6,number,,modules/Gp/views/gp mockups.html,Total GP Sponsors (PPC)
+gp,gp_k1_partners_in_manager_entity,K-1 Partners in Manager Entity,8,8,number,,modules/Gp/views/gp mockups.html,K-1 Partners in Manager Entity
+gp,gp_source_k1_year,Source K-1 Year,2024,2024,number,,modules/Gp/views/gp mockups.html,Source K-1 Year
