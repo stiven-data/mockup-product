@@ -1,6 +1,16 @@
 const DEFAULT_LIMIT = 500;
 const MAX_LIMIT = 5000;
-const DEFAULT_SELECT = "metric_key,value_display,source_file,source_context,updated_at";
+const DEFAULT_SELECT =
+  "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
+const TEXT_ARTIFACT_REPLACEMENTS = [
+  [/KÃ¢â‚¬â€˜1/g, "K-1"],
+  [/Kâ€‘1/g, "K-1"],
+  [/â€‘/g, "-"],
+  [/â€”/g, "-"],
+  [/â€“/g, "-"],
+  [/Â·/g, " - "],
+];
+const EMPTY_DISPLAY_TOKENS = new Set(["", "-", "—", "–", "â€”", "â€“", "null", "undefined", "nan", "n/a"]);
 
 function parseMetricKeys(rawValue) {
   const values = Array.isArray(rawValue) ? rawValue : String(rawValue || "").split(",");
@@ -47,8 +57,50 @@ function buildSourceTrace(row) {
   return lines.join("\n");
 }
 
+function repairTextArtifacts(value) {
+  let repaired = String(value ?? "");
+  for (const [pattern, replacement] of TEXT_ARTIFACT_REPLACEMENTS) {
+    repaired = repaired.replace(pattern, replacement);
+  }
+  return repaired.replace(/\s+/g, " ").trim();
+}
+
+function normalizeDisplayValue(value, fallback = "-") {
+  const repaired = repairTextArtifacts(value);
+  if (EMPTY_DISPLAY_TOKENS.has(repaired.toLowerCase())) return fallback;
+  return repaired || fallback;
+}
+
+function parseOptionalNumber(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const parsed = Number(String(value).replace(/,/g, "").trim());
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parseMetricUpdatePayload(body = {}) {
+  const metric_key = typeof body.metric_key === "string" ? body.metric_key.trim() : "";
+  if (!metric_key) {
+    throw new Error("metric_key is required.");
+  }
+
+  const updates = {};
+  if (body.label !== undefined) updates.label = repairTextArtifacts(body.label);
+  if (body.value_display !== undefined) {
+    updates.value_display = normalizeDisplayValue(body.value_display);
+  }
+  if (body.value_numeric !== undefined) {
+    updates.value_numeric = parseOptionalNumber(body.value_numeric);
+  }
+  if (body.source_context !== undefined) {
+    updates.source_context = repairTextArtifacts(body.source_context) || null;
+  }
+
+  return { metric_key, updates };
+}
+
 module.exports = {
   buildSourceTrace,
   buildSupabaseRestUrl,
+  parseMetricUpdatePayload,
   parseRequestQuery,
 };

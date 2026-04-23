@@ -15,14 +15,56 @@ create table if not exists ingestion_data (
   updated_at timestamptz not null default now()
 );
 
+create or replace function public.set_ingestion_data_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+drop trigger if exists set_ingestion_data_updated_at on ingestion_data;
+
+create trigger set_ingestion_data_updated_at
+before update on ingestion_data
+for each row
+execute function public.set_ingestion_data_updated_at();
+
 create index if not exists ingestion_data_module_idx on ingestion_data (module);
 
 alter table ingestion_data enable row level security;
 
 drop policy if exists "Public read ingestion data" on ingestion_data;
+drop policy if exists "Public update ingestion data" on ingestion_data;
 
 create policy "Public read ingestion data"
 on ingestion_data
 for select
 to anon
 using (true);
+
+create policy "Public update ingestion data"
+on ingestion_data
+for update
+to anon
+using (true)
+with check (true);
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public'
+      and tablename = 'ingestion_data'
+  ) then
+    alter publication supabase_realtime add table ingestion_data;
+  end if;
+exception
+  when undefined_object then
+    null;
+end;
+$$;

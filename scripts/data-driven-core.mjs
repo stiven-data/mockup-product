@@ -5,6 +5,15 @@ const MONEY_OR_PERCENT_PATTERN = new RegExp(
 );
 const PROTECTED_BLOCK_PATTERN = /<(script|style)\b[\s\S]*?<\/\1>/gi;
 const TAG_OR_TEXT_PATTERN = /(<[^>]+>|[^<]+)/g;
+const EMPTY_DISPLAY_TOKENS = new Set(["", "-", "—", "–", "â€”", "â€“", "null", "undefined", "nan", "n/a"]);
+const TEXT_ARTIFACT_REPLACEMENTS = [
+  [/KÃ¢â‚¬â€˜1/g, "K-1"],
+  [/Kâ€‘1/g, "K-1"],
+  [/â€‘/g, "-"],
+  [/â€”/g, "-"],
+  [/â€“/g, "-"],
+  [/Â·/g, " - "],
+];
 
 export function parseDisplayValue(valueDisplay) {
   const value = valueDisplay.trim();
@@ -30,6 +39,20 @@ export function parseDisplayValue(valueDisplay) {
     value_type: "number",
     currency: null,
   };
+}
+
+export function repairTextArtifacts(value) {
+  let repaired = String(value ?? "");
+  for (const [pattern, replacement] of TEXT_ARTIFACT_REPLACEMENTS) {
+    repaired = repaired.replace(pattern, replacement);
+  }
+  return repaired.replace(/\s+/g, " ").trim();
+}
+
+export function normalizeDisplayValue(value, fallback = "-") {
+  const repaired = repairTextArtifacts(value);
+  if (EMPTY_DISPLAY_TOKENS.has(repaired.toLowerCase())) return fallback;
+  return repaired || fallback;
 }
 
 export function extractHtmlMetrics(html, options) {
@@ -137,5 +160,5 @@ function labelFromContext(textContext, valueDisplay) {
 }
 
 function compactText(value) {
-  return value.replace(/\s+/g, " ").trim();
+  return repairTextArtifacts(value).replace(/\s+/g, " ").trim();
 }

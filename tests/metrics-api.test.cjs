@@ -4,6 +4,7 @@ const assert = require("node:assert/strict");
 const {
   buildSourceTrace,
   buildSupabaseRestUrl,
+  parseMetricUpdatePayload,
   parseRequestQuery,
 } = require("../api/_lib/metrics.js");
 
@@ -30,7 +31,10 @@ test("buildSupabaseRestUrl builds a key-filtered REST query", () => {
 
   assert.match(url, /https:\/\/example\.supabase\.co\/rest\/v1\/ingestion_data\?/);
   assert.match(url, /metric_key=in\.\("mortgage_total_due","mortgage_interest_rate"\)/);
-  assert.match(url, /select=metric_key,value_display,source_file,source_context,updated_at/);
+  assert.match(
+    url,
+    /select=id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at/,
+  );
   assert.match(url, /limit=2/);
 });
 
@@ -56,5 +60,32 @@ test("buildSourceTrace formats file and context for hover traceability", () => {
   assert.equal(
     trace,
     "Source file: modules/taxes/views/index.html\nContext: Net payable after appeal",
+  );
+});
+
+test("parseMetricUpdatePayload normalizes editable fields", () => {
+  const payload = parseMetricUpdatePayload({
+    metric_key: "gp_modules_gp_views_gp_mockups_025",
+    label: "  Total Raise  ",
+    value_display: "   ",
+    value_numeric: "not-a-number",
+    source_context: "2024 Kâ€‘1",
+  });
+
+  assert.deepEqual(payload, {
+    metric_key: "gp_modules_gp_views_gp_mockups_025",
+    updates: {
+      label: "Total Raise",
+      value_display: "-",
+      value_numeric: null,
+      source_context: "2024 K-1",
+    },
+  });
+});
+
+test("parseMetricUpdatePayload rejects missing metric keys", () => {
+  assert.throws(
+    () => parseMetricUpdatePayload({ value_display: "$10" }),
+    /metric_key/i,
   );
 });

@@ -259,6 +259,191 @@
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
       }
 
+      .editor-panel {
+        padding: 28px;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(15, 39, 71, 0.08);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 248, 251, 0.94));
+        box-shadow: 0 18px 40px rgba(16, 37, 62, 0.06);
+      }
+
+      .editor-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+
+      .editor-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      .editor-header p {
+        margin: 8px 0 0;
+        color: var(--ink-soft);
+        line-height: 1.6;
+      }
+
+      .editor-status {
+        padding: 9px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(245, 247, 250, 0.92);
+        font-size: 0.9rem;
+        color: var(--ink-soft);
+        white-space: nowrap;
+      }
+
+      .editor-status.is-success {
+        color: #155724;
+        background: rgba(221, 247, 229, 0.95);
+        border-color: rgba(39, 174, 96, 0.28);
+      }
+
+      .editor-status.is-error {
+        color: #8a1f11;
+        background: rgba(252, 231, 228, 0.96);
+        border-color: rgba(192, 57, 43, 0.28);
+      }
+
+      .editor-controls {
+        display: grid;
+        grid-template-columns: 180px minmax(0, 1fr);
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+
+      .editor-control {
+        display: grid;
+        gap: 6px;
+      }
+
+      .editor-control label {
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .editor-control select,
+      .editor-control input,
+      .editor-table textarea {
+        width: 100%;
+        border: 1px solid rgba(15, 39, 71, 0.14);
+        border-radius: 12px;
+        padding: 11px 12px;
+        font: inherit;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.94);
+      }
+
+      .editor-control select:focus-visible,
+      .editor-control input:focus-visible,
+      .editor-table textarea:focus-visible {
+        outline: 3px solid rgba(180, 145, 73, 0.22);
+        outline-offset: 2px;
+      }
+
+      .editor-meta {
+        margin-bottom: 14px;
+        color: var(--ink-soft);
+        font-size: 0.92rem;
+      }
+
+      .editor-table-wrap {
+        overflow: auto;
+        border: 1px solid rgba(15, 39, 71, 0.08);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.88);
+      }
+
+      .editor-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1040px;
+      }
+
+      .editor-table th,
+      .editor-table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(15, 39, 71, 0.08);
+        vertical-align: top;
+        text-align: left;
+      }
+
+      .editor-table th {
+        position: sticky;
+        top: 0;
+        background: #f8f5ee;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .editor-table tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .editor-table td small {
+        display: block;
+        margin-top: 6px;
+        color: var(--ink-soft);
+        line-height: 1.45;
+      }
+
+      .editor-table input,
+      .editor-table textarea {
+        width: 100%;
+        border: 1px solid rgba(15, 39, 71, 0.12);
+        border-radius: 10px;
+        padding: 9px 10px;
+        font: inherit;
+      }
+
+      .editor-table textarea {
+        min-height: 76px;
+        resize: vertical;
+      }
+
+      .editor-actions {
+        display: grid;
+        gap: 8px;
+        justify-items: start;
+      }
+
+      .save-button {
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 14px;
+        background: var(--brand);
+        color: #1c1c1c;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .save-button[disabled] {
+        cursor: progress;
+        opacity: 0.6;
+      }
+
+      .row-status {
+        font-size: 0.84rem;
+        color: var(--ink-soft);
+      }
+
+      .row-status.is-success {
+        color: #155724;
+      }
+
+      .row-status.is-error {
+        color: #8a1f11;
+      }
+
       @media (max-width: 980px) {
         .module-grid {
           grid-template-columns: 1fr;
@@ -266,6 +451,10 @@
 
         .hero-panel {
           padding: 28px;
+        }
+
+        .editor-controls {
+          grid-template-columns: 1fr;
         }
       }
 
@@ -289,6 +478,14 @@
         .hero-panel,
         .module-card {
           padding: 20px;
+        }
+
+        .editor-panel {
+          padding: 20px;
+        }
+
+        .editor-header {
+          flex-direction: column;
         }
       }
     </style>
@@ -381,10 +578,67 @@
             </a>
           </section>
 
+          <section class="editor-panel" id="metrics-editor" aria-label="Live metrics editor">
+            <div class="editor-header">
+              <div>
+                <p class="eyebrow">Live Data</p>
+                <h2>Metrics Editor</h2>
+                <p>
+                  Edit only real rows from <code>public.ingestion_data</code>. Changes save to
+                  Supabase and remote updates flow back into the UI automatically.
+                </p>
+              </div>
+              <div class="editor-status" id="metrics-editor-status">Loading metrics...</div>
+            </div>
+
+            <div class="editor-controls">
+              <div class="editor-control">
+                <label for="metrics-module-filter">Module</label>
+                <select id="metrics-module-filter">
+                  <option value="all">All modules</option>
+                  <option value="mortgage">Mortgage</option>
+                  <option value="insurance">Insurance</option>
+                  <option value="gp">GP</option>
+                  <option value="taxes">Taxes</option>
+                </select>
+              </div>
+              <div class="editor-control">
+                <label for="metrics-search">Search</label>
+                <input
+                  id="metrics-search"
+                  type="search"
+                  placeholder="Search by label, metric key, source, or value"
+                />
+              </div>
+            </div>
+
+            <div class="editor-meta" id="metrics-editor-meta">Preparing editor...</div>
+
+            <div class="editor-table-wrap">
+              <table class="editor-table">
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th>Display Value</th>
+                    <th>Numeric Value</th>
+                    <th>Context</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="metrics-editor-body">
+                  <tr>
+                    <td colspan="5">Loading metrics...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
           <footer class="footer-note">Internal Mockup &#8226; Valoris Capital</footer>
         </main>
       </div>
     </div>
     <script src="./assets/js/supabase-data.js"></script>
+    <script src="./assets/js/index-metrics-editor.js"></script>
   </body>
 </html>

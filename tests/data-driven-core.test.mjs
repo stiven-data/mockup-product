@@ -4,6 +4,8 @@ import test from "node:test";
 import {
   annotateHtmlMetrics,
   extractHtmlMetrics,
+  normalizeDisplayValue,
+  repairTextArtifacts,
   parseDisplayValue,
 } from "../scripts/data-driven-core.mjs";
 
@@ -73,4 +75,20 @@ test("extractHtmlMetrics excludes surrounding punctuation from currency values",
     metrics.map((metric) => metric.value_display),
     ["$9,143,000", "$8,600,000"],
   );
+});
+
+test("normalizeDisplayValue returns a clean fallback for empty or broken placeholders", () => {
+  assert.equal(normalizeDisplayValue(null), "-");
+  assert.equal(normalizeDisplayValue(undefined), "-");
+  assert.equal(normalizeDisplayValue(""), "-");
+  assert.equal(normalizeDisplayValue("   "), "-");
+  assert.equal(normalizeDisplayValue("â€”"), "-");
+  assert.equal(normalizeDisplayValue("undefined"), "-");
+  assert.equal(normalizeDisplayValue("NaN"), "-");
+});
+
+test("repairTextArtifacts fixes common mojibake without blanking meaningful text", () => {
+  assert.equal(repairTextArtifacts("2024 Kâ€‘1"), "2024 K-1");
+  assert.equal(repairTextArtifacts("Marâ€“Jul 2025"), "Mar-Jul 2025");
+  assert.equal(repairTextArtifacts("Oasis at San Marco Â· 4800 Atlantic"), "Oasis at San Marco - 4800 Atlantic");
 });
