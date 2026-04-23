@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { extractHtmlMetrics, moduleFromPath } from "./data-driven-core.mjs";
 
@@ -12,18 +13,6 @@ const HTML_FILES = [
 const OUTPUT_DIR = "supabase";
 const CSV_OUTPUT = path.join(OUTPUT_DIR, "ingestion_data.csv");
 const SQL_OUTPUT = path.join(OUTPUT_DIR, "seed_ingestion_data.sql");
-
-const htmlMetrics = (
-  await Promise.all(
-    HTML_FILES.map(async (sourceFile) => {
-      const html = await readFile(sourceFile, "utf8");
-      return extractHtmlMetrics(html, {
-        module: moduleFromPath(sourceFile),
-        sourceFile,
-      });
-    }),
-  )
-).flat();
 
 const mortgageMetrics = [
   metric("mortgage", "mortgage_principal_balance", "Principal Balance", 10853176.39, "$10,853,176.39", "currency", "modules/mortgage/views/current-debt-data.js"),
@@ -38,21 +27,39 @@ const mortgageMetrics = [
   metric("mortgage", "mortgage_ending_escrow_balance", "Ending Escrow Balance", 281922.98, "$281,922.98", "currency", "modules/mortgage/views/current-debt-data.js"),
 ];
 
-const gpMetrics = [
+export const GP_MANUAL_METRICS = [
   metric("gp", "gp_total_gp_sponsors", "Total GP Sponsors (PPC)", 6, "6", "number", "modules/Gp/views/gp mockups.html"),
   metric("gp", "gp_k1_partners_in_manager_entity", "K-1 Partners in Manager Entity", 8, "8", "number", "modules/Gp/views/gp mockups.html"),
   metric("gp", "gp_source_k1_year", "Source K-1 Year", 2024, "2024", "number", "modules/Gp/views/gp mockups.html"),
 ];
 
-const metrics = [...htmlMetrics, ...mortgageMetrics, ...gpMetrics];
+export async function buildIngestionMetrics() {
+  const htmlMetrics = (
+    await Promise.all(
+      HTML_FILES.map(async (sourceFile) => {
+        const html = await readFile(sourceFile, "utf8");
+        return extractHtmlMetrics(html, {
+          module: moduleFromPath(sourceFile),
+          sourceFile,
+        });
+      }),
+    )
+  ).flat();
 
-await mkdir(OUTPUT_DIR, { recursive: true });
-await writeFile(CSV_OUTPUT, toCsv(metrics), "utf8");
-await writeFile(SQL_OUTPUT, toSeedSql(metrics), "utf8");
+  return [...htmlMetrics, ...mortgageMetrics, ...GP_MANUAL_METRICS];
+}
 
-console.log(`Wrote ${metrics.length} metrics`);
-console.log(`- ${CSV_OUTPUT}`);
-console.log(`- ${SQL_OUTPUT}`);
+async function main() {
+  const metrics = await buildIngestionMetrics();
+
+  await mkdir(OUTPUT_DIR, { recursive: true });
+  await writeFile(CSV_OUTPUT, toCsv(metrics), "utf8");
+  await writeFile(SQL_OUTPUT, toSeedSql(metrics), "utf8");
+
+  console.log(`Wrote ${metrics.length} metrics`);
+  console.log(`- ${CSV_OUTPUT}`);
+  console.log(`- ${SQL_OUTPUT}`);
+}
 
 function metric(module, metric_key, label, value_numeric, value_display, value_type, source_file) {
   return {
@@ -140,4 +147,8 @@ function sqlValue(value) {
   if (value === null || value === undefined || value === "") return "null";
   if (typeof value === "number") return Number.isFinite(value) ? String(value) : "null";
   return `'${String(value).replaceAll("'", "''")}'`;
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  await main();
 }

@@ -20,3 +20,27 @@ test("gp page loads the shared metrics runtime and binds manual count fields", (
   assert.match(html, /gp_k1_partners_in_manager_entity/);
   assert.match(html, /gp_source_k1_year/);
 });
+
+test("gp manual metric bindings stay aligned with seeded outputs", async () => {
+  const { GP_MANUAL_METRICS } = await import("../scripts/extract-ingestion-data.mjs");
+  const html = read("modules/Gp/views/gp mockups.html");
+  const csv = read("supabase/ingestion_data.csv");
+  const sql = read("supabase/seed_ingestion_data.sql");
+
+  for (const manualMetric of GP_MANUAL_METRICS) {
+    const htmlPattern = new RegExp(
+      `data-metric-key="${manualMetric.metric_key}"[^>]*>${manualMetric.value_display}<`,
+    );
+    const csvPattern = new RegExp(
+      `^gp,${manualMetric.metric_key},.*?,${manualMetric.value_numeric},${manualMetric.value_display},number,`,
+      "m",
+    );
+    const sqlPattern = new RegExp(
+      `'gp', '${manualMetric.metric_key}'.*?, ${manualMetric.value_numeric}, '${manualMetric.value_display}', 'number'`,
+    );
+
+    assert.match(html, htmlPattern);
+    assert.match(csv, csvPattern);
+    assert.match(sql, sqlPattern);
+  }
+});
