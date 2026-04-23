@@ -16,6 +16,7 @@
     "nan",
     "n/a",
   ]);
+  const MISSING_DISPLAY_FALLBACK = "Missing in Supabase";
   const TEXT_ARTIFACT_REPLACEMENTS = [
     [/KÃ¢â‚¬â€˜1/g, "K-1"],
     [/Kâ€‘1/g, "K-1"],
@@ -148,24 +149,34 @@
   }
 
   function applyMetricRowToElement(element, row) {
-    const fallback = normalizeDisplayValue(element.textContent);
-    const nextValue = row ? normalizeDisplayValue(row.value_display, fallback) : fallback;
+    const missingDisplay = element.dataset.metricMissing || MISSING_DISPLAY_FALLBACK;
+    const nextValue = row
+      ? normalizeDisplayValue(row.value_display, missingDisplay)
+      : missingDisplay;
     element.textContent = nextValue;
 
-    const trace = row ? buildSourceTrace(row) : "";
-    if (trace) {
+    if (row) {
+      const trace = buildSourceTrace(row);
       element.title = trace;
       element.dataset.sourceFile = row.source_file || "";
       element.dataset.sourceContext = row.source_context || "";
+      return;
     }
+
+    element.title = "";
+    delete element.dataset.sourceFile;
+    delete element.dataset.sourceContext;
   }
 
-  function applyRowsToPage(rows) {
+  function applyRowsToPage(rows, options = {}) {
+    const { useCachedRows = true } = options;
     const rowsByKey = new Map(rows.filter(Boolean).map((row) => [row.metric_key, row]));
     const elements = Array.from(document.querySelectorAll("[data-metric-key]"));
 
     for (const element of elements) {
-      const row = rowsByKey.get(element.dataset.metricKey) || state.rowsByKey.get(element.dataset.metricKey);
+      const row =
+        rowsByKey.get(element.dataset.metricKey) ||
+        (useCachedRows ? state.rowsByKey.get(element.dataset.metricKey) : null);
       applyMetricRowToElement(element, row);
     }
   }
@@ -277,11 +288,11 @@
       ).flat();
 
       rememberRows(rows);
-      applyRowsToPage(rows);
+      applyRowsToPage(rows, { useCachedRows: false });
       emit("metric:loaded", rows);
     } catch (error) {
       console.warn("[metrics-runtime] Falling back to static HTML values.", error);
-      applyRowsToPage([]);
+      applyRowsToPage([], { useCachedRows: false });
     }
   }
 
