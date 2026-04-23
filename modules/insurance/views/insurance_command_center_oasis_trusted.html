@@ -1,250 +1,545 @@
-﻿<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Insurance Command Center â€” Oasis at San Marco</title>
-  <style>
-    :root{
-      --bg:#f8fafc;
-      --panel:#ffffff;
-      --soft:#f8fafc;
-      --border:#e5e7eb;
-      --text:#0f172a;
-      --muted:#64748b;
-      --blue:#3b82f6;
-      --teal:#14b8a6;
-      --rose:#f43f5e;
-      --accent:#facc15;
-      --accent-soft:#fef9c3;
-      --accent-border:#fde68a;
-      --accent-text:#854d0e;
-      --shadow-sm:0 1px 2px rgba(15,23,42,.06);
-      --shadow-md:0 10px 30px rgba(15,23,42,.08);
-      --radius:22px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:Inter,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.4;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-    a{color:inherit;text-decoration:none}
-    a:hover{text-decoration:underline}
-    .shell{max-width:1400px;margin:0 auto;padding:28px}
-    .hero{border-radius:calc(var(--radius) + 6px);background:var(--panel);border:1px solid var(--border);color:var(--text);padding:18px 18px 16px;box-shadow:var(--shadow-sm);margin-bottom:18px}
-    .hero-top{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}
-    .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--muted);font-weight:800}
-    h1{margin:6px 0 6px;font-size:28px;letter-spacing:-.02em;font-weight:800}
-    .hero-copy{margin:0;max-width:1000px;color:var(--muted);line-height:1.5;font-size:13px}
-    .tabbar{display:inline-flex;gap:10px;background:transparent;padding:0;border-radius:999px;border:0;box-shadow:none}
-    .tab{padding:8px 12px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.01em;color:var(--muted);border:1px solid transparent;user-select:none;white-space:nowrap}
-    .tab.active{background:var(--accent-soft);border-color:var(--accent-border);color:var(--accent-text)}
-    .kpis{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:14px;margin-top:16px}
-    .kpi{border-radius:18px;border:1px solid var(--border);background:var(--panel);padding:12px 14px;min-height:78px;box-shadow:var(--shadow-sm)}
-    .kpi .label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
-    .kpi .value{margin-top:6px;font-size:20px;font-weight:850;letter-spacing:-.02em}
-    .kpi .helper{margin-top:4px;font-size:12px;color:var(--muted)}
-    .unit{font-size:12px;color:var(--muted);font-weight:800;letter-spacing:.01em;margin-left:8px}
-    .unit-inline{font-size:12px;color:var(--muted);font-weight:800;margin-left:6px;letter-spacing:.01em}
-    .grid{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:18px}
-    .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px 18px 16px}
-    h2{margin:0;font-size:16px;letter-spacing:-.01em;font-weight:850}
-    .panel-intro{margin-top:6px;color:var(--muted);font-size:13px;line-height:1.5}
-    .section-label{margin-top:16px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:850}
-    .chart-card{margin-top:10px;padding:14px;background:var(--soft);border:1px solid var(--border);border-radius:18px}
-    .chart-title{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-    .chart-title strong{font-size:14px}
-    .chart-title span{color:var(--muted);font-size:12px}
-    .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:12px;font-weight:800}
-    .legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:8px;transform:translateY(1px)}
-    .facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
-    .fact{padding:12px 12px 10px;border:1px solid var(--border);background:var(--soft);border-radius:16px}
-    .fact .label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:850}
-    .fact .value{margin-top:6px;font-weight:850;letter-spacing:-.01em;font-size:16px}
-    .fact .small{margin-top:4px;color:var(--muted);font-size:12px;line-height:1.4}
-    table{width:100%;border-collapse:collapse;margin-top:10px;overflow:hidden;border-radius:16px;border:1px solid var(--border);background:var(--panel)}
-    thead th{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--soft);padding:10px 12px;border-bottom:1px solid var(--border);font-weight:850}
-    tbody td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top}
-    tbody tr:last-child td{border-bottom:0}
-    .mono{font-variant-numeric:tabular-nums}
-    .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;border:1px solid var(--border);background:var(--soft);color:var(--muted);font-size:12px;font-weight:850;letter-spacing:.01em}
-    .note{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.5}
-    .signal{margin-top:12px;padding:12px;border-radius:16px;border:1px solid var(--border);background:var(--panel)}
-    .signal h3{margin:0 0 6px;font-size:13px;font-weight:850}
-    .signal p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
-    .signal.warning{border-color:var(--accent-border);background:var(--accent-soft)}
-    .signal.good{border-color:rgba(20,184,166,.35);background:rgba(20,184,166,.08)}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insurance | Valoris Capital Platform</title>
+    <link rel="stylesheet" href="../../../shared/styles/platform-design-system.css" />
+    <style>
+      .insurance-property {
+        margin: 10px 0 0;
+      }
 
-    @media (max-width:1200px){
-      .kpis{grid-template-columns:repeat(2,minmax(180px,1fr))}
-      .grid{grid-template-columns:1fr}
-    }
-    @media (max-width:720px){
-      .shell{padding:18px}
-      h1{font-size:24px}
-      .kpis{grid-template-columns:1fr}
-      .facts{grid-template-columns:1fr}
-    }
-  </style>
-</head>
-<body>
-  <div class="shell">
-    <header class="hero">
-      <div class="hero-top">
-        <div>
-          <div class="eyebrow">Insurance (operational + decision-grade)</div>
-          <h1>Insurance Command Center</h1>
-          <p class="hero-copy">
-            Oasis at San Marco Â· 4800 Atlantic Blvd, Jacksonville, FL 32207.
-            Mockup grounded in Drive data: Insurance Overview (escrow snapshot Feb 10, 2026 + policy roster) and Income Statement DB (insurance expense trend).
-          </p>
+      .insurance-location {
+        margin: 6px 0 0;
+      }
+
+      .insurance-grid,
+      .insurance-roster,
+      .insurance-source-panel {
+        margin-top: 24px;
+      }
+
+      .insurance-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+        gap: 24px;
+      }
+
+      .insurance-section-header {
+        margin-bottom: 18px;
+      }
+
+      .insurance-section-header h2 {
+        margin: 8px 0 0;
+      }
+
+      .insurance-section-header p {
+        margin-bottom: 0;
+      }
+
+      .insurance-trend-card {
+        padding: 20px;
+      }
+
+      .insurance-trend-figure {
+        margin: 0;
+      }
+
+      .insurance-trend-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .insurance-bars {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 10px;
+        align-items: end;
+        min-height: 220px;
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+      }
+
+      .insurance-bar {
+        display: grid;
+        gap: 10px;
+        justify-items: center;
+        text-align: center;
+      }
+
+      .insurance-bar__column {
+        width: 100%;
+        min-height: 24px;
+        border-radius: 14px 14px 0 0;
+        background: linear-gradient(180deg, var(--action-hover) 0%, var(--action) 100%);
+      }
+
+      .insurance-bar__column.is-renewal {
+        background: linear-gradient(180deg, var(--text-soft) 0%, var(--text-muted) 100%);
+      }
+
+      .insurance-bar__value,
+      .insurance-bar__label {
+        color: var(--text-muted);
+      }
+
+      .insurance-legend {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+
+      .insurance-legend .badge {
+        min-height: 32px;
+      }
+
+      .insurance-trend-table {
+        margin-top: 18px;
+      }
+
+      .insurance-note {
+        margin-top: 16px;
+      }
+
+      .insurance-facts {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .insurance-facts .stat-card strong {
+        display: block;
+        margin-top: 8px;
+      }
+
+      .insurance-contact-table td strong,
+      .insurance-roster-table td strong {
+        display: block;
+      }
+
+      .insurance-contact-table tbody th,
+      .insurance-contact-table tbody td,
+      .insurance-roster-table tbody th,
+      .insurance-roster-table tbody td,
+      .insurance-trend-table tbody th,
+      .insurance-trend-table tbody td {
+        padding: 16px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+        text-align: left;
+      }
+
+      .insurance-contact-table tbody th,
+      .insurance-roster-table tbody th,
+      .insurance-trend-table tbody th {
+        font-weight: 600;
+      }
+
+      .insurance-contact-table tbody tr:last-child th,
+      .insurance-contact-table tbody tr:last-child td,
+      .insurance-roster-table tbody tr:last-child th,
+      .insurance-roster-table tbody tr:last-child td,
+      .insurance-trend-table tbody tr:last-child th,
+      .insurance-trend-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .insurance-secondary-header {
+        margin-top: 24px;
+      }
+
+      .insurance-badge-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+
+      @media (max-width: 1100px) {
+        .insurance-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .insurance-facts {
+          grid-template-columns: 1fr;
+        }
+
+        .insurance-bars {
+          display: none;
+        }
+
+        .insurance-legend {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="app-sidebar">
+        <a class="app-brand" href="../../../index.html" aria-label="Valoris Capital Platform home">
+          <div class="app-brand__mark" aria-hidden="true">V</div>
+          <div class="app-brand__copy">
+            <strong>VALORIS</strong>
+            <span>Capital Platform</span>
+          </div>
+        </a>
+
+        <div class="sidebar-group">
+          <p class="sidebar-group__label">Navigation</p>
+          <nav class="sidebar-nav" aria-label="Primary">
+            <a class="sidebar-link" href="../../../index.html">Home</a>
+            <a class="sidebar-link" href="../../mortgage/views/index.html">Mortgage</a>
+            <a class="sidebar-link is-active" href="./insurance_command_center_oasis_trusted.html" aria-current="page">Insurance</a>
+            <a class="sidebar-link" href="../../Gp/views/gp%20mockups.html">GP</a>
+            <a class="sidebar-link" href="../../taxes/views/index.html">Taxes</a>
+          </nav>
         </div>
-        <div class="tabbar" aria-label="view toggle (mockup)">
-          <div class="tab active">Operational View</div>
-        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="app-topbar">
+          <div class="topbar-pill">Valoris Capital Partners</div>
+          <a class="btn btn--secondary" href="../../../index.html">Home</a>
+          <div class="topbar-avatar" aria-hidden="true"></div>
+        </header>
+
+        <main class="page">
+          <header class="page-header">
+            <p class="eyebrow">Operational + decision-grade</p>
+            <h1 class="page-title">Insurance</h1>
+            <p class="page-subtitle insurance-property">Insurance Command Center</p>
+            <p class="text-muted insurance-location">
+              Oasis at San Marco | 4800 Atlantic Blvd, Jacksonville, FL 32207
+            </p>
+          </header>
+
+          <section class="page-controls" aria-label="Insurance context">
+            <div class="control-stack">
+              <div class="control-row">
+                <div class="badge badge--selected">Operational View</div>
+                <div class="badge">Insurance Overview | Feb 10, 2026 escrow snapshot</div>
+                <div class="badge">Income Statement DB | 6310-01 monthly expense</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="stats-grid" aria-label="Insurance statistics">
+            <article class="stat-card">
+              <div class="meta-label">Premiums Due (2026)</div>
+              <strong>$99,619 /yr</strong>
+              <p class="text-muted">Insurance Overview</p>
+            </article>
+            <article class="stat-card">
+              <div class="meta-label">Escrow Balance</div>
+              <strong>$209,799 balance</strong>
+              <p class="text-muted">As of Feb 10, 2026</p>
+            </article>
+            <article class="stat-card">
+              <div class="meta-label">Monthly Insurance Escrow</div>
+              <strong>$10,486 /mo</strong>
+              <p class="text-muted">Going forward</p>
+            </article>
+          </section>
+
+          <section class="insurance-grid" aria-label="Insurance overview panels">
+            <section class="panel" aria-labelledby="insurance-trend-heading">
+              <div class="insurance-section-header">
+                <p class="eyebrow">Trend</p>
+                <h2 id="insurance-trend-heading">Monthly Insurance Trend</h2>
+                <p class="text-muted">
+                  Uses income statement line item 6310-01 | Insurance - Property to surface step changes
+                  that prompt lender, asset management, and accounting questions.
+                </p>
+              </div>
+
+              <figure class="content-surface insurance-trend-card insurance-trend-figure">
+                <figcaption class="insurance-trend-header">
+                  <strong>Property insurance expense | Mar 2025 to Feb 2026</strong>
+                  <span class="text-muted">Source: Income Statement DB</span>
+                </figcaption>
+
+                <div
+                  class="insurance-bars"
+                  id="insurance-trend-bars"
+                  aria-hidden="true"
+                ></div>
+
+                <div class="insurance-legend" id="insurance-trend-legend" aria-hidden="true"></div>
+
+                <div class="table-scroll insurance-trend-table">
+                  <table class="data-table" aria-label="Monthly insurance trend data">
+                    <thead>
+                      <tr>
+                        <th>Month</th>
+                        <th>Expense</th>
+                        <th>Period</th>
+                      </tr>
+                    </thead>
+                    <tbody id="insurance-trend-table"></tbody>
+                  </table>
+                </div>
+
+                <p class="text-muted insurance-note">
+                  Operative use: detect step changes early and reconcile against policy periods,
+                  premium financing, and accrual timing. This view surfaces the pattern without
+                  inferring the cause.
+                </p>
+              </figure>
+            </section>
+
+            <section class="panel" aria-labelledby="insurance-coverage-heading">
+              <div class="insurance-section-header">
+                <p class="eyebrow">Coverage Snapshot</p>
+                <h2 id="insurance-coverage-heading">Property and Contacts</h2>
+                <p class="text-muted">
+                  Coverage facts and day-to-day operating contacts stay visible beside the trend.
+                </p>
+              </div>
+
+              <div class="insurance-facts">
+                <article class="stat-card">
+                  <div class="meta-label">Total Insured Value</div>
+                  <strong>$15,216,508 coverage</strong>
+                  <p class="text-muted">Buildings plus business income and extra expense.</p>
+                </article>
+                <article class="stat-card">
+                  <div class="meta-label">Flood Zone</div>
+                  <strong>X</strong>
+                  <p class="text-muted">Not in special flood hazard area.</p>
+                </article>
+                <article class="stat-card">
+                  <div class="meta-label">Distance to Coast</div>
+                  <strong>13.3 miles</strong>
+                  <p class="text-muted">Underwriting and renewal sensitivity.</p>
+                </article>
+                <article class="stat-card">
+                  <div class="meta-label">Insured Building Value</div>
+                  <strong>$13,542,295 coverage</strong>
+                  <p class="text-muted">Total insured building value.</p>
+                </article>
+              </div>
+
+              <div class="insurance-section-header insurance-secondary-header">
+                <p class="eyebrow">Key Contacts</p>
+                <h2 id="insurance-contacts-heading">Operational Contacts</h2>
+                <p class="text-muted">
+                  Fast access for renewals, lender requests, and claims.
+                </p>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table insurance-contact-table" aria-labelledby="insurance-contacts-heading">
+                  <thead>
+                    <tr>
+                      <th>Role</th>
+                      <th>Name / Entity</th>
+                      <th>Contact</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Property Wholesale Broker</th>
+                      <td>David Lamberson, CRC Group</td>
+                      <td>(561) 395-0711 | dlamberson@crcgroup.com</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Retail Agent (Umbrella)</th>
+                      <td>Joey Gorbacz, United Risk Mgmt</td>
+                      <td>Joey@unrm.com</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Excess WS Agent</th>
+                      <td>Rebecca Jones, McGowan</td>
+                      <td>RJones@mcgowanwholesale.com</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Claims - Property</th>
+                      <td>Boulder Claims LLC</td>
+                      <td>1-866-325-2142 / 1-866-789-4228</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+
+          <section class="table-card insurance-roster" aria-labelledby="insurance-roster-heading">
+            <div class="insurance-section-header">
+              <p class="eyebrow">Policy Roster</p>
+              <h2 id="insurance-roster-heading">Annual Premium Summary</h2>
+              <p class="text-muted">
+                This is the roster used for COIs, renewal dates, and proof-of-coverage requests.
+              </p>
+            </div>
+
+            <div class="table-scroll">
+              <table class="data-table insurance-roster-table" aria-label="Policy roster">
+                <thead>
+                  <tr>
+                    <th>Coverage</th>
+                    <th>Insurer</th>
+                    <th>Policy Period</th>
+                    <th>Annual Premium</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Property - Primary Multi-Peril</th>
+                    <td>Underwriters at Lloyd's of London</td>
+                    <td>01/18/2026 - 01/18/2027</td>
+                    <td>$40,144 /yr</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Property - Excess Multi-Peril</th>
+                    <td>Fortegra Specialty Insurance</td>
+                    <td>01/18/2026 - 01/18/2027</td>
+                    <td>$15,275.20 /yr</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">General Liability</th>
+                    <td>Concert Specialty Insurance Co.</td>
+                    <td>10/16/2025 - 10/16/2026</td>
+                    <td>$15,275 /yr</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Umbrella / Excess Liability</th>
+                    <td>Evanston Insurance Company</td>
+                    <td>01/18/2026 - 10/19/2026</td>
+                    <td>$13,230 /yr</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-muted insurance-note">
+              Missing fields in the Drive extract are still explicit here: policy numbers, carrier
+              contact emails, invoice dates, and financing terms.
+            </p>
+          </section>
+
+          <section class="panel insurance-source-panel" aria-labelledby="insurance-source-heading">
+            <div class="insurance-section-header">
+              <p class="eyebrow">Source Traceability</p>
+              <h2 id="insurance-source-heading">Source Context</h2>
+              <p class="text-muted">
+                Traceability remains attached to the escrow snapshot, roster, and income statement line.
+              </p>
+            </div>
+
+            <div class="insurance-facts">
+              <article class="stat-card">
+                <div class="meta-label">Escrow Snapshot</div>
+                <strong>Insurance Overview</strong>
+                <p class="text-muted">Captured Feb 10, 2026 for premiums due, escrow, and roster context.</p>
+              </article>
+              <article class="stat-card">
+                <div class="meta-label">Expense Trend</div>
+                <strong>Income Statement DB</strong>
+                <p class="text-muted">Monthly insurance expense mapped to line item 6310-01.</p>
+              </article>
+            </div>
+
+            <div class="insurance-badge-row">
+              <div class="badge">Insurance Overview</div>
+              <div class="badge">Feb 10, 2026 escrow snapshot</div>
+              <div class="badge">Income Statement DB</div>
+              <div class="badge">6310-01 monthly expense</div>
+            </div>
+          </section>
+        </main>
       </div>
-
-      <div class="kpis">
-        <div class="kpi">
-          <div class="label">Premiums Due (2026)</div>
-          <div class="value mono"><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_001">$99,619</span> <span class="unit">/yr</span></div>
-          <div class="helper">Insurance Overview</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Escrow Balance</div>
-          <div class="value mono"><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_002">$209,799</span> <span class="unit">balance</span></div>
-          <div class="helper">As of Feb 10, 2026</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Monthly Insurance Escrow</div>
-          <div class="value mono"><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_003">$10,486</span> <span class="unit">/mo</span></div>
-          <div class="helper">Going forward</div>
-        </div>
-      </div>
-    </header>
-
-    <div class="grid">
-      <section class="panel">
-        <h2>Monthly Insurance Trend (Expense)</h2>
-        <div class="panel-intro">
-          Uses the income statement line item <span class="mono">6310-01 Â· Insurance - Property</span>. This is the fastest way to see step-changes that typically drive questions from lenders, asset management, and accounting.
-        </div>
-
-        <div class="section-label">Last 12 months (available)</div>
-        <div class="chart-card">
-          <div class="chart-title">
-            <strong>Property insurance expense (Mar 2025 â€“ Feb 2026)</strong>
-            <span>Source: Income Statement DB</span>
-          </div>
-          <svg viewBox="0 0 620 240" width="100%" height="240" aria-label="Insurance expense bar chart">
-            <rect x="0" y="0" width="620" height="240" fill="white"></rect>
-            <line x1="55" y1="20" x2="55" y2="192" stroke="#cfd8e3"></line>
-            <line x1="55" y1="192" x2="595" y2="192" stroke="#cfd8e3"></line>
-
-            <!-- Scale: max 20,353.19 => 150px. Baseline y=192 -->
-            <!-- Marâ€“Jul 2025: 16,496.85 (hâ‰ˆ122, yâ‰ˆ70) -->
-            <rect x="80" y="70" width="28" height="122" fill="#2e6f9e"></rect>
-            <rect x="122" y="70" width="28" height="122" fill="#2e6f9e"></rect>
-            <rect x="164" y="70" width="28" height="122" fill="#2e6f9e"></rect>
-            <rect x="206" y="70" width="28" height="122" fill="#2e6f9e"></rect>
-            <rect x="248" y="70" width="28" height="122" fill="#2e6f9e"></rect>
-            <!-- Augâ€“Dec 2025: 20,353.19 (h=150, y=42) -->
-            <rect x="290" y="42" width="28" height="150" fill="#2e6f9e"></rect>
-            <rect x="332" y="42" width="28" height="150" fill="#2e6f9e"></rect>
-            <rect x="374" y="42" width="28" height="150" fill="#2e6f9e"></rect>
-            <rect x="416" y="42" width="28" height="150" fill="#2e6f9e"></rect>
-            <rect x="458" y="42" width="28" height="150" fill="#2e6f9e"></rect>
-            <!-- Janâ€“Feb 2026: 8,500.00 (hâ‰ˆ63, yâ‰ˆ129) -->
-            <rect x="500" y="129" width="28" height="63" fill="#187b82"></rect>
-            <rect x="542" y="129" width="28" height="63" fill="#187b82"></rect>
-
-            <g fill="#617181" font-size="11" font-family="Inter, Arial, sans-serif">
-              <text x="78" y="214">Mar-25</text>
-              <text x="204" y="214">Jun-25</text>
-              <text x="330" y="214">Sep-25</text>
-              <text x="456" y="214">Dec-25</text>
-              <text x="540" y="214">Feb-26</text>
-            </g>
-          </svg>
-          <div class="legend">
-            <span><i style="background:#2e6f9e"></i><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_004">$16,496.85</span> <span class="unit-inline">/mo</span> (Marâ€“Jul 2025)</span>
-            <span><i style="background:#2e6f9e"></i><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_005">$20,353.19</span> <span class="unit-inline">/mo</span> (Augâ€“Dec 2025)</span>
-            <span><i style="background:#187b82"></i><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_006">$8,500.00</span> <span class="unit-inline">/mo</span> (Janâ€“Feb 2026)</span>
-          </div>
-          <div class="note">
-            Operative use: detect step changes early and reconcile against policy periods / premium financing / accrual timing. This mockup does not assume a causeâ€”only surfaces the pattern.
-          </div>
-        </div>
-
-        <div class="section-label">Property & Coverage Snapshot</div>
-        <div class="facts">
-          <div class="fact">
-            <div class="label">Total Insured Value</div>
-            <div class="value mono"><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_007">$15,216,508</span> <span class="unit">coverage</span></div>
-            <div class="small">Buildings + business income/extra expense</div>
-          </div>
-          <div class="fact">
-            <div class="label">Flood Zone</div>
-            <div class="value">X</div>
-            <div class="small">Not in Special Flood Hazard Area</div>
-          </div>
-          <div class="fact">
-            <div class="label">Distance to Coast</div>
-            <div class="value mono">13.3 miles</div>
-            <div class="small">Underwriting / renewal sensitivity</div>
-          </div>
-          <div class="fact">
-            <div class="label">Insured Building Value</div>
-            <div class="value mono"><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_008">$13,542,295</span> <span class="unit">coverage</span></div>
-            <div class="small">Total insured building value</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>Key Contacts</h2>
-        <div class="panel-intro">Fast access for day-to-day insurance operations (renewals, lender requests, claims).</div>
-
-        <table aria-label="Insurance contacts">
-          <thead>
-            <tr><th>Role</th><th>Name / Entity</th><th>Contact</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Property Wholesale Broker</td><td>David Lamberson, CRC Group</td><td class="mono">(561) 395-0711 Â· dlamberson@crcgroup.com</td></tr>
-            <tr><td>Retail Agent (Umbrella)</td><td>Joey Gorbacz, United Risk Mgmt</td><td class="mono">Joey@unrm.com</td></tr>
-            <tr><td>Excess WS Agent</td><td>Rebecca Jones, McGowan</td><td class="mono">RJones@mcgowanwholesale.com</td></tr>
-            <tr><td>Claims â€“ Property</td><td>Boulder Claims LLC</td><td class="mono">1-866-325-2142 / 1-866-789-4228</td></tr>
-          </tbody>
-        </table>
-
-        <div class="section-label">Source Traceability</div>
-        <div class="pill">Insurance Overview Â· Feb 10, 2026 escrow snapshot</div>
-        <div class="pill" style="margin-left:10px;">Income Statement DB Â· <span class="mono">6310-01</span> monthly expense</div>
-      </section>
     </div>
+    <script>
+      (() => {
+        const insuranceTrendData = [
+          { month: "Mar-25", amount: 16496.85, period: "Mar-Jul 2025", variant: "standard" },
+          { month: "Apr-25", amount: 16496.85, period: "Mar-Jul 2025", variant: "standard" },
+          { month: "May-25", amount: 16496.85, period: "Mar-Jul 2025", variant: "standard" },
+          { month: "Jun-25", amount: 16496.85, period: "Mar-Jul 2025", variant: "standard" },
+          { month: "Jul-25", amount: 16496.85, period: "Mar-Jul 2025", variant: "standard" },
+          { month: "Aug-25", amount: 20353.19, period: "Aug-Dec 2025", variant: "standard" },
+          { month: "Sep-25", amount: 20353.19, period: "Aug-Dec 2025", variant: "standard" },
+          { month: "Oct-25", amount: 20353.19, period: "Aug-Dec 2025", variant: "standard" },
+          { month: "Nov-25", amount: 20353.19, period: "Aug-Dec 2025", variant: "standard" },
+          { month: "Dec-25", amount: 20353.19, period: "Aug-Dec 2025", variant: "standard" },
+          { month: "Jan-26", amount: 8500.0, period: "Jan-Feb 2026", variant: "renewal" },
+          { month: "Feb-26", amount: 8500.0, period: "Jan-Feb 2026", variant: "renewal" }
+        ];
 
-    <section class="panel">
-      <h2>Operational View â€” Policy Roster (Annual Premium Summary)</h2>
-      <div class="panel-intro">This is the table you use when someone asks for COI, renewal dates, or proof of coverage.</div>
-      <table aria-label="Policy roster">
-        <thead>
-          <tr>
-            <th>Coverage</th>
-            <th>Insurer</th>
-            <th>Policy Period</th>
-            <th>Annual Premium</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Property â€“ Primary Multi-Peril</td><td>Underwriters at Lloyd's of London</td><td class="mono">01/18/2026 â€“ 01/18/2027</td><td class="mono"><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_009">$40,144</span> <span class="unit-inline">/yr</span></td></tr>
-          <tr><td>Property â€“ Excess Multi-Peril</td><td>Fortegra Specialty Insurance</td><td class="mono">01/18/2026 â€“ 01/18/2027</td><td class="mono"><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010">$15,275.20</span> <span class="unit-inline">/yr</span></td></tr>
-          <tr><td>General Liability</td><td>Concert Specialty Insurance Co.</td><td class="mono">10/16/2025 â€“ 10/16/2026</td><td class="mono"><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011">$15,275</span> <span class="unit-inline">/yr</span></td></tr>
-          <tr><td>Umbrella / Excess Liability</td><td>Evanston Insurance Company</td><td class="mono">01/18/2026 â€“ 10/19/2026</td><td class="mono"><span data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012">$13,230</span> <span class="unit-inline">/yr</span></td></tr>
-        </tbody>
-      </table>
-      <div class="note">
-        Missing fields in Drive extract (not shown here): policy numbers, carrier contact emails, invoice dates, financing terms. This mockup surfaces the gaps explicitly so the next ingestion step is obvious.
-      </div>
-    </section>
-  </div>
-  <script src="../../../assets/js/supabase-data.js?v=2026-04-23-2"></script>
-</body>
+        const barsTarget = document.getElementById("insurance-trend-bars");
+        const legendTarget = document.getElementById("insurance-trend-legend");
+        const tableTarget = document.getElementById("insurance-trend-table");
+
+        const currency = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+        const compactCurrency = new Intl.NumberFormat("en-US", {
+          notation: "compact",
+          compactDisplay: "short",
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1
+        });
+
+        const maxAmount = Math.max(...insuranceTrendData.map((entry) => entry.amount));
+        const groupedLegend = insuranceTrendData.reduce((groups, entry) => {
+          const lastGroup = groups[groups.length - 1];
+          if (lastGroup && lastGroup.period === entry.period) {
+            return groups;
+          }
+
+          groups.push({
+            amount: entry.amount,
+            period: entry.period,
+            variant: entry.variant
+          });
+          return groups;
+        }, []);
+
+        barsTarget.innerHTML = insuranceTrendData
+          .map((entry) => {
+            const height = Math.max(24, Math.round((entry.amount / maxAmount) * 100));
+            const variantClass = entry.variant === "renewal" ? " is-renewal" : "";
+            return `
+              <div class="insurance-bar">
+                <div class="insurance-bar__value">${compactCurrency.format(entry.amount)}</div>
+                <div class="insurance-bar__column${variantClass}" style="height: ${height}%;"></div>
+                <div class="insurance-bar__label">${entry.month}</div>
+              </div>
+            `;
+          })
+          .join("");
+
+        legendTarget.innerHTML = groupedLegend
+          .map((group) => {
+            const badgeClass = group.variant === "renewal" ? "badge badge--selected" : "badge";
+            return `<div class="${badgeClass}">${currency.format(group.amount)} /mo | ${group.period}</div>`;
+          })
+          .join("");
+
+        tableTarget.innerHTML = insuranceTrendData
+          .map(
+            (entry) => `
+              <tr>
+                <th scope="row">${entry.month}</th>
+                <td>${currency.format(entry.amount)}</td>
+                <td>${entry.period}</td>
+              </tr>
+            `
+          )
+          .join("");
+      })();
+    </script>
+  </body>
 </html>
