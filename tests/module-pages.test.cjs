@@ -272,3 +272,15 @@ test("gp manual metric bindings stay aligned with seeded outputs", async () => {
     assert.match(sql, sqlPattern);
   }
 });
+
+test("curated seed artifacts include semantic identifiers", () => {
+  const csv = read("supabase/ingestion_data.csv");
+  const sql = read("supabase/seed_ingestion_data.sql");
+
+  assert.match(csv, /^module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context$/m);
+  assert.match(csv, /^mortgage,mortgage_total_due,mortgage\.total_due,Total Due,112158\.22,"\$112,158\.22",currency,USD,/m);
+  assert.match(csv, /^gp,gp_total_gp_sponsors,gp\.total_gp_sponsors,Total GP Sponsors \(PPC\),6,6,number,,/m);
+
+  assert.match(sql, /'mortgage', 'mortgage_total_due', 'mortgage\.total_due', 'Total Due'/);
+  assert.match(sql, /'gp', 'gp_total_gp_sponsors', 'gp\.total_gp_sponsors', 'Total GP Sponsors \(PPC\)'/);
+});

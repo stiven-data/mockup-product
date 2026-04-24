@@ -13,6 +13,33 @@ const HTML_FILES = [
 const OUTPUT_DIR = "supabase";
 const CSV_OUTPUT = path.join(OUTPUT_DIR, "ingestion_data.csv");
 const SQL_OUTPUT = path.join(OUTPUT_DIR, "seed_ingestion_data.sql");
+const CURATED_SEMANTIC_IDENTIFIERS = {
+  mortgage_principal_balance: "mortgage.principal_balance",
+  mortgage_interest_rate: "mortgage.interest_rate",
+  mortgage_escrow_amount: "mortgage.escrow_amount",
+  mortgage_monthly_payment_io_only: "mortgage.monthly_payment_io_only",
+  mortgage_monthly_payment_with_escrow: "mortgage.monthly_payment_with_escrow",
+  mortgage_current_interest_due: "mortgage.current_interest_due",
+  mortgage_current_tax_due: "mortgage.current_tax_due",
+  mortgage_current_insurance_due: "mortgage.current_insurance_due",
+  mortgage_total_due: "mortgage.total_due",
+  mortgage_ending_escrow_balance: "mortgage.ending_escrow_balance",
+  gp_total_gp_sponsors: "gp.total_gp_sponsors",
+  gp_k1_partners_in_manager_entity: "gp.k1_partners_in_manager_entity",
+  gp_source_k1_year: "gp.source_k1_year",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010: "insurance.monthly_expense.2025-03",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011: "insurance.monthly_expense.2025-04",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012: "insurance.monthly_expense.2025-05",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013: "insurance.monthly_expense.2025-06",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014: "insurance.monthly_expense.2025-07",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015: "insurance.monthly_expense.2025-08",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016: "insurance.monthly_expense.2025-09",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017: "insurance.monthly_expense.2025-10",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018: "insurance.monthly_expense.2025-11",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019: "insurance.monthly_expense.2025-12",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020: "insurance.monthly_expense.2026-01",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021: "insurance.monthly_expense.2026-02",
+};
 
 const mortgageMetrics = [
   metric("mortgage", "mortgage_principal_balance", "Principal Balance", 10853176.39, "$10,853,176.39", "currency", "modules/mortgage/views/current-debt-data.js"),
@@ -61,7 +88,12 @@ export async function buildIngestionMetrics() {
     )
   ).flat();
 
-  return [...htmlMetrics, ...mortgageMetrics, ...GP_MANUAL_METRICS, ...insuranceTrendMetrics];
+  return withSemanticIdentifiers([
+    ...htmlMetrics,
+    ...mortgageMetrics,
+    ...GP_MANUAL_METRICS,
+    ...insuranceTrendMetrics,
+  ]);
 }
 
 async function main() {
@@ -76,10 +108,21 @@ async function main() {
   console.log(`- ${SQL_OUTPUT}`);
 }
 
-function metric(module, metric_key, label, value_numeric, value_display, value_type, source_file, source_context = label) {
+function metric(
+  module,
+  metric_key,
+  label,
+  value_numeric,
+  value_display,
+  value_type,
+  source_file,
+  source_context = label,
+  semantic_identifier = null,
+) {
   return {
     module,
     metric_key,
+    semantic_identifier,
     label,
     value_numeric,
     value_display,
@@ -90,10 +133,21 @@ function metric(module, metric_key, label, value_numeric, value_display, value_t
   };
 }
 
+function withSemanticIdentifiers(rows) {
+  return rows.map((row) => ({
+    ...row,
+    semantic_identifier:
+      row.semantic_identifier ||
+      CURATED_SEMANTIC_IDENTIFIERS[row.metric_key] ||
+      null,
+  }));
+}
+
 function toCsv(rows) {
   const columns = [
     "module",
     "metric_key",
+    "semantic_identifier",
     "label",
     "value_numeric",
     "value_display",
@@ -114,6 +168,7 @@ function toSeedSql(rows) {
       const values = [
         row.module,
         row.metric_key,
+        row.semantic_identifier,
         row.label,
         row.value_numeric,
         row.value_display,
@@ -129,6 +184,7 @@ function toSeedSql(rows) {
   return `insert into ingestion_data (
   module,
   metric_key,
+  semantic_identifier,
   label,
   value_numeric,
   value_display,
@@ -141,6 +197,7 @@ values
 ${values}
 on conflict (metric_key) do update set
   module = excluded.module,
+  semantic_identifier = excluded.semantic_identifier,
   label = excluded.label,
   value_numeric = excluded.value_numeric,
   value_display = excluded.value_display,
