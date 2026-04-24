@@ -116,7 +116,17 @@
   }
 
   function canUseApiRoutes() {
-    return window.location.protocol === "http:" || window.location.protocol === "https:";
+    const protocol =
+      window.location.protocol ||
+      (() => {
+        try {
+          return new URL(window.location.origin).protocol;
+        } catch {
+          return "";
+        }
+      })();
+
+    return protocol === "http:" || protocol === "https:";
   }
 
   function buildRuntimeUrl(path) {
