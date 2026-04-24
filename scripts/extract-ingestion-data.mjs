@@ -27,18 +27,6 @@ const CURATED_SEMANTIC_IDENTIFIERS = {
   gp_total_gp_sponsors: "gp.total_gp_sponsors",
   gp_k1_partners_in_manager_entity: "gp.k1_partners_in_manager_entity",
   gp_source_k1_year: "gp.source_k1_year",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010: "insurance.monthly_expense.2025-03",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011: "insurance.monthly_expense.2025-04",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012: "insurance.monthly_expense.2025-05",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013: "insurance.monthly_expense.2025-06",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014: "insurance.monthly_expense.2025-07",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015: "insurance.monthly_expense.2025-08",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016: "insurance.monthly_expense.2025-09",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017: "insurance.monthly_expense.2025-10",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018: "insurance.monthly_expense.2025-11",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019: "insurance.monthly_expense.2025-12",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020: "insurance.monthly_expense.2026-01",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021: "insurance.monthly_expense.2026-02",
 };
 
 const mortgageMetrics = [
@@ -55,18 +43,18 @@ const mortgageMetrics = [
 ];
 
 const insuranceTrendMetrics = [
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010", "Monthly Insurance Trend | Mar-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011", "Monthly Insurance Trend | Apr-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012", "Monthly Insurance Trend | May-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013", "Monthly Insurance Trend | Jun-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014", "Monthly Insurance Trend | Jul-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015", "Monthly Insurance Trend | Aug-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016", "Monthly Insurance Trend | Sep-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017", "Monthly Insurance Trend | Oct-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018", "Monthly Insurance Trend | Nov-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019", "Monthly Insurance Trend | Dec-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020", "Monthly Insurance Trend | Jan-26", 8500, "$8,500.00", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Jan-Feb 2026"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", "Monthly Insurance Trend | Feb-26", 8500, "$8,500.00", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Jan-Feb 2026"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010", "Monthly Insurance Trend | Mar-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance.monthly_expense.2025-03"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011", "Monthly Insurance Trend | Apr-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance.monthly_expense.2025-04"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012", "Monthly Insurance Trend | May-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance.monthly_expense.2025-05"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013", "Monthly Insurance Trend | Jun-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance.monthly_expense.2025-06"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014", "Monthly Insurance Trend | Jul-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance.monthly_expense.2025-07"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015", "Monthly Insurance Trend | Aug-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance.monthly_expense.2025-08"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016", "Monthly Insurance Trend | Sep-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance.monthly_expense.2025-09"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017", "Monthly Insurance Trend | Oct-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance.monthly_expense.2025-10"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018", "Monthly Insurance Trend | Nov-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance.monthly_expense.2025-11"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019", "Monthly Insurance Trend | Dec-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance.monthly_expense.2025-12"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020", "Monthly Insurance Trend | Jan-26", 8500, "$8,500.00", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Jan-Feb 2026", "insurance.monthly_expense.2026-01"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", "Monthly Insurance Trend | Feb-26", 8500, "$8,500.00", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Jan-Feb 2026", "insurance.monthly_expense.2026-02"),
 ];
 
 export const GP_MANUAL_METRICS = [
@@ -88,12 +76,12 @@ export async function buildIngestionMetrics() {
     )
   ).flat();
 
-  return withSemanticIdentifiers([
+  return [
     ...htmlMetrics,
     ...mortgageMetrics,
     ...GP_MANUAL_METRICS,
     ...insuranceTrendMetrics,
-  ]);
+  ];
 }
 
 async function main() {
@@ -117,7 +105,7 @@ function metric(
   value_type,
   source_file,
   source_context = label,
-  semantic_identifier = null,
+  semantic_identifier = CURATED_SEMANTIC_IDENTIFIERS[metric_key] || null,
 ) {
   return {
     module,
@@ -131,16 +119,6 @@ function metric(
     source_file,
     source_context,
   };
-}
-
-function withSemanticIdentifiers(rows) {
-  return rows.map((row) => ({
-    ...row,
-    semantic_identifier:
-      row.semantic_identifier ||
-      CURATED_SEMANTIC_IDENTIFIERS[row.metric_key] ||
-      null,
-  }));
 }
 
 function toCsv(rows) {

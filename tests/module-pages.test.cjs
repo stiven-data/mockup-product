@@ -127,6 +127,34 @@ const INSURANCE_METRICS = [
   { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", value_numeric: 8500, value_display: "$8,500.00", binding: "trend" },
 ];
 
+const CURATED_SEMANTIC_IDENTIFIERS = {
+  mortgage_principal_balance: "mortgage.principal_balance",
+  mortgage_interest_rate: "mortgage.interest_rate",
+  mortgage_escrow_amount: "mortgage.escrow_amount",
+  mortgage_monthly_payment_io_only: "mortgage.monthly_payment_io_only",
+  mortgage_monthly_payment_with_escrow: "mortgage.monthly_payment_with_escrow",
+  mortgage_current_interest_due: "mortgage.current_interest_due",
+  mortgage_current_tax_due: "mortgage.current_tax_due",
+  mortgage_current_insurance_due: "mortgage.current_insurance_due",
+  mortgage_total_due: "mortgage.total_due",
+  mortgage_ending_escrow_balance: "mortgage.ending_escrow_balance",
+  gp_total_gp_sponsors: "gp.total_gp_sponsors",
+  gp_k1_partners_in_manager_entity: "gp.k1_partners_in_manager_entity",
+  gp_source_k1_year: "gp.source_k1_year",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010: "insurance.monthly_expense.2025-03",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011: "insurance.monthly_expense.2025-04",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012: "insurance.monthly_expense.2025-05",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013: "insurance.monthly_expense.2025-06",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014: "insurance.monthly_expense.2025-07",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015: "insurance.monthly_expense.2025-08",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016: "insurance.monthly_expense.2025-09",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017: "insurance.monthly_expense.2025-10",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018: "insurance.monthly_expense.2025-11",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019: "insurance.monthly_expense.2025-12",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020: "insurance.monthly_expense.2026-01",
+  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021: "insurance.monthly_expense.2026-02",
+};
+
 test("taxes page loads the shared metrics runtime and contains metric bindings", () => {
   const html = read("modules/taxes/views/index.html");
   assert.match(html, /supabase-data\.js/);
@@ -278,9 +306,36 @@ test("curated seed artifacts include semantic identifiers", () => {
   const sql = read("supabase/seed_ingestion_data.sql");
 
   assert.match(csv, /^module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context$/m);
-  assert.match(csv, /^mortgage,mortgage_total_due,mortgage\.total_due,Total Due,112158\.22,"\$112,158\.22",currency,USD,/m);
-  assert.match(csv, /^gp,gp_total_gp_sponsors,gp\.total_gp_sponsors,Total GP Sponsors \(PPC\),6,6,number,,/m);
+  for (const [metricKey, semanticIdentifier] of Object.entries(CURATED_SEMANTIC_IDENTIFIERS)) {
+    const escapedMetricKey = metricKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const escapedSemanticIdentifier = semanticIdentifier.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    assert.match(csv, new RegExp(`^[^,]+,${escapedMetricKey},${escapedSemanticIdentifier},`, "m"));
+    assert.match(sql, new RegExp(`'${escapedMetricKey}', '${escapedSemanticIdentifier}',`));
+  }
+});
 
-  assert.match(sql, /'mortgage', 'mortgage_total_due', 'mortgage\.total_due', 'Total Due'/);
-  assert.match(sql, /'gp', 'gp_total_gp_sponsors', 'gp\.total_gp_sponsors', 'Total GP Sponsors \(PPC\)'/);
+test("buildIngestionMetrics assigns semantic identifiers to curated metric rows", async () => {
+  const { buildIngestionMetrics } = await import("../scripts/extract-ingestion-data.mjs");
+  const metrics = await buildIngestionMetrics();
+
+  for (const [metricKey, semanticIdentifier] of Object.entries(CURATED_SEMANTIC_IDENTIFIERS)) {
+    const metric = metrics.find((row) => row.metric_key === metricKey);
+    assert.ok(metric, `Expected curated metric ${metricKey} to be generated`);
+    assert.equal(metric.semantic_identifier, semanticIdentifier);
+  }
+});
+
+test("curated metric definitions carry semantic identifiers without a later patch pass", async () => {
+  const source = read("scripts/extract-ingestion-data.mjs");
+  const { GP_MANUAL_METRICS } = await import("../scripts/extract-ingestion-data.mjs");
+
+  assert.doesNotMatch(source, /insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010:\s*"insurance\.monthly_expense\.2025-03"/);
+  assert.doesNotMatch(source, /withSemanticIdentifiers\(/);
+
+  for (const manualMetric of GP_MANUAL_METRICS) {
+    assert.ok(
+      manualMetric.semantic_identifier,
+      `Expected ${manualMetric.metric_key} to carry a semantic identifier at definition time`,
+    );
+  }
 });
