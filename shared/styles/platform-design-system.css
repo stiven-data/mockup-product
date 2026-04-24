@@ -440,6 +440,191 @@ body {
   border-radius: var(--radius-card);
 }
 
+.app-shell .editor-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.app-shell .editor-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.app-shell .editor-header h2 {
+  margin: 8px 0 0;
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.app-shell .editor-header p {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  max-width: 64ch;
+}
+
+.app-shell .editor-status {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.app-shell .editor-status.is-success {
+  border-color: #a7d6b0;
+  background: #edf9f0;
+  color: #25633a;
+}
+
+.app-shell .editor-status.is-error {
+  border-color: #efb0a7;
+  background: #fff1ef;
+  color: #8e3020;
+}
+
+.app-shell .editor-controls {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.app-shell .editor-control {
+  display: grid;
+  gap: 8px;
+}
+
+.app-shell .editor-control label {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-shell .editor-meta {
+  color: var(--text-muted);
+}
+
+.app-shell .editor-table-wrap {
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.app-shell .editor-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  background: var(--surface);
+}
+
+.app-shell .editor-table th,
+.app-shell .editor-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.app-shell .editor-table th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-subtle);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-shell .editor-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.app-shell .editor-table td small {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-soft);
+}
+
+.app-shell .editor-table input,
+.app-shell .editor-table textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.app-shell .editor-table textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+.app-shell .editor-actions {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.app-shell .save-button,
+.app-shell .reset-button {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-weight: 600;
+}
+
+.app-shell .save-button {
+  background: var(--action);
+  color: var(--text);
+}
+
+.app-shell .save-button:hover:not([disabled]) {
+  background: var(--action-hover);
+}
+
+.app-shell .reset-button {
+  border-color: var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.app-shell .reset-button:hover:not([disabled]) {
+  background: var(--surface-subtle);
+}
+
+.app-shell .save-button[disabled],
+.app-shell .reset-button[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.app-shell .row-status {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.app-shell .row-status.is-success {
+  color: #25633a;
+}
+
+.app-shell .row-status.is-error {
+  color: #8e3020;
+}
+
 @media (max-width: 1200px) {
   .app-shell .stats-grid,
   .app-shell .card-grid {
@@ -478,6 +663,10 @@ body {
 
   .app-shell .control-stack {
     min-width: 100%;
+  }
+
+  .app-shell .editor-controls {
+    grid-template-columns: 1fr;
   }
 }
 

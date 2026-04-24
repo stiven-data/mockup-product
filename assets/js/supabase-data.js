@@ -2,15 +2,18 @@
   const BATCH_SIZE = 60;
   const API_PATH = "/api/metrics";
   const CONFIG_PATH = "/api/public-config";
-  const RUNTIME_VERSION = "2026-04-23-2";
+  const DEFAULT_SELECT =
+    "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
+  const MAX_LIMIT = 5000;
+  const RUNTIME_VERSION = "2026-04-24-1";
   const MODULES = ["mortgage", "insurance", "taxes", "gp"];
   const EMPTY_DISPLAY_TOKENS = new Set([
     "",
     "-",
-    "—",
-    "–",
     "â€”",
     "â€“",
+    "Ã¢â‚¬â€",
+    "Ã¢â‚¬â€œ",
     "null",
     "undefined",
     "nan",
@@ -18,23 +21,24 @@
   ]);
   const MISSING_DISPLAY_FALLBACK = "Missing in Supabase";
   const TEXT_ARTIFACT_REPLACEMENTS = [
+    [/KÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Ëœ1/g, "K-1"],
     [/KÃ¢â‚¬â€˜1/g, "K-1"],
-    [/Kâ€‘1/g, "K-1"],
-    [/â€‘/g, "-"],
-    [/â€”/g, "-"],
-    [/â€“/g, "-"],
-    [/Â·/g, " - "],
-    [/â€œ|â€/g, '"'],
-    [/â–¶/g, ">"],
+    [/Ã¢â‚¬â€˜/g, "-"],
+    [/Ã¢â‚¬â€/g, "-"],
+    [/Ã¢â‚¬â€œ/g, "-"],
+    [/Ã‚Â·/g, " - "],
+    [/Ã¢â‚¬Å“|Ã¢â‚¬Â/g, '"'],
+    [/Ã¢â€“Â¶/g, ">"],
   ];
 
   const state = {
-    rowsByKey: new Map(),
-    listeners: new Set(),
-    configPromise: null,
-    clientPromise: null,
     channel: null,
+    clientPromise: null,
+    configPromise: null,
+    listeners: new Set(),
+    mode: "unknown",
     refreshPromise: null,
+    rowsByKey: new Map(),
   };
 
   function chunk(values, size) {
@@ -64,6 +68,12 @@
     return repaired || "";
   }
 
+  function parseOptionalNumber(value) {
+    if (value === null || value === undefined || value === "") return null;
+    const parsed = Number(String(value).replace(/,/g, "").trim());
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
   function buildSourceTrace(row) {
     const parts = [];
     if (row?.source_file) parts.push(`Source file: ${repairTextArtifacts(row.source_file)}`);
@@ -74,8 +84,7 @@
   function isSkippableNode(node) {
     const parent = node.parentElement;
     if (!parent) return true;
-    const tagName = parent.tagName;
-    return ["SCRIPT", "STYLE", "NOSCRIPT", "TEXTAREA"].includes(tagName);
+    return ["SCRIPT", "STYLE", "NOSCRIPT", "TEXTAREA"].includes(parent.tagName);
   }
 
   function repairStaticArtifactsInDom(root = document.body) {
@@ -106,35 +115,173 @@
     return url;
   }
 
+  function canUseApiRoutes() {
+    return window.location.protocol === "http:" || window.location.protocol === "https:";
+  }
+
+  function buildRuntimeUrl(path) {
+    if (!canUseApiRoutes()) return null;
+    return appendRuntimeVersion(new URL(path, window.location.origin));
+  }
+
   async function fetchJson(url, options = {}) {
-    const response = await fetch(url, {
-      cache: "no-store",
-      headers: {
-        accept: "application/json",
-        ...(options.body ? { "content-type": "application/json" } : {}),
-        ...(options.headers || {}),
-      },
-      ...options,
-    });
+    let response;
+    try {
+      response = await fetch(url, {
+        cache: "no-store",
+        headers: {
+          accept: "application/json",
+          ...(options.body ? { "content-type": "application/json" } : {}),
+          ...(options.headers || {}),
+        },
+        ...options,
+      });
+    } catch (error) {
+      error.status = 0;
+      throw error;
+    }
 
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error(payload?.error || `Request failed with status ${response.status}`);
+      const error = new Error(payload?.error || `Request failed with status ${response.status}`);
+      error.status = response.status;
+      throw error;
     }
     return payload;
   }
 
+  function shouldFallbackToDirect(error) {
+    return (
+      !canUseApiRoutes() ||
+      error?.status === 0 ||
+      error?.status === 400 ||
+      error?.status === 404 ||
+      error?.status === 500 ||
+      error?.status === 502
+    );
+  }
+
+  function buildSupabaseHeaders(key, extras = {}) {
+    return {
+      apikey: key,
+      authorization: `Bearer ${key}`,
+      ...extras,
+    };
+  }
+
+  function buildSupabaseReadUrl(baseUrl, query) {
+    const url = new URL("/rest/v1/ingestion_data", baseUrl);
+    url.searchParams.set("select", DEFAULT_SELECT);
+    url.searchParams.set("order", "metric_key.asc");
+    url.searchParams.set("limit", String(Math.min(Math.max(query.limit || 500, 1), MAX_LIMIT)));
+
+    if (query.keys?.length) {
+      url.searchParams.set(
+        "metric_key",
+        `in.(${query.keys.map((value) => `"${String(value).replaceAll('"', '\\"')}"`).join(",")})`,
+      );
+    } else if (query.module) {
+      url.searchParams.set("module", `eq.${query.module}`);
+    }
+
+    return url.toString();
+  }
+
+  function buildSupabaseUpdateUrl(baseUrl, metricKey) {
+    const url = new URL("/rest/v1/ingestion_data", baseUrl);
+    url.searchParams.set("metric_key", `eq.${metricKey}`);
+    url.searchParams.set("select", DEFAULT_SELECT);
+    return url.toString();
+  }
+
+  async function getPublicConfig() {
+    if (!state.configPromise) {
+      state.configPromise = (async () => {
+        const embedded = window.VALORIS_PUBLIC_SUPABASE_CONFIG;
+        if (embedded?.url && embedded?.key) return embedded;
+
+        const url = buildRuntimeUrl(CONFIG_PATH);
+        if (!url) return null;
+
+        try {
+          return await fetchJson(url.toString());
+        } catch (error) {
+          console.warn("[metrics-runtime] Public config unavailable from API.", error);
+          return null;
+        }
+      })();
+    }
+    return state.configPromise;
+  }
+
+  async function getDirectReadConfig() {
+    const config = await getPublicConfig();
+    if (!config?.url || !config?.key) {
+      throw new Error("Supabase public config is unavailable.");
+    }
+    return config;
+  }
+
+  async function runWithFallback(apiTask, directTask) {
+    if (state.mode === "direct") {
+      return directTask();
+    }
+
+    if (canUseApiRoutes()) {
+      try {
+        const result = await apiTask();
+        state.mode = "api";
+        return result;
+      } catch (error) {
+        if (!shouldFallbackToDirect(error)) throw error;
+        console.warn("[metrics-runtime] API unavailable. Falling back to direct Supabase access.", error);
+      }
+    }
+
+    const result = await directTask();
+    state.mode = "direct";
+    return result;
+  }
+
   async function fetchMetricBatch(keys) {
-    const url = appendRuntimeVersion(new URL(API_PATH, window.location.origin));
-    url.searchParams.set("keys", keys.join(","));
-    return fetchJson(url.toString()).then((payload) => (Array.isArray(payload?.data) ? payload.data : []));
+    return runWithFallback(
+      async () => {
+        const url = buildRuntimeUrl(API_PATH);
+        if (!url) throw Object.assign(new Error("API runtime unavailable."), { status: 0 });
+        url.searchParams.set("keys", keys.join(","));
+        const payload = await fetchJson(url.toString());
+        return Array.isArray(payload?.data) ? payload.data : [];
+      },
+      async () => {
+        const config = await getDirectReadConfig();
+        const payload = await fetchJson(
+          buildSupabaseReadUrl(config.url, { keys, module: "", limit: keys.length || BATCH_SIZE }),
+          { headers: buildSupabaseHeaders(config.key) },
+        );
+        return Array.isArray(payload) ? payload : [];
+      },
+    );
   }
 
   async function fetchMetricsByModule(module, limit = 5000) {
-    const url = appendRuntimeVersion(new URL(API_PATH, window.location.origin));
-    url.searchParams.set("module", module);
-    url.searchParams.set("limit", String(limit));
-    return fetchJson(url.toString()).then((payload) => (Array.isArray(payload?.data) ? payload.data : []));
+    return runWithFallback(
+      async () => {
+        const url = buildRuntimeUrl(API_PATH);
+        if (!url) throw Object.assign(new Error("API runtime unavailable."), { status: 0 });
+        url.searchParams.set("module", module);
+        url.searchParams.set("limit", String(limit));
+        const payload = await fetchJson(url.toString());
+        return Array.isArray(payload?.data) ? payload.data : [];
+      },
+      async () => {
+        const config = await getDirectReadConfig();
+        const payload = await fetchJson(
+          buildSupabaseReadUrl(config.url, { keys: [], module, limit }),
+          { headers: buildSupabaseHeaders(config.key) },
+        );
+        return Array.isArray(payload) ? payload : [];
+      },
+    );
   }
 
   async function fetchAllMetrics() {
@@ -202,17 +349,6 @@
     return () => state.listeners.delete(listener);
   }
 
-  async function getPublicConfig() {
-    if (!state.configPromise) {
-      const url = appendRuntimeVersion(new URL(CONFIG_PATH, window.location.origin));
-      state.configPromise = fetchJson(url.toString()).catch((error) => {
-        console.warn("[metrics-runtime] Public config unavailable.", error);
-        return null;
-      });
-    }
-    return state.configPromise;
-  }
-
   async function getRealtimeClient() {
     if (!state.clientPromise) {
       state.clientPromise = (async () => {
@@ -259,24 +395,42 @@
   async function saveMetricUpdate(input) {
     const payload = {
       metric_key: normalizeEditableText(input.metric_key),
-      label: normalizeEditableText(input.label),
       value_display: normalizeDisplayValue(input.value_display),
-      value_numeric: normalizeEditableText(input.value_numeric),
-      source_context: normalizeEditableText(input.source_context),
+      value_numeric: parseOptionalNumber(input.value_numeric),
+      source_context: normalizeEditableText(input.source_context) || null,
     };
 
-    const response = await fetchJson(API_PATH, {
-      method: "PATCH",
-      body: JSON.stringify(payload),
-    });
+    const data = await runWithFallback(
+      async () => {
+        const response = await fetchJson(API_PATH, {
+          method: "PATCH",
+          body: JSON.stringify(payload),
+        });
+        return response?.data || null;
+      },
+      async () => {
+        const config = await getDirectReadConfig();
+        const response = await fetchJson(buildSupabaseUpdateUrl(config.url, payload.metric_key), {
+          method: "PATCH",
+          headers: buildSupabaseHeaders(config.key, { Prefer: "return=representation" }),
+          body: JSON.stringify({
+            value_display: payload.value_display,
+            value_numeric: payload.value_numeric,
+            source_context: payload.source_context,
+            updated_at: new Date().toISOString(),
+          }),
+        });
+        return Array.isArray(response) ? response[0] || null : null;
+      },
+    );
 
-    if (response?.data?.metric_key) {
-      rememberRows([response.data]);
-      applyRowsToPage([response.data]);
-      emit("metric:saved", response.data);
+    if (data?.metric_key) {
+      rememberRows([data]);
+      applyRowsToPage([data]);
+      emit("metric:saved", data);
     }
 
-    return response?.data || null;
+    return data;
   }
 
   async function loadDynamicMetrics() {
@@ -328,10 +482,10 @@
       return [...state.rowsByKey.values()];
     },
     loadDynamicMetrics,
-    refreshMetrics,
     normalizeDisplayValue,
     repairStaticArtifactsInDom,
     repairTextArtifacts,
+    refreshMetrics,
     saveMetricUpdate,
     subscribe,
   };

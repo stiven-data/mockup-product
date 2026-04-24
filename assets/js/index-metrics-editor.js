@@ -1,6 +1,5 @@
 (() => {
   const RUNTIME_KEY = "ValorisMetrics";
-  const MODULES = ["mortgage", "insurance", "gp", "taxes"];
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -16,6 +15,23 @@
     return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleString();
   }
 
+  function buildDraftFromRow(runtime, row) {
+    return {
+      value_display: runtime.normalizeDisplayValue(row.value_display),
+      value_numeric: row.value_numeric ?? "",
+      source_context: row.source_context || "",
+    };
+  }
+
+  function inferDefaultModule() {
+    const pathname = window.location.pathname.toLowerCase();
+    if (pathname.includes("/modules/mortgage/")) return "mortgage";
+    if (pathname.includes("/modules/insurance/")) return "insurance";
+    if (pathname.includes("/modules/taxes/")) return "taxes";
+    if (pathname.includes("/modules/gp/")) return "gp";
+    return "";
+  }
+
   function boot() {
     const runtime = window[RUNTIME_KEY];
     const panel = document.getElementById("metrics-editor");
@@ -27,12 +43,17 @@
     const meta = document.getElementById("metrics-editor-meta");
     const status = document.getElementById("metrics-editor-status");
 
+    const defaultModule = inferDefaultModule();
+    if (defaultModule && Array.from(moduleFilter.options).some((option) => option.value === defaultModule)) {
+      moduleFilter.value = defaultModule;
+    }
+
     const state = {
-      rows: [],
       drafts: new Map(),
-      rowStatuses: new Map(),
-      loading: false,
       filterModule: moduleFilter.value,
+      rowStatuses: new Map(),
+      rows: [],
+      savingRows: new Set(),
       search: "",
     };
 
@@ -45,14 +66,26 @@
       state.rowStatuses.set(metricKey, { message, type });
     }
 
+    function getRow(metricKey) {
+      return state.rows.find((item) => item.metric_key === metricKey) || null;
+    }
+
     function getDraft(metricKey, row) {
+      if (!state.drafts.has(metricKey)) {
+        state.drafts.set(metricKey, buildDraftFromRow(runtime, row));
+      }
+      return state.drafts.get(metricKey);
+    }
+
+    function hasDraftChanges(metricKey, row) {
+      const draft = state.drafts.get(metricKey);
+      if (!draft) return false;
+
+      const original = buildDraftFromRow(runtime, row);
       return (
-        state.drafts.get(metricKey) || {
-          label: row.label || "",
-          value_display: runtime.normalizeDisplayValue(row.value_display),
-          value_numeric: row.value_numeric ?? "",
-          source_context: row.source_context || "",
-        }
+        draft.value_display !== original.value_display ||
+        String(draft.value_numeric) !== String(original.value_numeric) ||
+        draft.source_context !== original.source_context
       );
     }
 
@@ -95,13 +128,15 @@
         .map((row) => {
           const draft = getDraft(row.metric_key, row);
           const rowStatus = state.rowStatuses.get(row.metric_key);
+          const isDirty = hasDraftChanges(row.metric_key, row);
+          const isSaving = state.savingRows.has(row.metric_key);
 
           return `
             <tr data-metric-key="${escapeHtml(row.metric_key)}">
               <td>
                 <strong>${escapeHtml(row.label)}</strong>
                 <small>${escapeHtml(row.metric_key)}</small>
-                <small>${escapeHtml(row.module)} · ${escapeHtml(row.source_file || "No source file")}</small>
+                <small>${escapeHtml(row.module)} | ${escapeHtml(row.source_file || "No source file")}</small>
                 <small>Updated: ${escapeHtml(formatTimestamp(row.updated_at))}</small>
               </td>
               <td>
@@ -111,14 +146,18 @@
                 <input data-field="value_numeric" value="${escapeHtml(draft.value_numeric)}" />
               </td>
               <td>
-                <input data-field="label" value="${escapeHtml(draft.label)}" />
                 <textarea data-field="source_context">${escapeHtml(draft.source_context)}</textarea>
               </td>
               <td>
                 <div class="editor-actions">
-                  <button class="save-button" data-action="save">Save</button>
+                  <button class="save-button" data-action="save" ${isDirty && !isSaving ? "" : "disabled"}>
+                    ${isSaving ? "Saving..." : "Save"}
+                  </button>
+                  <button class="reset-button" data-action="reset" ${isDirty && !isSaving ? "" : "disabled"}>
+                    Reset
+                  </button>
                   <span class="row-status${rowStatus?.type ? ` is-${rowStatus.type}` : ""}">
-                    ${escapeHtml(rowStatus?.message || "Ready")}
+                    ${escapeHtml(rowStatus?.message || (isDirty ? "Unsaved changes" : "Ready"))}
                   </span>
                 </div>
               </td>
@@ -128,9 +167,37 @@
         .join("");
     }
 
+    function syncRowControls(rowElement, metricKey, row) {
+      const rowStatus = rowElement.querySelector(".row-status");
+      const saveButton = rowElement.querySelector('[data-action="save"]');
+      const resetButton = rowElement.querySelector('[data-action="reset"]');
+      const isDirty = hasDraftChanges(metricKey, row);
+      const isSaving = state.savingRows.has(metricKey);
+      const statusState = state.rowStatuses.get(metricKey);
+
+      if (rowStatus) {
+        rowStatus.textContent = statusState?.message || (isDirty ? "Unsaved changes" : "Ready");
+        rowStatus.className = `row-status${statusState?.type ? ` is-${statusState.type}` : ""}`;
+      }
+      if (saveButton) {
+        saveButton.disabled = !isDirty || isSaving;
+        saveButton.textContent = isSaving ? "Saving..." : "Save";
+      }
+      if (resetButton) {
+        resetButton.disabled = !isDirty || isSaving;
+      }
+    }
+
     async function loadRows() {
-      state.loading = true;
-      setStatus("Loading metrics...", "");
+      if (!state.filterModule) {
+        state.rows = [];
+        setStatus("Select a module to load metrics.");
+        meta.textContent = "Choose a module to edit its live metrics.";
+        body.innerHTML = '<tr><td colspan="5">Select a module to load metrics.</td></tr>';
+        return;
+      }
+
+      setStatus("Loading metrics...");
 
       try {
         const rows =
@@ -142,25 +209,24 @@
         setStatus("Realtime sync active.", "success");
         render();
       } catch (error) {
-        setStatus(error.message || "Failed to load metrics.", "error");
-        body.innerHTML = `<tr><td colspan="5">${escapeHtml(error.message || "Failed to load metrics.")}</td></tr>`;
-      } finally {
-        state.loading = false;
+        const message = error.message || "Failed to load metrics.";
+        setStatus(message, "error");
+        body.innerHTML = `<tr><td colspan="5">${escapeHtml(message)}</td></tr>`;
       }
     }
 
     async function saveRow(metricKey) {
-      const row = state.rows.find((item) => item.metric_key === metricKey);
-      if (!row) return;
+      const row = getRow(metricKey);
+      if (!row || !hasDraftChanges(metricKey, row)) return;
 
       const draft = getDraft(metricKey, row);
-      setRowStatus(metricKey, "Saving...", "");
+      state.savingRows.add(metricKey);
+      setRowStatus(metricKey, "Saving...");
       render();
 
       try {
         const saved = await runtime.saveMetricUpdate({
           metric_key: metricKey,
-          label: draft.label,
           value_display: draft.value_display,
           value_numeric: draft.value_numeric,
           source_context: draft.source_context,
@@ -168,17 +234,28 @@
 
         if (saved) {
           state.rows = state.rows.map((item) => (item.metric_key === metricKey ? saved : item));
-          state.drafts.delete(metricKey);
+          state.drafts.set(metricKey, buildDraftFromRow(runtime, saved));
         }
 
         setRowStatus(metricKey, "Saved", "success");
         setStatus(`Saved ${metricKey}.`, "success");
-        render();
       } catch (error) {
-        setRowStatus(metricKey, error.message || "Save failed", "error");
-        setStatus(error.message || "Save failed.", "error");
+        const message = error.message || "Save failed.";
+        setRowStatus(metricKey, message, "error");
+        setStatus(message, "error");
+      } finally {
+        state.savingRows.delete(metricKey);
         render();
       }
+    }
+
+    function resetRow(metricKey) {
+      const row = getRow(metricKey);
+      if (!row) return;
+
+      state.drafts.set(metricKey, buildDraftFromRow(runtime, row));
+      setRowStatus(metricKey, "Reset", "");
+      render();
     }
 
     body.addEventListener("input", (event) => {
@@ -187,20 +264,28 @@
       if (!field || !rowElement) return;
 
       const metricKey = rowElement.dataset.metricKey;
-      const row = state.rows.find((item) => item.metric_key === metricKey);
+      const row = getRow(metricKey);
       if (!row) return;
 
-      const draft = getDraft(metricKey, row);
-      draft[field] = event.target.value;
+      const draft = { ...getDraft(metricKey, row), [field]: event.target.value };
       state.drafts.set(metricKey, draft);
-      setRowStatus(metricKey, "Unsaved changes", "");
+      setRowStatus(metricKey, hasDraftChanges(metricKey, row) ? "Unsaved changes" : "Ready");
+      syncRowControls(rowElement, metricKey, row);
     });
 
     body.addEventListener("click", (event) => {
       const action = event.target?.dataset?.action;
       const rowElement = event.target?.closest("tr[data-metric-key]");
-      if (action !== "save" || !rowElement) return;
-      saveRow(rowElement.dataset.metricKey);
+      if (!action || !rowElement) return;
+
+      const metricKey = rowElement.dataset.metricKey;
+      if (action === "save") {
+        saveRow(metricKey);
+        return;
+      }
+      if (action === "reset") {
+        resetRow(metricKey);
+      }
     });
 
     moduleFilter.addEventListener("change", () => {
@@ -224,7 +309,8 @@
         state.rows.push(row);
       }
 
-      if (!state.drafts.has(row.metric_key)) {
+      if (!hasDraftChanges(row.metric_key, row)) {
+        state.drafts.set(row.metric_key, buildDraftFromRow(runtime, row));
         setRowStatus(row.metric_key, "Updated remotely", "success");
       }
 

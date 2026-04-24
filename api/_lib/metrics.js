@@ -84,7 +84,6 @@ function parseMetricUpdatePayload(body = {}) {
   }
 
   const updates = {};
-  if (body.label !== undefined) updates.label = repairTextArtifacts(body.label);
   if (body.value_display !== undefined) {
     updates.value_display = normalizeDisplayValue(body.value_display);
   }
@@ -93,6 +92,9 @@ function parseMetricUpdatePayload(body = {}) {
   }
   if (body.source_context !== undefined) {
     updates.source_context = repairTextArtifacts(body.source_context) || null;
+  }
+  if (!Object.keys(updates).length) {
+    throw new Error("Provide at least one editable field.");
   }
 
   return { metric_key, updates };

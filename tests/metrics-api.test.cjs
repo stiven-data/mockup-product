@@ -66,16 +66,14 @@ test("buildSourceTrace formats file and context for hover traceability", () => {
 test("parseMetricUpdatePayload normalizes editable fields", () => {
   const payload = parseMetricUpdatePayload({
     metric_key: "gp_modules_gp_views_gp_mockups_025",
-    label: "  Total Raise  ",
     value_display: "   ",
     value_numeric: "not-a-number",
-    source_context: "2024 Kâ€‘1",
+    source_context: "2024 KÃ¢â‚¬â€˜1",
   });
 
   assert.deepEqual(payload, {
     metric_key: "gp_modules_gp_views_gp_mockups_025",
     updates: {
-      label: "Total Raise",
       value_display: "-",
       value_numeric: null,
       source_context: "2024 K-1",
@@ -87,5 +85,12 @@ test("parseMetricUpdatePayload rejects missing metric keys", () => {
   assert.throws(
     () => parseMetricUpdatePayload({ value_display: "$10" }),
     /metric_key/i,
+  );
+});
+
+test("parseMetricUpdatePayload rejects payloads without editable fields", () => {
+  assert.throws(
+    () => parseMetricUpdatePayload({ metric_key: "mortgage_total_due" }),
+    /editable field/i,
   );
 });

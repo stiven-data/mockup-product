@@ -6,6 +6,7 @@ Static HTML mockups converted into a simple data-driven demo using `Supabase + V
 
 - `Supabase`: stores the KPI dataset in `public.ingestion_data`
 - `Vercel API`: exposes `/api/metrics` for reads and writes plus `/api/public-config` for browser realtime bootstrap
+- `Browser fallback`: if `/api/metrics` is unavailable, the pages fall back to direct Supabase access with the publishable key
 - `HTML/JS`: each view keeps its existing structure and replaces hardcoded values through `data-metric-key`
 
 ## Current modules
@@ -22,7 +23,8 @@ Static HTML mockups converted into a simple data-driven demo using `Supabase + V
 
 ## Vercel env vars
 
-Copy `.env.example` into Vercel project environment variables:
+Copy `.env.example` into the active Vercel project environment variables for both `Preview` and
+`Production`:
 
 - `SUPABASE_URL`
 - `SUPABASE_PUBLISHABLE_KEY`
@@ -43,5 +45,7 @@ node --test
 3. HTML views request metrics from `/api/metrics`.
 4. Matching `data-metric-key` spans are replaced on page load.
 5. `index.html` includes a live editor for existing rows in `public.ingestion_data`.
-6. Realtime subscriptions refresh open pages when the same metric changes remotely.
-7. Hovering a dynamic metric shows basic source traceability.
+6. The editor only changes `value_display`, `value_numeric`, and `source_context` so metric wiring
+   stays stable.
+7. Realtime subscriptions refresh open pages when the same metric changes remotely.
+8. Hovering a dynamic metric shows basic source traceability.
