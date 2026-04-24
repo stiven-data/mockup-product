@@ -27,6 +27,21 @@ const mortgageMetrics = [
   metric("mortgage", "mortgage_ending_escrow_balance", "Ending Escrow Balance", 281922.98, "$281,922.98", "currency", "modules/mortgage/views/current-debt-data.js"),
 ];
 
+const insuranceTrendMetrics = [
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010", "Monthly Insurance Trend | Mar-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011", "Monthly Insurance Trend | Apr-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012", "Monthly Insurance Trend | May-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013", "Monthly Insurance Trend | Jun-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014", "Monthly Insurance Trend | Jul-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015", "Monthly Insurance Trend | Aug-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016", "Monthly Insurance Trend | Sep-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017", "Monthly Insurance Trend | Oct-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018", "Monthly Insurance Trend | Nov-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019", "Monthly Insurance Trend | Dec-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020", "Monthly Insurance Trend | Jan-26", 8500, "$8,500.00", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Jan-Feb 2026"),
+  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", "Monthly Insurance Trend | Feb-26", 8500, "$8,500.00", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Jan-Feb 2026"),
+];
+
 export const GP_MANUAL_METRICS = [
   metric("gp", "gp_total_gp_sponsors", "Total GP Sponsors (PPC)", 6, "6", "number", "modules/Gp/views/gp mockups.html"),
   metric("gp", "gp_k1_partners_in_manager_entity", "K-1 Partners in Manager Entity", 8, "8", "number", "modules/Gp/views/gp mockups.html"),
@@ -46,7 +61,7 @@ export async function buildIngestionMetrics() {
     )
   ).flat();
 
-  return [...htmlMetrics, ...mortgageMetrics, ...GP_MANUAL_METRICS];
+  return [...htmlMetrics, ...mortgageMetrics, ...GP_MANUAL_METRICS, ...insuranceTrendMetrics];
 }
 
 async function main() {
@@ -61,7 +76,7 @@ async function main() {
   console.log(`- ${SQL_OUTPUT}`);
 }
 
-function metric(module, metric_key, label, value_numeric, value_display, value_type, source_file) {
+function metric(module, metric_key, label, value_numeric, value_display, value_type, source_file, source_context = label) {
   return {
     module,
     metric_key,
@@ -71,7 +86,7 @@ function metric(module, metric_key, label, value_numeric, value_display, value_t
     value_type,
     currency: value_type === "currency" ? "USD" : null,
     source_file,
-    source_context: label,
+    source_context,
   };
 }
 
