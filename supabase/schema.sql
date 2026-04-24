@@ -4,6 +4,7 @@ create table if not exists ingestion_data (
   id uuid primary key default gen_random_uuid(),
   module text not null,
   metric_key text not null unique,
+  semantic_identifier text,
   label text not null,
   value_numeric numeric,
   value_display text not null,
@@ -33,6 +34,7 @@ for each row
 execute function public.set_ingestion_data_updated_at();
 
 create index if not exists ingestion_data_module_idx on ingestion_data (module);
+create index if not exists ingestion_data_semantic_identifier_idx on ingestion_data (semantic_identifier);
 
 alter table ingestion_data enable row level security;
 

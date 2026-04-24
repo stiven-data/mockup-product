@@ -33,9 +33,24 @@ test("buildSupabaseRestUrl builds a key-filtered REST query", () => {
   assert.match(url, /metric_key=in\.\("mortgage_total_due","mortgage_interest_rate"\)/);
   assert.match(
     url,
-    /select=id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at/,
+    /select=id,module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at/,
   );
   assert.match(url, /limit=2/);
+});
+
+test("buildSupabaseRestUrl includes semantic_identifier in the select clause", () => {
+  const url = decodeURIComponent(
+    buildSupabaseRestUrl("https://example.supabase.co", {
+      keys: ["mortgage_total_due"],
+      module: "",
+      limit: 1,
+    }),
+  );
+
+  assert.match(
+    url,
+    /select=id,module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at/,
+  );
 });
 
 test("parseRequestQuery accepts module requests without keys", () => {

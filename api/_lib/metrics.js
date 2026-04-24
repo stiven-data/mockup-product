@@ -1,7 +1,7 @@
 const DEFAULT_LIMIT = 500;
 const MAX_LIMIT = 5000;
 const DEFAULT_SELECT =
-  "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
+  "id,module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
 const TEXT_ARTIFACT_REPLACEMENTS = [
   [/KÃ¢â‚¬â€˜1/g, "K-1"],
   [/Kâ€‘1/g, "K-1"],
