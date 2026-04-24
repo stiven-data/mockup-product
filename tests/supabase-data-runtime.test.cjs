@@ -48,6 +48,7 @@ async function loadRuntime(metricRows, elements, options = {}) {
   const domEvents = new Map();
   const windowEvents = new Map();
   let metricsCallCount = 0;
+  let supabaseRestCallCount = 0;
   const fakeConsole = {
     debug() {},
     error() {},
@@ -135,6 +136,36 @@ async function loadRuntime(metricRows, elements, options = {}) {
           ? metricRows.filter((row) => keys.includes(row?.metric_key))
           : metricRows;
       return createResponse({ data: responseConfig?.data ?? defaultRows });
+    }
+
+    if (pathname === "/rest/v1/ingestion_data") {
+      const request = {
+        callCount: supabaseRestCallCount,
+        headers: fetchOptions.headers || {},
+        method: fetchOptions.method || "GET",
+        searchParams: parsedUrl.searchParams,
+        url: parsedUrl,
+      };
+      const responseConfig =
+        typeof options.supabaseRestResponse === "function"
+          ? options.supabaseRestResponse(request)
+          : Array.isArray(options.supabaseRestResponse)
+            ? options.supabaseRestResponse[Math.min(supabaseRestCallCount, options.supabaseRestResponse.length - 1)]
+            : options.supabaseRestResponse;
+      supabaseRestCallCount += 1;
+
+      if (responseConfig?.reject) {
+        throw new Error(responseConfig.reject);
+      }
+      if (responseConfig && responseConfig.ok === false) {
+        return createResponse(
+          responseConfig.payload ?? { error: "supabase unavailable" },
+          false,
+          responseConfig.status ?? 500,
+        );
+      }
+
+      return createResponse(responseConfig?.data ?? metricRows);
     }
 
     throw new Error(`Unexpected fetch URL: ${url}`);
@@ -524,4 +555,49 @@ test("getMetricRow does not widen non-array lookup data to the global cache", as
     }),
     "$0.00",
   );
+});
+
+test("direct Supabase reads retry without semantic_identifier for legacy schemas", async () => {
+  const runtime = await loadRuntime([], [], {
+    publicConfig: {
+      key: "public-anon-key",
+      url: "https://example.supabase.co",
+    },
+    metricsResponse: {
+      ok: false,
+      status: 400,
+      payload: { error: "Request failed with status 400" },
+    },
+    supabaseRestResponse: ({ callCount, searchParams }) => {
+      const select = decodeURIComponent(searchParams.get("select") || "");
+      if (callCount === 0) {
+        return {
+          ok: false,
+          status: 400,
+          payload: {
+            code: "PGRST204",
+            error: "Could not find the 'semantic_identifier' column of 'ingestion_data' in the schema cache",
+          },
+        };
+      }
+
+      assert.doesNotMatch(select, /semantic_identifier/);
+      return {
+        data: [
+          {
+            module: "gp",
+            metric_key: "gp_total_gp_sponsors",
+            label: "Total GP Sponsors (PPC)",
+            value_numeric: 6,
+            value_display: "6",
+          },
+        ],
+      };
+    },
+  });
+
+  const rows = await runtime.window.ValorisMetrics.fetchMetricsByModule("gp");
+
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].semantic_identifier, null);
 });

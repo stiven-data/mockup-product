@@ -9,6 +9,7 @@ const {
   parseMetricUpdatePayload,
   parseRequestQuery,
 } = require("../api/_lib/metrics.js");
+const metricsHandler = require("../api/metrics.js");
 
 test("parseRequestQuery normalizes and deduplicates metric keys", () => {
   const query = parseRequestQuery({
@@ -105,4 +106,89 @@ test("parseMetricUpdatePayload rejects payloads without editable fields", () => 
     () => parseMetricUpdatePayload({ metric_key: "mortgage_total_due" }),
     /editable field/i,
   );
+});
+
+test("GET /api/metrics retries without semantic_identifier for legacy Supabase schemas", async () => {
+  const originalFetch = global.fetch;
+  const originalEnv = {
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY: process.env.SUPABASE_PUBLISHABLE_KEY,
+    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
+  };
+
+  process.env.SUPABASE_URL = "https://example.supabase.co";
+  process.env.SUPABASE_PUBLISHABLE_KEY = "public-key";
+  delete process.env.SUPABASE_ANON_KEY;
+
+  const fetchCalls = [];
+  global.fetch = async (url) => {
+    fetchCalls.push(decodeURIComponent(String(url)));
+    if (fetchCalls.length === 1) {
+      return {
+        ok: false,
+        status: 400,
+        async text() {
+          return JSON.stringify({
+            code: "PGRST204",
+            details: "Could not find the 'semantic_identifier' column of 'ingestion_data' in the schema cache",
+          });
+        },
+      };
+    }
+
+    return {
+      ok: true,
+      status: 200,
+      async text() {
+        return JSON.stringify([]);
+      },
+      async json() {
+        return [
+          {
+            module: "gp",
+            metric_key: "gp_total_gp_sponsors",
+            label: "Total GP Sponsors (PPC)",
+            value_display: "6",
+          },
+        ];
+      },
+    };
+  };
+
+  const response = {
+    headers: {},
+    statusCode: 200,
+    body: "",
+    setHeader(name, value) {
+      this.headers[name] = value;
+    },
+    end(payload) {
+      this.body = payload;
+    },
+  };
+
+  try {
+    await metricsHandler(
+      {
+        method: "GET",
+        query: {
+          module: "gp",
+        },
+      },
+      response,
+    );
+  } finally {
+    global.fetch = originalFetch;
+    process.env.SUPABASE_URL = originalEnv.SUPABASE_URL;
+    process.env.SUPABASE_PUBLISHABLE_KEY = originalEnv.SUPABASE_PUBLISHABLE_KEY;
+    process.env.SUPABASE_ANON_KEY = originalEnv.SUPABASE_ANON_KEY;
+  }
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(fetchCalls.length, 2);
+  assert.match(fetchCalls[0], /semantic_identifier/);
+  assert.doesNotMatch(fetchCalls[1], /semantic_identifier/);
+
+  const payload = JSON.parse(response.body);
+  assert.equal(payload.data[0].semantic_identifier, null);
 });

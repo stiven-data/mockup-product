@@ -4,6 +4,8 @@
   const CONFIG_PATH = "/api/public-config";
   const DEFAULT_SELECT =
     "id,module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
+  const LEGACY_SELECT =
+    "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
   const MAX_LIMIT = 5000;
   const RUNTIME_VERSION = "2026-04-24-2";
   const MODULES = ["mortgage", "insurance", "taxes", "gp"];
@@ -265,9 +267,9 @@
     };
   }
 
-  function buildSupabaseReadUrl(baseUrl, query) {
+  function buildSupabaseReadUrl(baseUrl, query, options = {}) {
     const url = new URL("/rest/v1/ingestion_data", baseUrl);
-    url.searchParams.set("select", DEFAULT_SELECT);
+    url.searchParams.set("select", options.select || DEFAULT_SELECT);
     url.searchParams.set("order", "metric_key.asc");
     url.searchParams.set("limit", String(Math.min(Math.max(query.limit || 500, 1), MAX_LIMIT)));
 
@@ -288,6 +290,41 @@
     url.searchParams.set("metric_key", `eq.${metricKey}`);
     url.searchParams.set("select", DEFAULT_SELECT);
     return url.toString();
+  }
+
+  function isMissingSemanticIdentifierError(error) {
+    return (
+      error?.status === 400 &&
+      /semantic_identifier/i.test(String(error?.message || "")) &&
+      /(column|schema cache|PGRST204)/i.test(String(error?.message || ""))
+    );
+  }
+
+  function normalizeMetricRows(rows) {
+    return (Array.isArray(rows) ? rows : []).map((row) => ({
+      semantic_identifier: row?.semantic_identifier ?? null,
+      ...row,
+    }));
+  }
+
+  async function fetchSupabaseRows(query) {
+    const config = await getDirectReadConfig();
+
+    try {
+      const payload = await fetchJson(
+        buildSupabaseReadUrl(config.url, query),
+        { headers: buildSupabaseHeaders(config.key) },
+      );
+      return normalizeMetricRows(Array.isArray(payload) ? payload : []);
+    } catch (error) {
+      if (!isMissingSemanticIdentifierError(error)) throw error;
+
+      const payload = await fetchJson(
+        buildSupabaseReadUrl(config.url, query, { select: LEGACY_SELECT }),
+        { headers: buildSupabaseHeaders(config.key) },
+      );
+      return normalizeMetricRows(Array.isArray(payload) ? payload : []);
+    }
   }
 
   async function getPublicConfig() {
@@ -349,12 +386,7 @@
         return Array.isArray(payload?.data) ? payload.data : [];
       },
       async () => {
-        const config = await getDirectReadConfig();
-        const payload = await fetchJson(
-          buildSupabaseReadUrl(config.url, { keys, module: "", limit: keys.length || BATCH_SIZE }),
-          { headers: buildSupabaseHeaders(config.key) },
-        );
-        return Array.isArray(payload) ? payload : [];
+        return fetchSupabaseRows({ keys, module: "", limit: keys.length || BATCH_SIZE });
       },
     );
   }
@@ -370,12 +402,7 @@
         return Array.isArray(payload?.data) ? payload.data : [];
       },
       async () => {
-        const config = await getDirectReadConfig();
-        const payload = await fetchJson(
-          buildSupabaseReadUrl(config.url, { keys: [], module, limit }),
-          { headers: buildSupabaseHeaders(config.key) },
-        );
-        return Array.isArray(payload) ? payload : [];
+        return fetchSupabaseRows({ keys: [], module, limit });
       },
     );
   }

@@ -1,5 +1,9 @@
 const {
+  DEFAULT_SELECT,
+  LEGACY_SELECT,
   buildSupabaseRestUrl,
+  isMissingSemanticIdentifierError,
+  normalizeMetricRows,
   parseMetricUpdatePayload,
   parseRequestQuery,
 } = require("./_lib/metrics.js");
@@ -41,6 +45,31 @@ function readJsonBody(req) {
   return {};
 }
 
+async function fetchMetricsRows(credentials, query) {
+  for (const select of [DEFAULT_SELECT, LEGACY_SELECT]) {
+    const endpoint = buildSupabaseRestUrl(credentials.url, query, { select });
+    const response = await fetch(endpoint, {
+      headers: {
+        apikey: credentials.key,
+        authorization: `Bearer ${credentials.key}`,
+      },
+    });
+
+    if (response.ok) {
+      return normalizeMetricRows(await response.json());
+    }
+
+    const details = await response.text();
+    if (select === DEFAULT_SELECT && isMissingSemanticIdentifierError(response.status, details)) {
+      continue;
+    }
+
+    throw new Error(`Supabase request failed (${response.status}): ${details}`);
+  }
+
+  return [];
+}
+
 module.exports = async (req, res) => {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.setHeader("Cache-Control", "no-store");
@@ -65,20 +94,7 @@ module.exports = async (req, res) => {
     }
 
     try {
-      const endpoint = buildSupabaseRestUrl(credentials.url, query);
-      const response = await fetch(endpoint, {
-        headers: {
-          apikey: credentials.key,
-          authorization: `Bearer ${credentials.key}`,
-        },
-      });
-
-      if (!response.ok) {
-        const details = await response.text();
-        throw new Error(`Supabase request failed (${response.status}): ${details}`);
-      }
-
-      const data = await response.json();
+      const data = await fetchMetricsRows(credentials, query);
       res.statusCode = 200;
       res.end(JSON.stringify({ data }));
     } catch (error) {

@@ -2,6 +2,8 @@ const DEFAULT_LIMIT = 500;
 const MAX_LIMIT = 5000;
 const DEFAULT_SELECT =
   "id,module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
+const LEGACY_SELECT =
+  "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
 const TEXT_ARTIFACT_REPLACEMENTS = [
   [/KÃ¢â‚¬â€˜1/g, "K-1"],
   [/Kâ€‘1/g, "K-1"],
@@ -32,9 +34,9 @@ function parseRequestQuery(query = {}) {
   return { keys, module, limit };
 }
 
-function buildSupabaseRestUrl(baseUrl, query) {
+function buildSupabaseRestUrl(baseUrl, query, options = {}) {
   const url = new URL("/rest/v1/ingestion_data", baseUrl);
-  url.searchParams.set("select", DEFAULT_SELECT);
+  url.searchParams.set("select", options.select || DEFAULT_SELECT);
   url.searchParams.set("order", "metric_key.asc");
   url.searchParams.set("limit", String(query.limit || DEFAULT_LIMIT));
 
@@ -48,6 +50,21 @@ function buildSupabaseRestUrl(baseUrl, query) {
   }
 
   return url.toString();
+}
+
+function isMissingSemanticIdentifierError(status, details = "") {
+  return (
+    status === 400 &&
+    /semantic_identifier/i.test(String(details)) &&
+    /(column|schema cache|PGRST204)/i.test(String(details))
+  );
+}
+
+function normalizeMetricRows(rows) {
+  return (Array.isArray(rows) ? rows : []).map((row) => ({
+    semantic_identifier: row?.semantic_identifier ?? null,
+    ...row,
+  }));
 }
 
 function buildSourceTrace(row) {
@@ -101,8 +118,12 @@ function parseMetricUpdatePayload(body = {}) {
 }
 
 module.exports = {
+  DEFAULT_SELECT,
+  LEGACY_SELECT,
   buildSourceTrace,
   buildSupabaseRestUrl,
+  isMissingSemanticIdentifierError,
+  normalizeMetricRows,
   parseMetricUpdatePayload,
   parseRequestQuery,
 };
