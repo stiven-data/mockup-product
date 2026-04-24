@@ -1,275 +1,275 @@
-module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context
-taxes,taxes_modules_taxes_views_index_001,,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_002,,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
-taxes,taxes_modules_taxes_views_index_003,,"$7,348.50",7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50"
-taxes,taxes_modules_taxes_views_index_004,,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
-taxes,taxes_modules_taxes_views_index_005,,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
-taxes,taxes_modules_taxes_views_index_006,,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
-taxes,taxes_modules_taxes_views_index_007,,"$14,195.78",14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78"
-taxes,taxes_modules_taxes_views_index_008,,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_009,,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_010,,"$7,348.50",7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50"
-taxes,taxes_modules_taxes_views_index_011,,4%,4,4%,percent,,modules/taxes/views/index.html,4%
-taxes,taxes_modules_taxes_views_index_012,,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
-taxes,taxes_modules_taxes_views_index_013,,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
-taxes,taxes_modules_taxes_views_index_014,,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_015,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_016,,"$165,586.99",165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99"
-taxes,taxes_modules_taxes_views_index_017,,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
-taxes,taxes_modules_taxes_views_index_018,,4%,4,4%,percent,,modules/taxes/views/index.html,4%
-taxes,taxes_modules_taxes_views_index_019,,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
-taxes,taxes_modules_taxes_views_index_020,,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
-taxes,taxes_modules_taxes_views_index_021,,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_022,,"$160,038.24",160038.24,"$160,038.24",currency,USD,modules/taxes/views/index.html,"$160,038.24"
-taxes,taxes_modules_taxes_views_index_023,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_024,,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
-taxes,taxes_modules_taxes_views_index_025,,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_026,,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_027,,"$162,207.79",162207.79,"$162,207.79",currency,USD,modules/taxes/views/index.html,"$162,207.79"
-taxes,taxes_modules_taxes_views_index_028,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_029,,"$165,586.99",165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99"
-taxes,taxes_modules_taxes_views_index_030,,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_031,,"$152,574.32",152574.32,"$152,574.32",currency,USD,modules/taxes/views/index.html,"$152,574.32"
-taxes,taxes_modules_taxes_views_index_032,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_033,,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
-taxes,taxes_modules_taxes_views_index_034,,4%,4,4%,percent,,modules/taxes/views/index.html,4%
-taxes,taxes_modules_taxes_views_index_035,,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
-taxes,taxes_modules_taxes_views_index_036,,"$8,780,000",8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000"
-taxes,taxes_modules_taxes_views_index_037,,"$162,360.37",162360.37,"$162,360.37",currency,USD,modules/taxes/views/index.html,"$162,360.37"
-taxes,taxes_modules_taxes_views_index_038,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_039,,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
-taxes,taxes_modules_taxes_views_index_040,,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
-taxes,taxes_modules_taxes_views_index_041,,"$543,000",543000,"$543,000",currency,USD,modules/taxes/views/index.html,"$543,000"
-taxes,taxes_modules_taxes_views_index_042,,"$7,348.50",7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50"
-taxes,taxes_modules_taxes_views_index_043,,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
-taxes,taxes_modules_taxes_views_index_044,,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
-taxes,taxes_modules_taxes_views_index_045,,"$8,231,200",8231200,"$8,231,200",currency,USD,modules/taxes/views/index.html,"$8,231,200"
-taxes,taxes_modules_taxes_views_index_046,,"$146,584.71",146584.71,"$146,584.71",currency,USD,modules/taxes/views/index.html,"$146,584.71"
-taxes,taxes_modules_taxes_views_index_047,,"$3,211.10",3211.1,"$3,211.10",currency,USD,modules/taxes/views/index.html,"$3,211.10"
-taxes,taxes_modules_taxes_views_index_048,,"$149,795.81",149795.81,"$149,795.81",currency,USD,modules/taxes/views/index.html,"$149,795.81"
-taxes,taxes_modules_taxes_views_index_049,,"$8,621,400",8621400,"$8,621,400",currency,USD,modules/taxes/views/index.html,"$8,621,400"
-taxes,taxes_modules_taxes_views_index_050,,"$153,499.83",153499.83,"$153,499.83",currency,USD,modules/taxes/views/index.html,"$153,499.83"
-taxes,taxes_modules_taxes_views_index_051,,"$3,287.42",3287.42,"$3,287.42",currency,USD,modules/taxes/views/index.html,"$3,287.42"
-taxes,taxes_modules_taxes_views_index_052,,"$156,787.25",156787.25,"$156,787.25",currency,USD,modules/taxes/views/index.html,"$156,787.25"
-taxes,taxes_modules_taxes_views_index_053,,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_054,,"$160,038.24",160038.24,"$160,038.24",currency,USD,modules/taxes/views/index.html,"$160,038.24"
-taxes,taxes_modules_taxes_views_index_055,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_056,,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
-taxes,taxes_modules_taxes_views_index_057,,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_058,,"$152,574.32",152574.32,"$152,574.32",currency,USD,modules/taxes/views/index.html,"$152,574.32"
-taxes,taxes_modules_taxes_views_index_059,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_060,,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
-taxes,taxes_modules_taxes_views_index_061,,"$8,780,000",8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000"
-taxes,taxes_modules_taxes_views_index_062,,"$162,360.37",162360.37,"$162,360.37",currency,USD,modules/taxes/views/index.html,"$162,360.37"
-taxes,taxes_modules_taxes_views_index_063,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_064,,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
-taxes,taxes_modules_taxes_views_index_065,,"$18,441.98",18441.98,"$18,441.98",currency,USD,modules/taxes/views/index.html,"$18,441.98"
-taxes,taxes_modules_taxes_views_index_066,,"$29,205.09",29205.09,"$29,205.09",currency,USD,modules/taxes/views/index.html,"$29,205.09"
-taxes,taxes_modules_taxes_views_index_067,,"$17,461.82",17461.82,"$17,461.82",currency,USD,modules/taxes/views/index.html,"$17,461.82"
-taxes,taxes_modules_taxes_views_index_068,,$640.72,640.72,$640.72,currency,USD,modules/taxes/views/index.html,$640.72
-taxes,taxes_modules_taxes_views_index_069,,"$19,636.41",19636.41,"$19,636.41",currency,USD,modules/taxes/views/index.html,"$19,636.41"
-taxes,taxes_modules_taxes_views_index_070,,"$1,284.46",1284.46,"$1,284.46",currency,USD,modules/taxes/views/index.html,"$1,284.46"
-taxes,taxes_modules_taxes_views_index_071,,$299.84,299.84,$299.84,currency,USD,modules/taxes/views/index.html,$299.84
-taxes,taxes_modules_taxes_views_index_072,,"$146,220.45",146220.45,"$146,220.45",currency,USD,modules/taxes/views/index.html,"$146,220.45"
-taxes,taxes_modules_taxes_views_index_073,,"$58,118.24",58118.24,"$58,118.24",currency,USD,modules/taxes/views/index.html,"$58,118.24"
-taxes,taxes_modules_taxes_views_index_074,,"$25,000.00",25000,"$25,000.00",currency,USD,modules/taxes/views/index.html,"$25,000.00"
-taxes,taxes_modules_taxes_views_index_075,,"$33,118.24",33118.24,"$33,118.24",currency,USD,modules/taxes/views/index.html,"$33,118.24"
-taxes,taxes_modules_taxes_views_index_076,,"$14,892.34",14892.34,"$14,892.34",currency,USD,modules/taxes/views/index.html,"$14,892.34"
-taxes,taxes_modules_taxes_views_index_077,,"$6,417.11",6417.11,"$6,417.11",currency,USD,modules/taxes/views/index.html,"$6,417.11"
-taxes,taxes_modules_taxes_views_index_078,,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
-taxes,taxes_modules_taxes_views_index_079,,"$6,417.11",6417.11,"$6,417.11",currency,USD,modules/taxes/views/index.html,"$6,417.11"
-taxes,taxes_modules_taxes_views_index_080,,"$29,581.87",29581.87,"$29,581.87",currency,USD,modules/taxes/views/index.html,"$29,581.87"
-taxes,taxes_modules_taxes_views_index_081,,"$12,778.67",12778.67,"$12,778.67",currency,USD,modules/taxes/views/index.html,"$12,778.67"
-taxes,taxes_modules_taxes_views_index_082,,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
-taxes,taxes_modules_taxes_views_index_083,,"$12,778.67",12778.67,"$12,778.67",currency,USD,modules/taxes/views/index.html,"$12,778.67"
-taxes,taxes_modules_taxes_views_index_084,,"$4,220.15",4220.15,"$4,220.15",currency,USD,modules/taxes/views/index.html,"$4,220.15"
-taxes,taxes_modules_taxes_views_index_085,,"$1,881.76",1881.76,"$1,881.76",currency,USD,modules/taxes/views/index.html,"$1,881.76"
-taxes,taxes_modules_taxes_views_index_086,,$0.00,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00
-taxes,taxes_modules_taxes_views_index_087,,"$1,881.76",1881.76,"$1,881.76",currency,USD,modules/taxes/views/index.html,"$1,881.76"
-taxes,taxes_modules_taxes_views_index_088,,"$194,914.81",194914.81,"$194,914.81",currency,USD,modules/taxes/views/index.html,"$194,914.81"
-taxes,taxes_modules_taxes_views_index_089,,"$79,195.78",79195.78,"$79,195.78",currency,USD,modules/taxes/views/index.html,"$79,195.78"
-taxes,taxes_modules_taxes_views_index_090,,"$25,000.00",25000,"$25,000.00",currency,USD,modules/taxes/views/index.html,"$25,000.00"
-taxes,taxes_modules_taxes_views_index_091,,"$14,195.78",14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78"
-taxes,taxes_modules_taxes_views_index_092,,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_093,,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_094,,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_095,,"$8,780,000",8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000"
-taxes,taxes_modules_taxes_views_index_096,,"$8,958,200",8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200"
-taxes,taxes_modules_taxes_views_index_097,,"$9,143,000",9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000"
-taxes,taxes_modules_taxes_views_index_098,,"$8,600,000",8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000"
-taxes,taxes_modules_taxes_views_index_099,,"$8,780,000",8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000"
-taxes,taxes_modules_taxes_views_index_100,,"$12,918.42",12918.42,"$12,918.42",currency,USD,modules/taxes/views/index.html,"$12,918.42"
-taxes,taxes_modules_taxes_views_index_101,,"$13,604.27",13604.27,"$13,604.27",currency,USD,modules/taxes/views/index.html,"$13,604.27"
-taxes,taxes_modules_taxes_views_index_102,,"$14,195.78",14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78"
-taxes,taxes_modules_taxes_views_index_103,,"$14,195.78",14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78"
-taxes,taxes_modules_taxes_views_index_104,,"$47,195.12",47195.12,"$47,195.12",currency,USD,modules/taxes/views/index.html,"$47,195.12"
-taxes,taxes_modules_taxes_views_index_105,,"$48,964.88",48964.88,"$48,964.88",currency,USD,modules/taxes/views/index.html,"$48,964.88"
-taxes,taxes_modules_taxes_views_index_106,,"$44,052.79",44052.79,"$44,052.79",currency,USD,modules/taxes/views/index.html,"$44,052.79"
-taxes,taxes_modules_taxes_views_index_107,,"$46,729.16",46729.16,"$46,729.16",currency,USD,modules/taxes/views/index.html,"$46,729.16"
-taxes,taxes_modules_taxes_views_index_108,,"$17,823.76",17823.76,"$17,823.76",currency,USD,modules/taxes/views/index.html,"$17,823.76"
-taxes,taxes_modules_taxes_views_index_109,,"$18,191.38",18191.38,"$18,191.38",currency,USD,modules/taxes/views/index.html,"$18,191.38"
-taxes,taxes_modules_taxes_views_index_110,,"$17,461.82",17461.82,"$17,461.82",currency,USD,modules/taxes/views/index.html,"$17,461.82"
-taxes,taxes_modules_taxes_views_index_111,,"$17,826.05",17826.05,"$17,826.05",currency,USD,modules/taxes/views/index.html,"$17,826.05"
-taxes,taxes_modules_taxes_views_index_112,,"$95,019.36",95019.36,"$95,019.36",currency,USD,modules/taxes/views/index.html,"$95,019.36"
-taxes,taxes_modules_taxes_views_index_113,,"$95,051.53",95051.53,"$95,051.53",currency,USD,modules/taxes/views/index.html,"$95,051.53"
-taxes,taxes_modules_taxes_views_index_114,,"$91,059.71",91059.71,"$91,059.71",currency,USD,modules/taxes/views/index.html,"$91,059.71"
-taxes,taxes_modules_taxes_views_index_115,,"$97,805.16",97805.16,"$97,805.16",currency,USD,modules/taxes/views/index.html,"$97,805.16"
-taxes,taxes_modules_taxes_views_index_116,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_117,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_118,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_119,,"$3,379.20",3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20"
-taxes,taxes_modules_taxes_views_index_120,,"$163,417.44",163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44"
-taxes,taxes_modules_taxes_views_index_121,,"$165,586.99",165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99"
-taxes,taxes_modules_taxes_views_index_122,,"$155,953.52",155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52"
-taxes,taxes_modules_taxes_views_index_123,,"$165,739.57",165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57"
-taxes,taxes_modules_taxes_views_index_124,,4%,4,4%,percent,,modules/taxes/views/index.html,4%
-taxes,taxes_modules_taxes_views_index_125,,"$6,238.14",6238.14,"$6,238.14",currency,USD,modules/taxes/views/index.html,"$6,238.14"
-taxes,taxes_modules_taxes_views_index_126,,"$6,629.58",6629.58,"$6,629.58",currency,USD,modules/taxes/views/index.html,"$6,629.58"
-taxes,taxes_modules_taxes_views_index_127,,"$149,715.38",149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38"
-taxes,taxes_modules_taxes_views_index_128,,"$159,109.98",159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_001,,"$99,619",99619,"$99,619",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$99,619"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_002,,"$209,799",209799,"$209,799",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$209,799"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_003,,"$10,486",10486,"$10,486",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$10,486"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_004,,"$15,216,508",15216508,"$15,216,508",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,216,508"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_005,,"$13,542,295",13542295,"$13,542,295",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$13,542,295"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_006,,"$40,144",40144,"$40,144",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$40,144"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_007,,"$15,275.20",15275.2,"$15,275.20",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,275.20"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_008,,"$15,275",15275,"$15,275",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,275"
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_009,,"$13,230",13230,"$13,230",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$13,230"
-gp,gp_modules_gp_views_gp_mockups_001,,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
-gp,gp_modules_gp_views_gp_mockups_002,,"$2,530,000",2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000"
-gp,gp_modules_gp_views_gp_mockups_003,,GP,35,35%,percent,,modules/Gp/views/gp mockups.html,35% GP
-gp,gp_modules_gp_views_gp_mockups_004,,LP share,65,65%,percent,,modules/Gp/views/gp mockups.html,LP share: 65%
-gp,gp_modules_gp_views_gp_mockups_005,,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
-gp,gp_modules_gp_views_gp_mockups_006,,"$3,517,500",3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500"
-gp,gp_modules_gp_views_gp_mockups_007,,"$2,530,000",2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000"
-gp,gp_modules_gp_views_gp_mockups_008,,35%,35,35%,percent,,modules/Gp/views/gp mockups.html,35%
-gp,gp_modules_gp_views_gp_mockups_009,,65%,65,65%,percent,,modules/Gp/views/gp mockups.html,65%
-gp,gp_modules_gp_views_gp_mockups_010,,"$400,000",400000,"$400,000",currency,USD,modules/Gp/views/gp mockups.html,"$400,000"
-gp,gp_modules_gp_views_gp_mockups_011,,2.3150%,2.315,2.3150%,percent,,modules/Gp/views/gp mockups.html,2.3150%
-gp,gp_modules_gp_views_gp_mockups_012,,"$6,528",6528,"$6,528",currency,USD,modules/Gp/views/gp mockups.html,"$6,528"
-gp,gp_modules_gp_views_gp_mockups_013,,"$660,000",660000,"$660,000",currency,USD,modules/Gp/views/gp mockups.html,"$660,000"
-gp,gp_modules_gp_views_gp_mockups_014,,3.8198%,3.8198,3.8198%,percent,,modules/Gp/views/gp mockups.html,3.8198%
-gp,gp_modules_gp_views_gp_mockups_015,,"$10,772",10772,"$10,772",currency,USD,modules/Gp/views/gp mockups.html,"$10,772"
-gp,gp_modules_gp_views_gp_mockups_016,,"$350,000",350000,"$350,000",currency,USD,modules/Gp/views/gp mockups.html,"$350,000"
-gp,gp_modules_gp_views_gp_mockups_017,,2.0256%,2.0256,2.0256%,percent,,modules/Gp/views/gp mockups.html,2.0256%
-gp,gp_modules_gp_views_gp_mockups_018,,"$5,712",5712,"$5,712",currency,USD,modules/Gp/views/gp mockups.html,"$5,712"
-gp,gp_modules_gp_views_gp_mockups_019,,"$410,000",410000,"$410,000",currency,USD,modules/Gp/views/gp mockups.html,"$410,000"
-gp,gp_modules_gp_views_gp_mockups_020,,2.3729%,2.3729,2.3729%,percent,,modules/Gp/views/gp mockups.html,2.3729%
-gp,gp_modules_gp_views_gp_mockups_021,,"$6,692",6692,"$6,692",currency,USD,modules/Gp/views/gp mockups.html,"$6,692"
-gp,gp_modules_gp_views_gp_mockups_022,,"$460,000",460000,"$460,000",currency,USD,modules/Gp/views/gp mockups.html,"$460,000"
-gp,gp_modules_gp_views_gp_mockups_023,,2.6623%,2.6623,2.6623%,percent,,modules/Gp/views/gp mockups.html,2.6623%
-gp,gp_modules_gp_views_gp_mockups_024,,"$7,508",7508,"$7,508",currency,USD,modules/Gp/views/gp mockups.html,"$7,508"
-gp,gp_modules_gp_views_gp_mockups_025,,"$250,000",250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000"
-gp,gp_modules_gp_views_gp_mockups_026,,1.4469%,1.4469,1.4469%,percent,,modules/Gp/views/gp mockups.html,1.4469%
-gp,gp_modules_gp_views_gp_mockups_027,,"$4,080",4080,"$4,080",currency,USD,modules/Gp/views/gp mockups.html,"$4,080"
-gp,gp_modules_gp_views_gp_mockups_028,,"$2,530,000",2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000"
-gp,gp_modules_gp_views_gp_mockups_029,,14.6425%,14.6425,14.6425%,percent,,modules/Gp/views/gp mockups.html,14.6425%
-gp,gp_modules_gp_views_gp_mockups_030,,"$3,517,500",3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500"
-gp,gp_modules_gp_views_gp_mockups_031,,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
-gp,gp_modules_gp_views_gp_mockups_032,,"$150,000",150000,"$150,000",currency,USD,modules/Gp/views/gp mockups.html,"$150,000"
-gp,gp_modules_gp_views_gp_mockups_033,,2.48%,2.48,2.48%,percent,,modules/Gp/views/gp mockups.html,2.48%
-gp,gp_modules_gp_views_gp_mockups_034,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_035,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_036,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_037,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_038,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_039,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_040,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_041,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_042,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_043,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_044,,"$60,000",60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000"
-gp,gp_modules_gp_views_gp_mockups_045,,0.99%,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%
-gp,gp_modules_gp_views_gp_mockups_046,,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_047,,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_048,,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_049,,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_050,,"$250,000",250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000"
-gp,gp_modules_gp_views_gp_mockups_051,,4.13%,4.13,4.13%,percent,,modules/Gp/views/gp mockups.html,4.13%
-gp,gp_modules_gp_views_gp_mockups_052,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_053,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_054,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_055,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_056,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_057,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_058,,"$250,000",250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000"
-gp,gp_modules_gp_views_gp_mockups_059,,4.13%,4.13,4.13%,percent,,modules/Gp/views/gp mockups.html,4.13%
-gp,gp_modules_gp_views_gp_mockups_060,,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_061,,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_062,,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_063,,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_064,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_065,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_066,,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_067,,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_068,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_069,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_070,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_071,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_072,,"$60,000",60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000"
-gp,gp_modules_gp_views_gp_mockups_073,,0.99%,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%
-gp,gp_modules_gp_views_gp_mockups_074,,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_075,,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_076,,"$100,000",100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000"
-gp,gp_modules_gp_views_gp_mockups_077,,1.65%,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%
-gp,gp_modules_gp_views_gp_mockups_078,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_079,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_080,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_081,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_082,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_083,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_084,,"$50,000",50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000"
-gp,gp_modules_gp_views_gp_mockups_085,,0.83%,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%
-gp,gp_modules_gp_views_gp_mockups_086,,"$60,000",60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000"
-gp,gp_modules_gp_views_gp_mockups_087,,0.99%,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%
-gp,gp_modules_gp_views_gp_mockups_088,,"$150,000",150000,"$150,000",currency,USD,modules/Gp/views/gp mockups.html,"$150,000"
-gp,gp_modules_gp_views_gp_mockups_089,,2.48%,2.48,2.48%,percent,,modules/Gp/views/gp mockups.html,2.48%
-gp,gp_modules_gp_views_gp_mockups_090,,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
-gp,gp_modules_gp_views_gp_mockups_091,,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
-gp,gp_modules_gp_views_gp_mockups_092,,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
-gp,gp_modules_gp_views_gp_mockups_093,,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
-gp,gp_modules_gp_views_gp_mockups_094,,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
-gp,gp_modules_gp_views_gp_mockups_095,,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
-gp,gp_modules_gp_views_gp_mockups_096,,"$25,000",25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000"
-gp,gp_modules_gp_views_gp_mockups_097,,0.41%,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%
-gp,gp_modules_gp_views_gp_mockups_098,,Mgr Entity,32.88,32.88%,percent,,modules/Gp/views/gp mockups.html,32.88% Mgr Entity
-gp,gp_modules_gp_views_gp_mockups_099,,of Manager Entity (RED RAIDER 45 MGR LLC) per 2024 K-1,32.88,32.88%,percent,,modules/Gp/views/gp mockups.html,32.88% of Manager Entity (RED RAIDER 45 MGR LLC) per 2024 K-1
-gp,gp_modules_gp_views_gp_mockups_100,,Mgr Entity,4.92,4.92%,percent,,modules/Gp/views/gp mockups.html,4.92% Mgr Entity
-gp,gp_modules_gp_views_gp_mockups_101,,of Manager Entity; linked to Bhavin Parikh via EIN notice,4.92,4.92%,percent,,modules/Gp/views/gp mockups.html,4.92% of Manager Entity; linked to Bhavin Parikh via EIN notice
-gp,gp_modules_gp_views_gp_mockups_102,,Mgr Entity,10,10.00%,percent,,modules/Gp/views/gp mockups.html,10.00% Mgr Entity
-gp,gp_modules_gp_views_gp_mockups_103,,of Manager Entity per 2024 K-1,10,10.00%,percent,,modules/Gp/views/gp mockups.html,10.00% of Manager Entity per 2024 K-1
-gp,gp_modules_gp_views_gp_mockups_104,,Mgr Entity,41.37,41.37%,percent,,modules/Gp/views/gp mockups.html,41.37% Mgr Entity
-gp,gp_modules_gp_views_gp_mockups_105,,of Manager Entity; also holds 12.41% GP project interest per Side Letter,41.37,41.37%,percent,,modules/Gp/views/gp mockups.html,41.37% of Manager Entity; also holds 12.41% GP project interest per Side Letter
-gp,gp_modules_gp_views_gp_mockups_106,,41.37% of Manager Entity; also holds GP project interest per Side Letter,12.41,12.41%,percent,,modules/Gp/views/gp mockups.html,41.37% of Manager Entity; also holds 12.41% GP project interest per Side Letter
-gp,gp_modules_gp_views_gp_mockups_107,,Mgr Entity,2.03,2.03%,percent,,modules/Gp/views/gp mockups.html,2.03% Mgr Entity
-gp,gp_modules_gp_views_gp_mockups_108,,of Manager Entity per 2024 K-1,2.03,2.03%,percent,,modules/Gp/views/gp mockups.html,2.03% of Manager Entity per 2024 K-1
-gp,gp_modules_gp_views_gp_mockups_109,,"$3,517,500",3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500"
-gp,gp_modules_gp_views_gp_mockups_110,,58.16%,58.16,58.16%,percent,,modules/Gp/views/gp mockups.html,58.16%
-gp,gp_modules_gp_views_gp_mockups_111,,"$6,047,500",6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500"
-gp,gp_modules_gp_views_gp_mockups_112,,100.00%,100,100.00%,percent,,modules/Gp/views/gp mockups.html,100.00%
-mortgage,mortgage_principal_balance,mortgage.principal_balance,Principal Balance,10853176.39,"$10,853,176.39",currency,USD,modules/mortgage/views/current-debt-data.js,Principal Balance
-mortgage,mortgage_interest_rate,mortgage.interest_rate,Interest Rate,8.5,8.50%,percent,,modules/mortgage/views/current-debt-data.js,Interest Rate
-mortgage,mortgage_escrow_amount,mortgage.escrow_amount,Escrow Amount,32719,"$32,719.00 / mo (taxes + insurance impound)",currency,USD,modules/mortgage/views/current-debt-data.js,Escrow Amount
-mortgage,mortgage_monthly_payment_io_only,mortgage.monthly_payment_io_only,Monthly Payment IO Only,79439.22,"$79,439.22",currency,USD,modules/mortgage/views/current-debt-data.js,Monthly Payment IO Only
-mortgage,mortgage_monthly_payment_with_escrow,mortgage.monthly_payment_with_escrow,Monthly Payment With Escrow,112158.22,"$112,158.22",currency,USD,modules/mortgage/views/current-debt-data.js,Monthly Payment With Escrow
-mortgage,mortgage_current_interest_due,mortgage.current_interest_due,Current Interest Due,79439.22,"$79,439.22",currency,USD,modules/mortgage/views/current-debt-data.js,Current Interest Due
-mortgage,mortgage_current_tax_due,mortgage.current_tax_due,Current Tax Due,14572.46,"$14,572.46",currency,USD,modules/mortgage/views/current-debt-data.js,Current Tax Due
-mortgage,mortgage_current_insurance_due,mortgage.current_insurance_due,Current Insurance Due,18146.54,"$18,146.54",currency,USD,modules/mortgage/views/current-debt-data.js,Current Insurance Due
-mortgage,mortgage_total_due,mortgage.total_due,Total Due,112158.22,"$112,158.22",currency,USD,modules/mortgage/views/current-debt-data.js,Total Due
-mortgage,mortgage_ending_escrow_balance,mortgage.ending_escrow_balance,Ending Escrow Balance,281922.98,"$281,922.98",currency,USD,modules/mortgage/views/current-debt-data.js,Ending Escrow Balance
-gp,gp_total_gp_sponsors,gp.total_gp_sponsors,Total GP Sponsors (PPC),6,6,number,,modules/Gp/views/gp mockups.html,Total GP Sponsors (PPC)
-gp,gp_k1_partners_in_manager_entity,gp.k1_partners_in_manager_entity,K-1 Partners in Manager Entity,8,8,number,,modules/Gp/views/gp mockups.html,K-1 Partners in Manager Entity
-gp,gp_source_k1_year,gp.source_k1_year,Source K-1 Year,2024,2024,number,,modules/Gp/views/gp mockups.html,Source K-1 Year
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010,insurance.monthly_expense.2025-03,Monthly Insurance Trend | Mar-25,16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Mar-Jul 2025
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011,insurance.monthly_expense.2025-04,Monthly Insurance Trend | Apr-25,16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Mar-Jul 2025
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012,insurance.monthly_expense.2025-05,Monthly Insurance Trend | May-25,16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Mar-Jul 2025
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013,insurance.monthly_expense.2025-06,Monthly Insurance Trend | Jun-25,16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Mar-Jul 2025
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014,insurance.monthly_expense.2025-07,Monthly Insurance Trend | Jul-25,16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Mar-Jul 2025
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015,insurance.monthly_expense.2025-08,Monthly Insurance Trend | Aug-25,20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Aug-Dec 2025
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016,insurance.monthly_expense.2025-09,Monthly Insurance Trend | Sep-25,20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Aug-Dec 2025
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017,insurance.monthly_expense.2025-10,Monthly Insurance Trend | Oct-25,20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Aug-Dec 2025
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018,insurance.monthly_expense.2025-11,Monthly Insurance Trend | Nov-25,20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Aug-Dec 2025
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019,insurance.monthly_expense.2025-12,Monthly Insurance Trend | Dec-25,20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Aug-Dec 2025
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020,insurance.monthly_expense.2026-01,Monthly Insurance Trend | Jan-26,8500,"$8,500.00",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Jan-Feb 2026
-insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021,insurance.monthly_expense.2026-02,Monthly Insurance Trend | Feb-26,8500,"$8,500.00",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Jan-Feb 2026
+module,metric_key,semantic_identifier,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context
+taxes,taxes_modules_taxes_views_index_001,,"$8,600,000",2025 Assessed Value After Appeal,2025 Assessed Value After Appeal,8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000",2025 Assessed Value After Appeal
+taxes,taxes_modules_taxes_views_index_002,,"$159,109.98",2026 Projected Net Payable,2026 Projected Net Payable,159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98",2026 Projected Net Payable
+taxes,taxes_modules_taxes_views_index_003,,"$7,348.50",Net Benefit To Owner,Net Benefit To Owner,7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50",Net Benefit To Owner
+taxes,taxes_modules_taxes_views_index_004,,"$149,715.38",2025 Net Payable,2025 Net Payable,149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38",2025 Net Payable
+taxes,taxes_modules_taxes_views_index_005,,"$155,953.52",2025 Gross Total,2025 Gross Total,155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52",2025 Gross Total
+taxes,taxes_modules_taxes_views_index_006,,"$165,739.57",2026 Gross Total,2026 Gross Total,165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57",2026 Gross Total
+taxes,taxes_modules_taxes_views_index_007,,"$14,195.78",Estimated Net Taxable TPP,Estimated Net Taxable TPP,14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78",Estimated Net Taxable TPP
+taxes,taxes_modules_taxes_views_index_008,,"$9,143,000",2025 Assessed Value Before Appeal,2025 Assessed Value Before Appeal,9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000",2025 Assessed Value Before Appeal
+taxes,taxes_modules_taxes_views_index_009,,"$8,600,000",2025 Assessed Value After Appeal,2025 Assessed Value After Appeal,8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000",2025 Assessed Value After Appeal
+taxes,taxes_modules_taxes_views_index_010,,"$7,348.50",Owner Benefit After Appeal Fees,Owner Benefit After Appeal Fees,7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50",Owner Benefit After Appeal Fees
+taxes,taxes_modules_taxes_views_index_011,,4%,Early Payment Discount,Early Payment Discount,4,4%,percent,,modules/taxes/views/index.html,4%,Early Payment Discount
+taxes,taxes_modules_taxes_views_index_012,,"$149,715.38",Net Payable After Early Payment Discount,Net Payable After Early Payment Discount,149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38",Net Payable After Early Payment Discount
+taxes,taxes_modules_taxes_views_index_013,,"$163,417.44",2024 Actual,2024 Actual,163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44",2024 Actual
+taxes,taxes_modules_taxes_views_index_014,,"$8,958,200",2024 Actual,2024 Actual,8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200",2024 Actual
+taxes,taxes_modules_taxes_views_index_015,,"$3,379.20",2024 Actual,2024 Actual,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",2024 Actual
+taxes,taxes_modules_taxes_views_index_016,,"$165,586.99",2025 Original,2025 Original,165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99",2025 Original
+taxes,taxes_modules_taxes_views_index_017,,"$155,953.52",2025 After Appeal,2025 After Appeal,155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52",2025 After Appeal
+taxes,taxes_modules_taxes_views_index_018,,4%,2025 After Appeal,2025 After Appeal,4,4%,percent,,modules/taxes/views/index.html,4%,2025 After Appeal
+taxes,taxes_modules_taxes_views_index_019,,"$165,739.57",2026 Projection,2026 Projection,165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57",2026 Projection
+taxes,taxes_modules_taxes_views_index_020,,"$159,109.98",2026 Projection,2026 Projection,159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98",2026 Projection
+taxes,taxes_modules_taxes_views_index_021,,"$8,958,200",2024 Historical actual | Taxable / Assessed Value,2024 Historical actual | Taxable / Assessed Value,8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200",2024 Historical actual | Taxable / Assessed Value
+taxes,taxes_modules_taxes_views_index_022,,"$160,038.24",2024 Historical actual | Ad Valorem,2024 Historical actual | Ad Valorem,160038.24,"$160,038.24",currency,USD,modules/taxes/views/index.html,"$160,038.24",2024 Historical actual | Ad Valorem
+taxes,taxes_modules_taxes_views_index_023,,"$3,379.20",2024 Historical actual | Non-Ad Valorem,2024 Historical actual | Non-Ad Valorem,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",2024 Historical actual | Non-Ad Valorem
+taxes,taxes_modules_taxes_views_index_024,,"$163,417.44",2024 Historical actual | Grand Total,2024 Historical actual | Grand Total,163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44",2024 Historical actual | Grand Total
+taxes,taxes_modules_taxes_views_index_025,,"$8,958,200",2024 Historical actual | Net Payable / Note,2024 Historical actual | Net Payable / Note,8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200",2024 Historical actual | Net Payable / Note
+taxes,taxes_modules_taxes_views_index_026,,"$9,143,000",2025 Original Pre-appeal | Taxable / Assessed Value,2025 Original Pre-appeal | Taxable / Assessed Value,9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000",2025 Original Pre-appeal | Taxable / Assessed Value
+taxes,taxes_modules_taxes_views_index_027,,"$162,207.79",2025 Original Pre-appeal | Ad Valorem,2025 Original Pre-appeal | Ad Valorem,162207.79,"$162,207.79",currency,USD,modules/taxes/views/index.html,"$162,207.79",2025 Original Pre-appeal | Ad Valorem
+taxes,taxes_modules_taxes_views_index_028,,"$3,379.20",2025 Original Pre-appeal | Non-Ad Valorem,2025 Original Pre-appeal | Non-Ad Valorem,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",2025 Original Pre-appeal | Non-Ad Valorem
+taxes,taxes_modules_taxes_views_index_029,,"$165,586.99",2025 Original Pre-appeal,2025 Original Pre-appeal,165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99",2025 Original Pre-appeal
+taxes,taxes_modules_taxes_views_index_030,,"$8,600,000",2025 After Appeal CBRE result,2025 After Appeal CBRE result,8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000",2025 After Appeal CBRE result
+taxes,taxes_modules_taxes_views_index_031,,"$152,574.32",2025 After Appeal CBRE result,2025 After Appeal CBRE result,152574.32,"$152,574.32",currency,USD,modules/taxes/views/index.html,"$152,574.32",2025 After Appeal CBRE result
+taxes,taxes_modules_taxes_views_index_032,,"$3,379.20",2025 After Appeal CBRE result,2025 After Appeal CBRE result,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",2025 After Appeal CBRE result
+taxes,taxes_modules_taxes_views_index_033,,"$155,953.52",2025 After Appeal CBRE result,2025 After Appeal CBRE result,155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52",2025 After Appeal CBRE result
+taxes,taxes_modules_taxes_views_index_034,,4%,2025 After Appeal CBRE result,2025 After Appeal CBRE result,4,4%,percent,,modules/taxes/views/index.html,4%,2025 After Appeal CBRE result
+taxes,taxes_modules_taxes_views_index_035,,"$149,715.38",2025 After Appeal CBRE result,2025 After Appeal CBRE result,149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38",2025 After Appeal CBRE result
+taxes,taxes_modules_taxes_views_index_036,,"$8,780,000",2026 Projected Projection model,2026 Projected Projection model,8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000",2026 Projected Projection model
+taxes,taxes_modules_taxes_views_index_037,,"$162,360.37",2026 Projected Projection model,2026 Projected Projection model,162360.37,"$162,360.37",currency,USD,modules/taxes/views/index.html,"$162,360.37",2026 Projected Projection model
+taxes,taxes_modules_taxes_views_index_038,,"$3,379.20",2026 Projected Projection model,2026 Projected Projection model,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",2026 Projected Projection model
+taxes,taxes_modules_taxes_views_index_039,,"$165,739.57",2026 Projected Projection model,2026 Projected Projection model,165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57",2026 Projected Projection model
+taxes,taxes_modules_taxes_views_index_040,,"$159,109.98",2026 Projected Projection model,2026 Projected Projection model,159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98",2026 Projected Projection model
+taxes,taxes_modules_taxes_views_index_041,,"$543,000",Assessed Value Reduction,Assessed Value Reduction,543000,"$543,000",currency,USD,modules/taxes/views/index.html,"$543,000",Assessed Value Reduction
+taxes,taxes_modules_taxes_views_index_042,,"$7,348.50",Net Benefit To Owner,Net Benefit To Owner,7348.5,"$7,348.50",currency,USD,modules/taxes/views/index.html,"$7,348.50",Net Benefit To Owner
+taxes,taxes_modules_taxes_views_index_043,,"$165,739.57",2026 Escrow View,2026 Escrow View,165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57",2026 Escrow View
+taxes,taxes_modules_taxes_views_index_044,,"$159,109.98",2026 Escrow View,2026 Escrow View,159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98",2026 Escrow View
+taxes,taxes_modules_taxes_views_index_045,,"$8,231,200",2022 | Assessed Value,2022 | Assessed Value,8231200,"$8,231,200",currency,USD,modules/taxes/views/index.html,"$8,231,200",2022 | Assessed Value
+taxes,taxes_modules_taxes_views_index_046,,"$146,584.71",2022 | Ad Valorem,2022 | Ad Valorem,146584.71,"$146,584.71",currency,USD,modules/taxes/views/index.html,"$146,584.71",2022 | Ad Valorem
+taxes,taxes_modules_taxes_views_index_047,,"$3,211.10",2022 | Non-Ad Valorem,2022 | Non-Ad Valorem,3211.1,"$3,211.10",currency,USD,modules/taxes/views/index.html,"$3,211.10",2022 | Non-Ad Valorem
+taxes,taxes_modules_taxes_views_index_048,,"$149,795.81",2022 | Grand Total,2022 | Grand Total,149795.81,"$149,795.81",currency,USD,modules/taxes/views/index.html,"$149,795.81",2022 | Grand Total
+taxes,taxes_modules_taxes_views_index_049,,"$8,621,400",2023 | Assessed Value,2023 | Assessed Value,8621400,"$8,621,400",currency,USD,modules/taxes/views/index.html,"$8,621,400",2023 | Assessed Value
+taxes,taxes_modules_taxes_views_index_050,,"$153,499.83",2023 | Ad Valorem,2023 | Ad Valorem,153499.83,"$153,499.83",currency,USD,modules/taxes/views/index.html,"$153,499.83",2023 | Ad Valorem
+taxes,taxes_modules_taxes_views_index_051,,"$3,287.42",2023 | Non-Ad Valorem,2023 | Non-Ad Valorem,3287.42,"$3,287.42",currency,USD,modules/taxes/views/index.html,"$3,287.42",2023 | Non-Ad Valorem
+taxes,taxes_modules_taxes_views_index_052,,"$156,787.25",2023 | Grand Total,2023 | Grand Total,156787.25,"$156,787.25",currency,USD,modules/taxes/views/index.html,"$156,787.25",2023 | Grand Total
+taxes,taxes_modules_taxes_views_index_053,,"$8,958,200",2024 | Assessed Value,2024 | Assessed Value,8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200",2024 | Assessed Value
+taxes,taxes_modules_taxes_views_index_054,,"$160,038.24",2024 | Ad Valorem,2024 | Ad Valorem,160038.24,"$160,038.24",currency,USD,modules/taxes/views/index.html,"$160,038.24",2024 | Ad Valorem
+taxes,taxes_modules_taxes_views_index_055,,"$3,379.20",2024 | Non-Ad Valorem,2024 | Non-Ad Valorem,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",2024 | Non-Ad Valorem
+taxes,taxes_modules_taxes_views_index_056,,"$163,417.44",2024 | Grand Total,2024 | Grand Total,163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44",2024 | Grand Total
+taxes,taxes_modules_taxes_views_index_057,,"$8,600,000",2025 After Appeal,2025 After Appeal,8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000",2025 After Appeal
+taxes,taxes_modules_taxes_views_index_058,,"$152,574.32",2025 After Appeal,2025 After Appeal,152574.32,"$152,574.32",currency,USD,modules/taxes/views/index.html,"$152,574.32",2025 After Appeal
+taxes,taxes_modules_taxes_views_index_059,,"$3,379.20",2025 After Appeal,2025 After Appeal,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",2025 After Appeal
+taxes,taxes_modules_taxes_views_index_060,,"$155,953.52",2025 After Appeal,2025 After Appeal,155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52",2025 After Appeal
+taxes,taxes_modules_taxes_views_index_061,,"$8,780,000",2026 Projection,2026 Projection,8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000",2026 Projection
+taxes,taxes_modules_taxes_views_index_062,,"$162,360.37",2026 Projection,2026 Projection,162360.37,"$162,360.37",currency,USD,modules/taxes/views/index.html,"$162,360.37",2026 Projection
+taxes,taxes_modules_taxes_views_index_063,,"$3,379.20",2026 Projection,2026 Projection,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",2026 Projection
+taxes,taxes_modules_taxes_views_index_064,,"$165,739.57",2026 Projection,2026 Projection,165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57",2026 Projection
+taxes,taxes_modules_taxes_views_index_065,,"$18,441.98",Duval County | Tax Amount,Duval County | Tax Amount,18441.98,"$18,441.98",currency,USD,modules/taxes/views/index.html,"$18,441.98",Duval County | Tax Amount
+taxes,taxes_modules_taxes_views_index_066,,"$29,205.09",City of Jacksonville | Tax Amount,City of Jacksonville | Tax Amount,29205.09,"$29,205.09",currency,USD,modules/taxes/views/index.html,"$29,205.09",City of Jacksonville | Tax Amount
+taxes,taxes_modules_taxes_views_index_067,,"$17,461.82",Duval County School Board | Tax Amount,Duval County School Board | Tax Amount,17461.82,"$17,461.82",currency,USD,modules/taxes/views/index.html,"$17,461.82",Duval County School Board | Tax Amount
+taxes,taxes_modules_taxes_views_index_068,,$640.72,St. Johns Water Management | Tax Amount,St. Johns Water Management | Tax Amount,640.72,$640.72,currency,USD,modules/taxes/views/index.html,$640.72,St. Johns Water Management | Tax Amount
+taxes,taxes_modules_taxes_views_index_069,,"$19,636.41",F.I.R.E. District | Tax Amount,F.I.R.E. District | Tax Amount,19636.41,"$19,636.41",currency,USD,modules/taxes/views/index.html,"$19,636.41",F.I.R.E. District | Tax Amount
+taxes,taxes_modules_taxes_views_index_070,,"$1,284.46",Jacksonville Children's Commission | Tax Amount,Jacksonville Children's Commission | Tax Amount,1284.46,"$1,284.46",currency,USD,modules/taxes/views/index.html,"$1,284.46",Jacksonville Children's Commission | Tax Amount
+taxes,taxes_modules_taxes_views_index_071,,$299.84,Mosquito Control,Mosquito Control,299.84,$299.84,currency,USD,modules/taxes/views/index.html,$299.84,Mosquito Control
+taxes,taxes_modules_taxes_views_index_072,,"$146,220.45","Furniture, Fixtures & Equipment | Original Cost","Furniture, Fixtures & Equipment | Original Cost",146220.45,"$146,220.45",currency,USD,modules/taxes/views/index.html,"$146,220.45","Furniture, Fixtures & Equipment | Original Cost"
+taxes,taxes_modules_taxes_views_index_073,,"$58,118.24","Furniture, Fixtures & Equipment | Depreciated Value","Furniture, Fixtures & Equipment | Depreciated Value",58118.24,"$58,118.24",currency,USD,modules/taxes/views/index.html,"$58,118.24","Furniture, Fixtures & Equipment | Depreciated Value"
+taxes,taxes_modules_taxes_views_index_074,,"$25,000.00","Furniture, Fixtures & Equipment | Exemption / Adjustment","Furniture, Fixtures & Equipment | Exemption / Adjustment",25000,"$25,000.00",currency,USD,modules/taxes/views/index.html,"$25,000.00","Furniture, Fixtures & Equipment | Exemption / Adjustment"
+taxes,taxes_modules_taxes_views_index_075,,"$33,118.24","Furniture, Fixtures & Equipment | Net Taxable","Furniture, Fixtures & Equipment | Net Taxable",33118.24,"$33,118.24",currency,USD,modules/taxes/views/index.html,"$33,118.24","Furniture, Fixtures & Equipment | Net Taxable"
+taxes,taxes_modules_taxes_views_index_076,,"$14,892.34",Leasing / Office Equipment | Original Cost,Leasing / Office Equipment | Original Cost,14892.34,"$14,892.34",currency,USD,modules/taxes/views/index.html,"$14,892.34",Leasing / Office Equipment | Original Cost
+taxes,taxes_modules_taxes_views_index_077,,"$6,417.11",Leasing / Office Equipment | Depreciated Value,Leasing / Office Equipment | Depreciated Value,6417.11,"$6,417.11",currency,USD,modules/taxes/views/index.html,"$6,417.11",Leasing / Office Equipment | Depreciated Value
+taxes,taxes_modules_taxes_views_index_078,,$0.00,Leasing / Office Equipment | Exemption / Adjustment,Leasing / Office Equipment | Exemption / Adjustment,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00,Leasing / Office Equipment | Exemption / Adjustment
+taxes,taxes_modules_taxes_views_index_079,,"$6,417.11",Leasing / Office Equipment | Net Taxable,Leasing / Office Equipment | Net Taxable,6417.11,"$6,417.11",currency,USD,modules/taxes/views/index.html,"$6,417.11",Leasing / Office Equipment | Net Taxable
+taxes,taxes_modules_taxes_views_index_080,,"$29,581.87",Maintenance Tools & Shop Assets | Original Cost,Maintenance Tools & Shop Assets | Original Cost,29581.87,"$29,581.87",currency,USD,modules/taxes/views/index.html,"$29,581.87",Maintenance Tools & Shop Assets | Original Cost
+taxes,taxes_modules_taxes_views_index_081,,"$12,778.67",Maintenance Tools & Shop Assets,Maintenance Tools & Shop Assets,12778.67,"$12,778.67",currency,USD,modules/taxes/views/index.html,"$12,778.67",Maintenance Tools & Shop Assets
+taxes,taxes_modules_taxes_views_index_082,,$0.00,Maintenance Tools & Shop Assets,Maintenance Tools & Shop Assets,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00,Maintenance Tools & Shop Assets
+taxes,taxes_modules_taxes_views_index_083,,"$12,778.67",Maintenance Tools & Shop Assets,Maintenance Tools & Shop Assets,12778.67,"$12,778.67",currency,USD,modules/taxes/views/index.html,"$12,778.67",Maintenance Tools & Shop Assets
+taxes,taxes_modules_taxes_views_index_084,,"$4,220.15",Signage / Miscellaneous,Signage / Miscellaneous,4220.15,"$4,220.15",currency,USD,modules/taxes/views/index.html,"$4,220.15",Signage / Miscellaneous
+taxes,taxes_modules_taxes_views_index_085,,"$1,881.76",Signage / Miscellaneous,Signage / Miscellaneous,1881.76,"$1,881.76",currency,USD,modules/taxes/views/index.html,"$1,881.76",Signage / Miscellaneous
+taxes,taxes_modules_taxes_views_index_086,,$0.00,Signage / Miscellaneous,Signage / Miscellaneous,0,$0.00,currency,USD,modules/taxes/views/index.html,$0.00,Signage / Miscellaneous
+taxes,taxes_modules_taxes_views_index_087,,"$1,881.76",Signage / Miscellaneous,Signage / Miscellaneous,1881.76,"$1,881.76",currency,USD,modules/taxes/views/index.html,"$1,881.76",Signage / Miscellaneous
+taxes,taxes_modules_taxes_views_index_088,,"$194,914.81",Estimated Net Taxable TPP,Estimated Net Taxable TPP,194914.81,"$194,914.81",currency,USD,modules/taxes/views/index.html,"$194,914.81",Estimated Net Taxable TPP
+taxes,taxes_modules_taxes_views_index_089,,"$79,195.78",Estimated Net Taxable TPP,Estimated Net Taxable TPP,79195.78,"$79,195.78",currency,USD,modules/taxes/views/index.html,"$79,195.78",Estimated Net Taxable TPP
+taxes,taxes_modules_taxes_views_index_090,,"$25,000.00",Estimated Net Taxable TPP,Estimated Net Taxable TPP,25000,"$25,000.00",currency,USD,modules/taxes/views/index.html,"$25,000.00",Estimated Net Taxable TPP
+taxes,taxes_modules_taxes_views_index_091,,"$14,195.78",Estimated Net Taxable TPP,Estimated Net Taxable TPP,14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78",Estimated Net Taxable TPP
+taxes,taxes_modules_taxes_views_index_092,,"$8,958,200",County / City Taxable Value | 2024,County / City Taxable Value | 2024,8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200",County / City Taxable Value | 2024
+taxes,taxes_modules_taxes_views_index_093,,"$9,143,000",County / City Taxable Value | 2025 Original,County / City Taxable Value | 2025 Original,9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000",County / City Taxable Value | 2025 Original
+taxes,taxes_modules_taxes_views_index_094,,"$8,600,000",County / City Taxable Value | 2025 After Appeal,County / City Taxable Value | 2025 After Appeal,8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000",County / City Taxable Value | 2025 After Appeal
+taxes,taxes_modules_taxes_views_index_095,,"$8,780,000",County / City Taxable Value | 2026 Projection,County / City Taxable Value | 2026 Projection,8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000",County / City Taxable Value | 2026 Projection
+taxes,taxes_modules_taxes_views_index_096,,"$8,958,200",School Taxable Value | 2024,School Taxable Value | 2024,8958200,"$8,958,200",currency,USD,modules/taxes/views/index.html,"$8,958,200",School Taxable Value | 2024
+taxes,taxes_modules_taxes_views_index_097,,"$9,143,000",School Taxable Value | 2025 Original,School Taxable Value | 2025 Original,9143000,"$9,143,000",currency,USD,modules/taxes/views/index.html,"$9,143,000",School Taxable Value | 2025 Original
+taxes,taxes_modules_taxes_views_index_098,,"$8,600,000",School Taxable Value | 2025 After Appeal,School Taxable Value | 2025 After Appeal,8600000,"$8,600,000",currency,USD,modules/taxes/views/index.html,"$8,600,000",School Taxable Value | 2025 After Appeal
+taxes,taxes_modules_taxes_views_index_099,,"$8,780,000",School Taxable Value | 2026 Projection,School Taxable Value | 2026 Projection,8780000,"$8,780,000",currency,USD,modules/taxes/views/index.html,"$8,780,000",School Taxable Value | 2026 Projection
+taxes,taxes_modules_taxes_views_index_100,,"$12,918.42",TPP Net Taxable | 2024,TPP Net Taxable | 2024,12918.42,"$12,918.42",currency,USD,modules/taxes/views/index.html,"$12,918.42",TPP Net Taxable | 2024
+taxes,taxes_modules_taxes_views_index_101,,"$13,604.27",TPP Net Taxable,TPP Net Taxable,13604.27,"$13,604.27",currency,USD,modules/taxes/views/index.html,"$13,604.27",TPP Net Taxable
+taxes,taxes_modules_taxes_views_index_102,,"$14,195.78",TPP Net Taxable,TPP Net Taxable,14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78",TPP Net Taxable
+taxes,taxes_modules_taxes_views_index_103,,"$14,195.78",TPP Net Taxable,TPP Net Taxable,14195.78,"$14,195.78",currency,USD,modules/taxes/views/index.html,"$14,195.78",TPP Net Taxable
+taxes,taxes_modules_taxes_views_index_104,,"$47,195.12",County + City | 2024,County + City | 2024,47195.12,"$47,195.12",currency,USD,modules/taxes/views/index.html,"$47,195.12",County + City | 2024
+taxes,taxes_modules_taxes_views_index_105,,"$48,964.88",County + City | 2025 Original,County + City | 2025 Original,48964.88,"$48,964.88",currency,USD,modules/taxes/views/index.html,"$48,964.88",County + City | 2025 Original
+taxes,taxes_modules_taxes_views_index_106,,"$44,052.79",County + City | 2025 After Appeal,County + City | 2025 After Appeal,44052.79,"$44,052.79",currency,USD,modules/taxes/views/index.html,"$44,052.79",County + City | 2025 After Appeal
+taxes,taxes_modules_taxes_views_index_107,,"$46,729.16",County + City | 2026 Projection,County + City | 2026 Projection,46729.16,"$46,729.16",currency,USD,modules/taxes/views/index.html,"$46,729.16",County + City | 2026 Projection
+taxes,taxes_modules_taxes_views_index_108,,"$17,823.76",School Board | 2024,School Board | 2024,17823.76,"$17,823.76",currency,USD,modules/taxes/views/index.html,"$17,823.76",School Board | 2024
+taxes,taxes_modules_taxes_views_index_109,,"$18,191.38",School Board | 2025 Original,School Board | 2025 Original,18191.38,"$18,191.38",currency,USD,modules/taxes/views/index.html,"$18,191.38",School Board | 2025 Original
+taxes,taxes_modules_taxes_views_index_110,,"$17,461.82",School Board | 2025 After Appeal,School Board | 2025 After Appeal,17461.82,"$17,461.82",currency,USD,modules/taxes/views/index.html,"$17,461.82",School Board | 2025 After Appeal
+taxes,taxes_modules_taxes_views_index_111,,"$17,826.05",School Board | 2026 Projection,School Board | 2026 Projection,17826.05,"$17,826.05",currency,USD,modules/taxes/views/index.html,"$17,826.05",School Board | 2026 Projection
+taxes,taxes_modules_taxes_views_index_112,,"$95,019.36",Special Districts | 2024,Special Districts | 2024,95019.36,"$95,019.36",currency,USD,modules/taxes/views/index.html,"$95,019.36",Special Districts | 2024
+taxes,taxes_modules_taxes_views_index_113,,"$95,051.53",Special Districts,Special Districts,95051.53,"$95,051.53",currency,USD,modules/taxes/views/index.html,"$95,051.53",Special Districts
+taxes,taxes_modules_taxes_views_index_114,,"$91,059.71",Special Districts,Special Districts,91059.71,"$91,059.71",currency,USD,modules/taxes/views/index.html,"$91,059.71",Special Districts
+taxes,taxes_modules_taxes_views_index_115,,"$97,805.16",Special Districts,Special Districts,97805.16,"$97,805.16",currency,USD,modules/taxes/views/index.html,"$97,805.16",Special Districts
+taxes,taxes_modules_taxes_views_index_116,,"$3,379.20",Non-Ad Valorem,Non-Ad Valorem,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",Non-Ad Valorem
+taxes,taxes_modules_taxes_views_index_117,,"$3,379.20",Non-Ad Valorem,Non-Ad Valorem,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",Non-Ad Valorem
+taxes,taxes_modules_taxes_views_index_118,,"$3,379.20",Non-Ad Valorem,Non-Ad Valorem,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",Non-Ad Valorem
+taxes,taxes_modules_taxes_views_index_119,,"$3,379.20",Non-Ad Valorem,Non-Ad Valorem,3379.2,"$3,379.20",currency,USD,modules/taxes/views/index.html,"$3,379.20",Non-Ad Valorem
+taxes,taxes_modules_taxes_views_index_120,,"$163,417.44",Grand Total,Grand Total,163417.44,"$163,417.44",currency,USD,modules/taxes/views/index.html,"$163,417.44",Grand Total
+taxes,taxes_modules_taxes_views_index_121,,"$165,586.99",Grand Total,Grand Total,165586.99,"$165,586.99",currency,USD,modules/taxes/views/index.html,"$165,586.99",Grand Total
+taxes,taxes_modules_taxes_views_index_122,,"$155,953.52",Grand Total,Grand Total,155953.52,"$155,953.52",currency,USD,modules/taxes/views/index.html,"$155,953.52",Grand Total
+taxes,taxes_modules_taxes_views_index_123,,"$165,739.57",Grand Total,Grand Total,165739.57,"$165,739.57",currency,USD,modules/taxes/views/index.html,"$165,739.57",Grand Total
+taxes,taxes_modules_taxes_views_index_124,,4%,4% Early Payment Discount,4% Early Payment Discount,4,4%,percent,,modules/taxes/views/index.html,4%,4% Early Payment Discount
+taxes,taxes_modules_taxes_views_index_125,,"$6,238.14",4% Early Payment Discount,4% Early Payment Discount,6238.14,"$6,238.14",currency,USD,modules/taxes/views/index.html,"$6,238.14",4% Early Payment Discount
+taxes,taxes_modules_taxes_views_index_126,,"$6,629.58",4% Early Payment Discount,4% Early Payment Discount,6629.58,"$6,629.58",currency,USD,modules/taxes/views/index.html,"$6,629.58",4% Early Payment Discount
+taxes,taxes_modules_taxes_views_index_127,,"$149,715.38",Net Payable,Net Payable,149715.38,"$149,715.38",currency,USD,modules/taxes/views/index.html,"$149,715.38",Net Payable
+taxes,taxes_modules_taxes_views_index_128,,"$159,109.98",Net Payable,Net Payable,159109.98,"$159,109.98",currency,USD,modules/taxes/views/index.html,"$159,109.98",Net Payable
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_001,,"$99,619",Premiums Due (2026),Premiums Due (2026),99619,"$99,619",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$99,619",Premiums Due (2026)
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_002,,"$209,799",Escrow Balance,Escrow Balance,209799,"$209,799",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$209,799",Escrow Balance
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_003,,"$10,486",Monthly Insurance Escrow,Monthly Insurance Escrow,10486,"$10,486",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$10,486",Monthly Insurance Escrow
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_004,,"$15,216,508",Period,Period,15216508,"$15,216,508",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,216,508",Period
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_005,,"$13,542,295",Insured Building Value,Insured Building Value,13542295,"$13,542,295",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$13,542,295",Insured Building Value
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_006,,"$40,144",Property - Primary Multi-Peril,Property - Primary Multi-Peril,40144,"$40,144",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$40,144",Property - Primary Multi-Peril
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_007,,"$15,275.20",Property - Excess Multi-Peril,Property - Excess Multi-Peril,15275.2,"$15,275.20",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,275.20",Property - Excess Multi-Peril
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_008,,"$15,275",General Liability,General Liability,15275,"$15,275",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$15,275",General Liability
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_009,,"$13,230",Umbrella / Excess Liability,Umbrella / Excess Liability,13230,"$13,230",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,"$13,230",Umbrella / Excess Liability
+gp,gp_modules_gp_views_gp_mockups_001,,"$6,047,500",Total Capital Raise (LP),Total Capital Raise (LP),6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500",Total Capital Raise (LP)
+gp,gp_modules_gp_views_gp_mockups_002,,"$2,530,000",PPC Sponsor Groups,PPC Sponsor Groups,2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000",PPC Sponsor Groups
+gp,gp_modules_gp_views_gp_mockups_003,,GP,GP / LP Share,GP / LP Share,35,35%,percent,,modules/Gp/views/gp mockups.html,35% GP,GP / LP Share
+gp,gp_modules_gp_views_gp_mockups_004,,LP share,GP / LP Share,GP / LP Share,65,65%,percent,,modules/Gp/views/gp mockups.html,LP share: 65%,GP / LP Share
+gp,gp_modules_gp_views_gp_mockups_005,,"$6,047,500",Total Capital Raise (LP),Total Capital Raise (LP),6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500",Total Capital Raise (LP)
+gp,gp_modules_gp_views_gp_mockups_006,,"$3,517,500",VCP + Partners (Virendra Patel Group),VCP + Partners (Virendra Patel Group),3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500",VCP + Partners (Virendra Patel Group)
+gp,gp_modules_gp_views_gp_mockups_007,,"$2,530,000",PPC Sponsor Groups (6 GPs),PPC Sponsor Groups (6 GPs),2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000",PPC Sponsor Groups (6 GPs)
+gp,gp_modules_gp_views_gp_mockups_008,,35%,GP Carve Out (Project Interest),GP Carve Out (Project Interest),35,35%,percent,,modules/Gp/views/gp mockups.html,35%,GP Carve Out (Project Interest)
+gp,gp_modules_gp_views_gp_mockups_009,,65%,LP Share of Project,LP Share of Project,65,65%,percent,,modules/Gp/views/gp mockups.html,65%,LP Share of Project
+gp,gp_modules_gp_views_gp_mockups_010,,"$400,000",Anne Santos | Capital Raised,Anne Santos | Capital Raised,400000,"$400,000",currency,USD,modules/Gp/views/gp mockups.html,"$400,000",Anne Santos | Capital Raised
+gp,gp_modules_gp_views_gp_mockups_011,,2.3150%,Anne Santos | GP Project %,Anne Santos | GP Project %,2.315,2.3150%,percent,,modules/Gp/views/gp mockups.html,2.3150%,Anne Santos | GP Project %
+gp,gp_modules_gp_views_gp_mockups_012,,"$6,528",Anne Santos | Est. Acq. Fee,Anne Santos | Est. Acq. Fee,6528,"$6,528",currency,USD,modules/Gp/views/gp mockups.html,"$6,528",Anne Santos | Est. Acq. Fee
+gp,gp_modules_gp_views_gp_mockups_013,,"$660,000",Jeanine Witten | Capital Raised,Jeanine Witten | Capital Raised,660000,"$660,000",currency,USD,modules/Gp/views/gp mockups.html,"$660,000",Jeanine Witten | Capital Raised
+gp,gp_modules_gp_views_gp_mockups_014,,3.8198%,Jeanine Witten | GP Project %,Jeanine Witten | GP Project %,3.8198,3.8198%,percent,,modules/Gp/views/gp mockups.html,3.8198%,Jeanine Witten | GP Project %
+gp,gp_modules_gp_views_gp_mockups_015,,"$10,772",Jeanine Witten | Est. Acq. Fee,Jeanine Witten | Est. Acq. Fee,10772,"$10,772",currency,USD,modules/Gp/views/gp mockups.html,"$10,772",Jeanine Witten | Est. Acq. Fee
+gp,gp_modules_gp_views_gp_mockups_016,,"$350,000",Giulianna Pino | Capital Raised,Giulianna Pino | Capital Raised,350000,"$350,000",currency,USD,modules/Gp/views/gp mockups.html,"$350,000",Giulianna Pino | Capital Raised
+gp,gp_modules_gp_views_gp_mockups_017,,2.0256%,Giulianna Pino | GP Project %,Giulianna Pino | GP Project %,2.0256,2.0256%,percent,,modules/Gp/views/gp mockups.html,2.0256%,Giulianna Pino | GP Project %
+gp,gp_modules_gp_views_gp_mockups_018,,"$5,712",Giulianna Pino | Est. Acq. Fee,Giulianna Pino | Est. Acq. Fee,5712,"$5,712",currency,USD,modules/Gp/views/gp mockups.html,"$5,712",Giulianna Pino | Est. Acq. Fee
+gp,gp_modules_gp_views_gp_mockups_019,,"$410,000",Vinod Malik | Capital Raised,Vinod Malik | Capital Raised,410000,"$410,000",currency,USD,modules/Gp/views/gp mockups.html,"$410,000",Vinod Malik | Capital Raised
+gp,gp_modules_gp_views_gp_mockups_020,,2.3729%,Vinod Malik | GP Project %,Vinod Malik | GP Project %,2.3729,2.3729%,percent,,modules/Gp/views/gp mockups.html,2.3729%,Vinod Malik | GP Project %
+gp,gp_modules_gp_views_gp_mockups_021,,"$6,692",Vinod Malik | Est. Acq. Fee,Vinod Malik | Est. Acq. Fee,6692,"$6,692",currency,USD,modules/Gp/views/gp mockups.html,"$6,692",Vinod Malik | Est. Acq. Fee
+gp,gp_modules_gp_views_gp_mockups_022,,"$460,000",Ayesha Khalid | Capital Raised,Ayesha Khalid | Capital Raised,460000,"$460,000",currency,USD,modules/Gp/views/gp mockups.html,"$460,000",Ayesha Khalid
+gp,gp_modules_gp_views_gp_mockups_023,,2.6623%,Ayesha Khalid | GP Project %,Ayesha Khalid | GP Project %,2.6623,2.6623%,percent,,modules/Gp/views/gp mockups.html,2.6623%,Ayesha Khalid
+gp,gp_modules_gp_views_gp_mockups_024,,"$7,508",Ayesha Khalid | Est. Acq. Fee,Ayesha Khalid | Est. Acq. Fee,7508,"$7,508",currency,USD,modules/Gp/views/gp mockups.html,"$7,508",Ayesha Khalid
+gp,gp_modules_gp_views_gp_mockups_025,,"$250,000",Paul Landman | Capital Raised,Paul Landman | Capital Raised,250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000",Paul Landman
+gp,gp_modules_gp_views_gp_mockups_026,,1.4469%,Paul Landman | GP Project %,Paul Landman | GP Project %,1.4469,1.4469%,percent,,modules/Gp/views/gp mockups.html,1.4469%,Paul Landman
+gp,gp_modules_gp_views_gp_mockups_027,,"$4,080",Paul Landman | Est. Acq. Fee,Paul Landman | Est. Acq. Fee,4080,"$4,080",currency,USD,modules/Gp/views/gp mockups.html,"$4,080",Paul Landman
+gp,gp_modules_gp_views_gp_mockups_028,,"$2,530,000",TOTAL PPC | Capital Raised,TOTAL PPC | Capital Raised,2530000,"$2,530,000",currency,USD,modules/Gp/views/gp mockups.html,"$2,530,000",TOTAL PPC
+gp,gp_modules_gp_views_gp_mockups_029,,14.6425%,TOTAL PPC | GP Project %,TOTAL PPC | GP Project %,14.6425,14.6425%,percent,,modules/Gp/views/gp mockups.html,14.6425%,TOTAL PPC
+gp,gp_modules_gp_views_gp_mockups_030,,"$3,517,500",VCP + Partners | Capital Raised,VCP + Partners | Capital Raised,3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500",VCP + Partners
+gp,gp_modules_gp_views_gp_mockups_031,,"$6,047,500",GRAND TOTAL RAISE | Capital Raised,GRAND TOTAL RAISE | Capital Raised,6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500",GRAND TOTAL RAISE
+gp,gp_modules_gp_views_gp_mockups_032,,"$150,000",Anne Santos | Amount Invested,Anne Santos | Amount Invested,150000,"$150,000",currency,USD,modules/Gp/views/gp mockups.html,"$150,000",Anne Santos | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_033,,2.48%,Anne Santos | % of Total Raise,Anne Santos | % of Total Raise,2.48,2.48%,percent,,modules/Gp/views/gp mockups.html,2.48%,Anne Santos | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_034,,"$50,000",Salvatore Caminito | Amount Invested,Salvatore Caminito | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Salvatore Caminito | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_035,,0.83%,Salvatore Caminito | % of Total Raise,Salvatore Caminito | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Salvatore Caminito | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_036,,"$50,000",Elizabeth Tan | Amount Invested,Elizabeth Tan | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Elizabeth Tan | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_037,,0.83%,Elizabeth Tan | % of Total Raise,Elizabeth Tan | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Elizabeth Tan | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_038,,"$50,000",Michael Kates | Amount Invested,Michael Kates | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Michael Kates | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_039,,0.83%,Michael Kates | % of Total Raise,Michael Kates | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Michael Kates | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_040,,"$50,000",Sean Reiter | Amount Invested,Sean Reiter | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Sean Reiter | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_041,,0.83%,Sean Reiter | % of Total Raise,Sean Reiter | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Sean Reiter | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_042,,"$50,000",Baqir Jaffery | Amount Invested,Baqir Jaffery | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Baqir Jaffery | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_043,,0.83%,Baqir Jaffery | % of Total Raise,Baqir Jaffery | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Baqir Jaffery | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_044,,"$60,000",Tatiana Friderici | Amount Invested,Tatiana Friderici | Amount Invested,60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000",Tatiana Friderici | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_045,,0.99%,Tatiana Friderici | % of Total Raise,Tatiana Friderici | % of Total Raise,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%,Tatiana Friderici | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_046,,"$100,000",Erica Buchan | Amount Invested,Erica Buchan | Amount Invested,100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000",Erica Buchan | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_047,,1.65%,Erica Buchan | % of Total Raise,Erica Buchan | % of Total Raise,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%,Erica Buchan | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_048,,"$100,000",Pamela Kugit | Amount Invested,Pamela Kugit | Amount Invested,100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000",Pamela Kugit | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_049,,1.65%,Pamela Kugit | % of Total Raise,Pamela Kugit | % of Total Raise,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%,Pamela Kugit | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_050,,"$250,000",Dawn McCale | Amount Invested,Dawn McCale | Amount Invested,250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000",Dawn McCale | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_051,,4.13%,Dawn McCale | % of Total Raise,Dawn McCale | % of Total Raise,4.13,4.13%,percent,,modules/Gp/views/gp mockups.html,4.13%,Dawn McCale | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_052,,"$50,000",Ines Marrinucci | Amount Invested,Ines Marrinucci | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Ines Marrinucci | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_053,,0.83%,Ines Marrinucci | % of Total Raise,Ines Marrinucci | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Ines Marrinucci | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_054,,"$50,000",Jeanine Witten | Amount Invested,Jeanine Witten | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Jeanine Witten | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_055,,0.83%,Jeanine Witten | % of Total Raise,Jeanine Witten | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Jeanine Witten | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_056,,"$50,000",Pamela DeVaughn | Amount Invested,Pamela DeVaughn | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Pamela DeVaughn | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_057,,0.83%,Pamela DeVaughn | % of Total Raise,Pamela DeVaughn | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Pamela DeVaughn | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_058,,"$250,000",Antonio Pino | Amount Invested,Antonio Pino | Amount Invested,250000,"$250,000",currency,USD,modules/Gp/views/gp mockups.html,"$250,000",Antonio Pino | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_059,,4.13%,Antonio Pino | % of Total Raise,Antonio Pino | % of Total Raise,4.13,4.13%,percent,,modules/Gp/views/gp mockups.html,4.13%,Antonio Pino | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_060,,"$100,000",Grethel Kunkel | Amount Invested,Grethel Kunkel | Amount Invested,100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000",Grethel Kunkel | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_061,,1.65%,Grethel Kunkel | % of Total Raise,Grethel Kunkel | % of Total Raise,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%,Grethel Kunkel | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_062,,"$100,000",Aruna Gamini | Amount Invested,Aruna Gamini | Amount Invested,100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000",Aruna Gamini | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_063,,1.65%,Aruna Gamini | % of Total Raise,Aruna Gamini | % of Total Raise,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%,Aruna Gamini | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_064,,"$50,000",Dipti Lodaya | Amount Invested,Dipti Lodaya | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Dipti Lodaya | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_065,,0.83%,Dipti Lodaya | % of Total Raise,Dipti Lodaya | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Dipti Lodaya | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_066,,"$100,000",Vinod Malik | Amount Invested,Vinod Malik | Amount Invested,100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000",Vinod Malik | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_067,,1.65%,Vinod Malik | % of Total Raise,Vinod Malik | % of Total Raise,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%,Vinod Malik | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_068,,"$50,000",Sunjeev Chawla | Amount Invested,Sunjeev Chawla | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Sunjeev Chawla | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_069,,0.83%,Sunjeev Chawla | % of Total Raise,Sunjeev Chawla | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Sunjeev Chawla | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_070,,"$50,000",Girija Murali | Amount Invested,Girija Murali | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Girija Murali | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_071,,0.83%,Girija Murali | % of Total Raise,Girija Murali | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Girija Murali | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_072,,"$60,000",Harsha Sharma | Amount Invested,Harsha Sharma | Amount Invested,60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000",Harsha Sharma | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_073,,0.99%,Harsha Sharma | % of Total Raise,Harsha Sharma | % of Total Raise,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%,Harsha Sharma | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_074,,"$100,000",Elizabeth Darr | Amount Invested,Elizabeth Darr | Amount Invested,100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000",Elizabeth Darr | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_075,,1.65%,Elizabeth Darr | % of Total Raise,Elizabeth Darr | % of Total Raise,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%,Elizabeth Darr | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_076,,"$100,000",Douglas Dawson | Amount Invested,Douglas Dawson | Amount Invested,100000,"$100,000",currency,USD,modules/Gp/views/gp mockups.html,"$100,000",Douglas Dawson | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_077,,1.65%,Douglas Dawson | % of Total Raise,Douglas Dawson | % of Total Raise,1.65,1.65%,percent,,modules/Gp/views/gp mockups.html,1.65%,Douglas Dawson | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_078,,"$50,000",Rebanta Chakraborty | Amount Invested,Rebanta Chakraborty | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Rebanta Chakraborty | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_079,,0.83%,Rebanta Chakraborty | % of Total Raise,Rebanta Chakraborty | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Rebanta Chakraborty | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_080,,"$50,000",Ayesha Khalid | Amount Invested,Ayesha Khalid | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Ayesha Khalid | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_081,,0.83%,Ayesha Khalid | % of Total Raise,Ayesha Khalid | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Ayesha Khalid | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_082,,"$50,000",Ayesha Khalid | Amount Invested,Ayesha Khalid | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Ayesha Khalid | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_083,,0.83%,Ayesha Khalid | % of Total Raise,Ayesha Khalid | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Ayesha Khalid | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_084,,"$50,000",Andrea Metz | Amount Invested,Andrea Metz | Amount Invested,50000,"$50,000",currency,USD,modules/Gp/views/gp mockups.html,"$50,000",Andrea Metz | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_085,,0.83%,Andrea Metz | % of Total Raise,Andrea Metz | % of Total Raise,0.83,0.83%,percent,,modules/Gp/views/gp mockups.html,0.83%,Andrea Metz | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_086,,"$60,000",Abel Contreras | Amount Invested,Abel Contreras | Amount Invested,60000,"$60,000",currency,USD,modules/Gp/views/gp mockups.html,"$60,000",Abel Contreras | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_087,,0.99%,Abel Contreras | % of Total Raise,Abel Contreras | % of Total Raise,0.99,0.99%,percent,,modules/Gp/views/gp mockups.html,0.99%,Abel Contreras | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_088,,"$150,000",Paul Landman | Amount Invested,Paul Landman | Amount Invested,150000,"$150,000",currency,USD,modules/Gp/views/gp mockups.html,"$150,000",Paul Landman | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_089,,2.48%,Paul Landman | % of Total Raise,Paul Landman | % of Total Raise,2.48,2.48%,percent,,modules/Gp/views/gp mockups.html,2.48%,Paul Landman | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_090,,"$25,000",Anirudh Rathi | Amount Invested,Anirudh Rathi | Amount Invested,25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000",Anirudh Rathi | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_091,,0.41%,Anirudh Rathi | % of Total Raise,Anirudh Rathi | % of Total Raise,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%,Anirudh Rathi | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_092,,"$25,000",Akshay Shah | Amount Invested,Akshay Shah | Amount Invested,25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000",Akshay Shah | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_093,,0.41%,Akshay Shah | % of Total Raise,Akshay Shah | % of Total Raise,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%,Akshay Shah | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_094,,"$25,000",Ron Landman | Amount Invested,Ron Landman | Amount Invested,25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000",Ron Landman | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_095,,0.41%,Ron Landman | % of Total Raise,Ron Landman | % of Total Raise,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%,Ron Landman | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_096,,"$25,000",Amit Menipaz | Amount Invested,Amit Menipaz | Amount Invested,25000,"$25,000",currency,USD,modules/Gp/views/gp mockups.html,"$25,000",Amit Menipaz | Amount Invested
+gp,gp_modules_gp_views_gp_mockups_097,,0.41%,Amit Menipaz | % of Total Raise,Amit Menipaz | % of Total Raise,0.41,0.41%,percent,,modules/Gp/views/gp mockups.html,0.41%,Amit Menipaz | % of Total Raise
+gp,gp_modules_gp_views_gp_mockups_098,,Mgr Entity,Virendra Patel | Manager Entity %,Virendra Patel | Manager Entity %,32.88,32.88%,percent,,modules/Gp/views/gp mockups.html,32.88% Mgr Entity,Virendra Patel | Manager Entity %
+gp,gp_modules_gp_views_gp_mockups_099,,of Manager Entity (RED RAIDER 45 MGR LLC) per 2024 K-1,Virendra Patel | Manager Entity %,Virendra Patel | Manager Entity %,32.88,32.88%,percent,,modules/Gp/views/gp mockups.html,32.88% of Manager Entity (RED RAIDER 45 MGR LLC) per 2024 K-1,Virendra Patel | Manager Entity %
+gp,gp_modules_gp_views_gp_mockups_100,,Mgr Entity,BLISS GROUP LLC (Bhavin Parikh) | Manager Entity %,BLISS GROUP LLC (Bhavin Parikh) | Manager Entity %,4.92,4.92%,percent,,modules/Gp/views/gp mockups.html,4.92% Mgr Entity,BLISS GROUP LLC (Bhavin Parikh) | Manager Entity %
+gp,gp_modules_gp_views_gp_mockups_101,,of Manager Entity; linked to Bhavin Parikh via EIN notice,BLISS GROUP LLC (Bhavin Parikh) | Manager Entity %,BLISS GROUP LLC (Bhavin Parikh) | Manager Entity %,4.92,4.92%,percent,,modules/Gp/views/gp mockups.html,4.92% of Manager Entity; linked to Bhavin Parikh via EIN notice,BLISS GROUP LLC (Bhavin Parikh) | Manager Entity %
+gp,gp_modules_gp_views_gp_mockups_102,,Mgr Entity,Edward Sittler | Manager Entity %,Edward Sittler | Manager Entity %,10,10.00%,percent,,modules/Gp/views/gp mockups.html,10.00% Mgr Entity,Edward Sittler | Manager Entity %
+gp,gp_modules_gp_views_gp_mockups_103,,of Manager Entity per 2024 K-1,Edward Sittler | Manager Entity %,Edward Sittler | Manager Entity %,10,10.00%,percent,,modules/Gp/views/gp mockups.html,10.00% of Manager Entity per 2024 K-1,Edward Sittler | Manager Entity %
+gp,gp_modules_gp_views_gp_mockups_104,,Mgr Entity,4800 Atlantic Blvd VCP Holdings LLC | Manager Entity %,4800 Atlantic Blvd VCP Holdings LLC | Manager Entity %,41.37,41.37%,percent,,modules/Gp/views/gp mockups.html,41.37% Mgr Entity,4800 Atlantic Blvd VCP Holdings LLC | Manager Entity %
+gp,gp_modules_gp_views_gp_mockups_105,,of Manager Entity; also holds 12.41% GP project interest per Side Letter,4800 Atlantic Blvd VCP Holdings LLC | Manager Entity %,4800 Atlantic Blvd VCP Holdings LLC | Manager Entity %,41.37,41.37%,percent,,modules/Gp/views/gp mockups.html,41.37% of Manager Entity; also holds 12.41% GP project interest per Side Letter,4800 Atlantic Blvd VCP Holdings LLC | Manager Entity %
+gp,gp_modules_gp_views_gp_mockups_106,,41.37% of Manager Entity; also holds GP project interest per Side Letter,4800 Atlantic Blvd VCP Holdings LLC | GP Project %,4800 Atlantic Blvd VCP Holdings LLC | GP Project %,12.41,12.41%,percent,,modules/Gp/views/gp mockups.html,41.37% of Manager Entity; also holds 12.41% GP project interest per Side Letter,4800 Atlantic Blvd VCP Holdings LLC | GP Project %
+gp,gp_modules_gp_views_gp_mockups_107,,Mgr Entity,"Bluesurf Holdings, LLC | Manager Entity %","Bluesurf Holdings, LLC | Manager Entity %",2.03,2.03%,percent,,modules/Gp/views/gp mockups.html,2.03% Mgr Entity,"Bluesurf Holdings, LLC | Manager Entity %"
+gp,gp_modules_gp_views_gp_mockups_108,,of Manager Entity per 2024 K-1,"Bluesurf Holdings, LLC | Manager Entity %","Bluesurf Holdings, LLC | Manager Entity %",2.03,2.03%,percent,,modules/Gp/views/gp mockups.html,2.03% of Manager Entity per 2024 K-1,"Bluesurf Holdings, LLC | Manager Entity %"
+gp,gp_modules_gp_views_gp_mockups_109,,"$3,517,500",TOTAL VCP + Partners (wired as single block) | Amount Invested,TOTAL VCP + Partners (wired as single block) | Amount Invested,3517500,"$3,517,500",currency,USD,modules/Gp/views/gp mockups.html,"$3,517,500",TOTAL VCP + Partners (wired as single block)
+gp,gp_modules_gp_views_gp_mockups_110,,58.16%,TOTAL VCP + Partners (wired as single block) | % of Total Raise,TOTAL VCP + Partners (wired as single block) | % of Total Raise,58.16,58.16%,percent,,modules/Gp/views/gp mockups.html,58.16%,TOTAL VCP + Partners (wired as single block)
+gp,gp_modules_gp_views_gp_mockups_111,,"$6,047,500",GRAND TOTAL RAISE | Amount Invested,GRAND TOTAL RAISE | Amount Invested,6047500,"$6,047,500",currency,USD,modules/Gp/views/gp mockups.html,"$6,047,500",GRAND TOTAL RAISE
+gp,gp_modules_gp_views_gp_mockups_112,,100.00%,GRAND TOTAL RAISE | % of Total Raise,GRAND TOTAL RAISE | % of Total Raise,100,100.00%,percent,,modules/Gp/views/gp mockups.html,100.00%,GRAND TOTAL RAISE
+mortgage,mortgage_principal_balance,mortgage.principal_balance,Principal Balance,Principal Balance,Principal Balance,10853176.39,"$10,853,176.39",currency,USD,modules/mortgage/views/current-debt-data.js,Principal Balance,Principal Balance
+mortgage,mortgage_interest_rate,mortgage.interest_rate,Interest Rate,Interest Rate,Interest Rate,8.5,8.50%,percent,,modules/mortgage/views/current-debt-data.js,Interest Rate,Interest Rate
+mortgage,mortgage_escrow_amount,mortgage.escrow_amount,Escrow Amount,Escrow Amount,Escrow Amount,32719,"$32,719.00 / mo (taxes + insurance impound)",currency,USD,modules/mortgage/views/current-debt-data.js,Escrow Amount,Escrow Amount
+mortgage,mortgage_monthly_payment_io_only,mortgage.monthly_payment_io_only,Monthly Payment IO Only,Monthly Payment IO Only,Monthly Payment IO Only,79439.22,"$79,439.22",currency,USD,modules/mortgage/views/current-debt-data.js,Monthly Payment IO Only,Monthly Payment IO Only
+mortgage,mortgage_monthly_payment_with_escrow,mortgage.monthly_payment_with_escrow,Monthly Payment With Escrow,Monthly Payment With Escrow,Monthly Payment With Escrow,112158.22,"$112,158.22",currency,USD,modules/mortgage/views/current-debt-data.js,Monthly Payment With Escrow,Monthly Payment With Escrow
+mortgage,mortgage_current_interest_due,mortgage.current_interest_due,Current Interest Due,Current Interest Due,Current Interest Due,79439.22,"$79,439.22",currency,USD,modules/mortgage/views/current-debt-data.js,Current Interest Due,Current Interest Due
+mortgage,mortgage_current_tax_due,mortgage.current_tax_due,Current Tax Due,Current Tax Due,Current Tax Due,14572.46,"$14,572.46",currency,USD,modules/mortgage/views/current-debt-data.js,Current Tax Due,Current Tax Due
+mortgage,mortgage_current_insurance_due,mortgage.current_insurance_due,Current Insurance Due,Current Insurance Due,Current Insurance Due,18146.54,"$18,146.54",currency,USD,modules/mortgage/views/current-debt-data.js,Current Insurance Due,Current Insurance Due
+mortgage,mortgage_total_due,mortgage.total_due,Total Due,Total Due,Total Due,112158.22,"$112,158.22",currency,USD,modules/mortgage/views/current-debt-data.js,Total Due,Total Due
+mortgage,mortgage_ending_escrow_balance,mortgage.ending_escrow_balance,Ending Escrow Balance,Ending Escrow Balance,Ending Escrow Balance,281922.98,"$281,922.98",currency,USD,modules/mortgage/views/current-debt-data.js,Ending Escrow Balance,Ending Escrow Balance
+gp,gp_total_gp_sponsors,gp.total_gp_sponsors,Total GP Sponsors (PPC),Total GP Sponsors (PPC),Total GP Sponsors (PPC),6,6,number,,modules/Gp/views/gp mockups.html,Total GP Sponsors (PPC),Total GP Sponsors (PPC)
+gp,gp_k1_partners_in_manager_entity,gp.k1_partners_in_manager_entity,K-1 Partners in Manager Entity,K-1 Partners in Manager Entity,K-1 Partners in Manager Entity,8,8,number,,modules/Gp/views/gp mockups.html,K-1 Partners in Manager Entity,K-1 Partners in Manager Entity
+gp,gp_source_k1_year,gp.source_k1_year,Source K-1 Year,Source K-1 Year,Source K-1 Year,2024,2024,number,,modules/Gp/views/gp mockups.html,Source K-1 Year,Source K-1 Year
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010,insurance.monthly_expense.2025-03,Monthly Insurance Trend | Mar-25,Monthly Insurance Trend | Mar-25,Monthly Insurance Trend | Mar-25,16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Mar-Jul 2025,Monthly insurance trend | Mar-Jul 2025
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011,insurance.monthly_expense.2025-04,Monthly Insurance Trend | Apr-25,Monthly Insurance Trend | Apr-25,Monthly Insurance Trend | Apr-25,16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Mar-Jul 2025,Monthly insurance trend | Mar-Jul 2025
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012,insurance.monthly_expense.2025-05,Monthly Insurance Trend | May-25,Monthly Insurance Trend | May-25,Monthly Insurance Trend | May-25,16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Mar-Jul 2025,Monthly insurance trend | Mar-Jul 2025
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013,insurance.monthly_expense.2025-06,Monthly Insurance Trend | Jun-25,Monthly Insurance Trend | Jun-25,Monthly Insurance Trend | Jun-25,16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Mar-Jul 2025,Monthly insurance trend | Mar-Jul 2025
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014,insurance.monthly_expense.2025-07,Monthly Insurance Trend | Jul-25,Monthly Insurance Trend | Jul-25,Monthly Insurance Trend | Jul-25,16496.85,"$16,496.85",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Mar-Jul 2025,Monthly insurance trend | Mar-Jul 2025
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015,insurance.monthly_expense.2025-08,Monthly Insurance Trend | Aug-25,Monthly Insurance Trend | Aug-25,Monthly Insurance Trend | Aug-25,20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Aug-Dec 2025,Monthly insurance trend | Aug-Dec 2025
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016,insurance.monthly_expense.2025-09,Monthly Insurance Trend | Sep-25,Monthly Insurance Trend | Sep-25,Monthly Insurance Trend | Sep-25,20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Aug-Dec 2025,Monthly insurance trend | Aug-Dec 2025
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017,insurance.monthly_expense.2025-10,Monthly Insurance Trend | Oct-25,Monthly Insurance Trend | Oct-25,Monthly Insurance Trend | Oct-25,20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Aug-Dec 2025,Monthly insurance trend | Aug-Dec 2025
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018,insurance.monthly_expense.2025-11,Monthly Insurance Trend | Nov-25,Monthly Insurance Trend | Nov-25,Monthly Insurance Trend | Nov-25,20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Aug-Dec 2025,Monthly insurance trend | Aug-Dec 2025
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019,insurance.monthly_expense.2025-12,Monthly Insurance Trend | Dec-25,Monthly Insurance Trend | Dec-25,Monthly Insurance Trend | Dec-25,20353.19,"$20,353.19",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Aug-Dec 2025,Monthly insurance trend | Aug-Dec 2025
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020,insurance.monthly_expense.2026-01,Monthly Insurance Trend | Jan-26,Monthly Insurance Trend | Jan-26,Monthly Insurance Trend | Jan-26,8500,"$8,500.00",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Jan-Feb 2026,Monthly insurance trend | Jan-Feb 2026
+insurance,insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021,insurance.monthly_expense.2026-02,Monthly Insurance Trend | Feb-26,Monthly Insurance Trend | Feb-26,Monthly Insurance Trend | Feb-26,8500,"$8,500.00",currency,USD,modules/insurance/views/insurance_command_center_oasis_trusted.html,Monthly insurance trend | Jan-Feb 2026,Monthly insurance trend | Jan-Feb 2026

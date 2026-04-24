@@ -216,6 +216,36 @@ test("insurance metric bindings stay aligned with seeded outputs", () => {
   }
 });
 
+test("seed artifacts include improved ingestion_data metadata columns", () => {
+  const csv = read("supabase/ingestion_data.csv");
+  const sql = read("supabase/seed_ingestion_data.sql");
+  const schema = read("supabase/schema.sql");
+  const metadataOnly = read("supabase/setup_metadata_only.sql");
+
+  assert.match(
+    csv,
+    /^module,metric_key,semantic_identifier,label,display_label,search_label,value_numeric,/
+  );
+  assert.match(
+    sql,
+    /insert into ingestion_data \(\s+module,\s+metric_key,\s+semantic_identifier,\s+label,\s+display_label,\s+search_label,/m
+  );
+  assert.match(schema, /add column if not exists display_label text;/);
+  assert.match(schema, /add column if not exists search_label text;/);
+  assert.match(schema, /add column if not exists ui_context text;/);
+  assert.match(metadataOnly, /on conflict \(metric_key\) do update set/);
+  assert.doesNotMatch(metadataOnly, /value_numeric = excluded\.value_numeric/);
+  assert.doesNotMatch(metadataOnly, /value_display = excluded\.value_display/);
+  assert.doesNotMatch(metadataOnly, /source_context = excluded\.source_context/);
+});
+
+test("seeded display labels avoid noisy html/table fragments", () => {
+  const csv = read("supabase/ingestion_data.csv");
+  assert.doesNotMatch(csv, /display_label[^\n]*Yes N\/A N\/A/);
+  assert.doesNotMatch(csv, /,[^,\n]*<th scope=/);
+  assert.doesNotMatch(csv, /,[^,\n]*<tbody aria-label=/);
+});
+
 test("mortgage page loads the shared runtime and mortgage overlay bridge", () => {
   const html = read("modules/mortgage/views/index.html");
 
@@ -311,7 +341,10 @@ test("curated seed artifacts include semantic identifiers", () => {
   const csv = read("supabase/ingestion_data.csv");
   const sql = read("supabase/seed_ingestion_data.sql");
 
-  assert.match(csv, /^module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context$/m);
+  assert.match(
+    csv,
+    /^module,metric_key,semantic_identifier,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context$/m
+  );
   for (const [metricKey, semanticIdentifier] of Object.entries(CURATED_SEMANTIC_IDENTIFIERS)) {
     const escapedMetricKey = metricKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const escapedSemanticIdentifier = semanticIdentifier.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

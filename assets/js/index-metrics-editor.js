@@ -46,6 +46,10 @@
     return "";
   }
 
+  function getPreferredLabel(row) {
+    return row.display_label || row.search_label || row.label || row.metric_key;
+  }
+
   function boot() {
     const runtime = window[RUNTIME_KEY];
     const panel = document.getElementById("metrics-editor");
@@ -118,9 +122,12 @@
           return [
             row.module,
             row.metric_key,
+            row.display_label,
+            row.search_label,
             row.label,
             row.value_display,
             row.source_file,
+            row.ui_context,
             row.source_context,
           ]
             .join(" ")
@@ -153,7 +160,8 @@
           return `
             <tr data-metric-key="${escapeHtml(row.metric_key)}">
               <td>
-                <strong>${escapeHtml(row.label)}</strong>
+                <strong>${escapeHtml(getPreferredLabel(row))}</strong>
+                ${getPreferredLabel(row) !== row.label ? `<small>${escapeHtml(row.label)}</small>` : ""}
                 <small>${escapeHtml(row.metric_key)}</small>
                 <small>${escapeHtml(row.module)} | ${escapeHtml(row.source_file || "No source file")}</small>
                 <small>Updated: ${escapeHtml(formatTimestamp(row.updated_at))}</small>

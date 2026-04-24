@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { extractHtmlMetrics, moduleFromPath } from "./data-driven-core.mjs";
+import { applySourceLabelOverrides, enrichMetricMetadata, loadLabelOverrides } from "./ingestion-metadata.mjs";
 
 const HTML_FILES = [
   "modules/taxes/views/index.html",
@@ -13,6 +14,9 @@ const HTML_FILES = [
 const OUTPUT_DIR = "supabase";
 const CSV_OUTPUT = path.join(OUTPUT_DIR, "ingestion_data.csv");
 const SQL_OUTPUT = path.join(OUTPUT_DIR, "seed_ingestion_data.sql");
+const SETUP_OUTPUT = path.join(OUTPUT_DIR, "setup.sql");
+const METADATA_ONLY_OUTPUT = path.join(OUTPUT_DIR, "setup_metadata_only.sql");
+const SCHEMA_OUTPUT = path.join(OUTPUT_DIR, "schema.sql");
 const CURATED_SEMANTIC_IDENTIFIERS = {
   mortgage_principal_balance: "mortgage.principal_balance",
   mortgage_interest_rate: "mortgage.interest_rate",
@@ -64,36 +68,44 @@ export const GP_MANUAL_METRICS = [
 ];
 
 export async function buildIngestionMetrics() {
+  const labelOverrides = await loadLabelOverrides();
   const htmlMetrics = (
     await Promise.all(
       HTML_FILES.map(async (sourceFile) => {
         const html = await readFile(sourceFile, "utf8");
-        return extractHtmlMetrics(html, {
+        const extractedMetrics = extractHtmlMetrics(html, {
           module: moduleFromPath(sourceFile),
           sourceFile,
         });
+        return applySourceLabelOverrides(extractedMetrics, html, sourceFile);
       }),
     )
   ).flat();
 
-  return [
-    ...htmlMetrics,
-    ...mortgageMetrics,
-    ...GP_MANUAL_METRICS,
-    ...insuranceTrendMetrics,
-  ];
+  return [...htmlMetrics, ...mortgageMetrics, ...GP_MANUAL_METRICS, ...insuranceTrendMetrics].map((item) =>
+    enrichMetricMetadata(item, labelOverrides),
+  );
 }
 
 async function main() {
   const metrics = await buildIngestionMetrics();
 
   await mkdir(OUTPUT_DIR, { recursive: true });
-  await writeFile(CSV_OUTPUT, toCsv(metrics), "utf8");
-  await writeFile(SQL_OUTPUT, toSeedSql(metrics), "utf8");
+  const csv = toCsv(metrics);
+  const seedSql = toSeedSql(metrics);
+  const metadataOnlySql = toMetadataOnlySql(metrics);
+  const schemaSql = await readFile(SCHEMA_OUTPUT, "utf8");
+
+  await writeFile(CSV_OUTPUT, csv, "utf8");
+  await writeFile(SQL_OUTPUT, seedSql, "utf8");
+  await writeFile(SETUP_OUTPUT, `${schemaSql.trim()}\n\n${seedSql.trim()}\n`, "utf8");
+  await writeFile(METADATA_ONLY_OUTPUT, `${schemaSql.trim()}\n\n${metadataOnlySql.trim()}\n`, "utf8");
 
   console.log(`Wrote ${metrics.length} metrics`);
   console.log(`- ${CSV_OUTPUT}`);
   console.log(`- ${SQL_OUTPUT}`);
+  console.log(`- ${SETUP_OUTPUT}`);
+  console.log(`- ${METADATA_ONLY_OUTPUT}`);
 }
 
 function metric(
@@ -112,12 +124,15 @@ function metric(
     metric_key,
     semantic_identifier,
     label,
+    display_label: label,
+    search_label: label,
     value_numeric,
     value_display,
     value_type,
     currency: value_type === "currency" ? "USD" : null,
     source_file,
     source_context,
+    ui_context: source_context,
   };
 }
 
@@ -127,12 +142,15 @@ function toCsv(rows) {
     "metric_key",
     "semantic_identifier",
     "label",
+    "display_label",
+    "search_label",
     "value_numeric",
     "value_display",
     "value_type",
     "currency",
     "source_file",
     "source_context",
+    "ui_context",
   ];
   return [
     columns.join(","),
@@ -148,12 +166,15 @@ function toSeedSql(rows) {
         row.metric_key,
         row.semantic_identifier,
         row.label,
+        row.display_label,
+        row.search_label,
         row.value_numeric,
         row.value_display,
         row.value_type,
         row.currency,
         row.source_file,
         row.source_context,
+        row.ui_context,
       ];
       return `  (${values.map(sqlValue).join(", ")})`;
     })
@@ -164,25 +185,82 @@ function toSeedSql(rows) {
   metric_key,
   semantic_identifier,
   label,
+  display_label,
+  search_label,
   value_numeric,
   value_display,
   value_type,
   currency,
   source_file,
-  source_context
+  source_context,
+  ui_context
 )
 values
 ${values}
 on conflict (metric_key) do update set
   module = excluded.module,
   semantic_identifier = excluded.semantic_identifier,
-  label = excluded.label,
+  display_label = excluded.display_label,
+  search_label = excluded.search_label,
   value_numeric = excluded.value_numeric,
   value_display = excluded.value_display,
   value_type = excluded.value_type,
   currency = excluded.currency,
   source_file = excluded.source_file,
   source_context = excluded.source_context,
+  ui_context = excluded.ui_context,
+  updated_at = now();
+`;
+}
+
+function toMetadataOnlySql(rows) {
+  const values = rows
+    .map((row) => {
+      const values = [
+        row.module,
+        row.metric_key,
+        row.semantic_identifier,
+        row.label,
+        row.display_label,
+        row.search_label,
+        row.value_numeric,
+        row.value_display,
+        row.value_type,
+        row.currency,
+        row.source_file,
+        row.source_context,
+        row.ui_context,
+      ];
+      return `  (${values.map(sqlValue).join(", ")})`;
+    })
+    .join(",\n");
+
+  return `insert into ingestion_data (
+  module,
+  metric_key,
+  semantic_identifier,
+  label,
+  display_label,
+  search_label,
+  value_numeric,
+  value_display,
+  value_type,
+  currency,
+  source_file,
+  source_context,
+  ui_context
+)
+values
+${values}
+on conflict (metric_key) do update set
+  module = excluded.module,
+  semantic_identifier = excluded.semantic_identifier,
+  display_label = excluded.display_label,
+  search_label = excluded.search_label,
+  value_type = excluded.value_type,
+  currency = excluded.currency,
+  source_file = excluded.source_file,
+  ui_context = excluded.ui_context,
   updated_at = now();
 `;
 }

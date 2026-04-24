@@ -21,6 +21,13 @@ Static HTML mockups converted into a simple data-driven demo using `Supabase + V
 1. Run `supabase/schema.sql`
 2. Run `supabase/seed_ingestion_data.sql`
 
+`ingestion_data` now supports safe label enrichment without changing `metric_key`:
+
+- `label`: legacy/raw label kept for compatibility
+- `display_label`: preferred human label shown by the editor
+- `search_label`: human/searchable text used by the editor filter
+- `ui_context`: frontend text context used for traceability/backfill
+
 ## Vercel env vars
 
 Copy `.env.example` into the active Vercel project environment variables for both `Preview` and

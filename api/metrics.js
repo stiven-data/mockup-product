@@ -32,10 +32,7 @@ function getSupabaseCredentials(mode = "read") {
 function buildSupabaseUpdateUrl(baseUrl, metricKey) {
   const url = new URL("/rest/v1/ingestion_data", baseUrl);
   url.searchParams.set("metric_key", `eq.${metricKey}`);
-  url.searchParams.set(
-    "select",
-    "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at",
-  );
+  url.searchParams.set("select", "*");
   return url.toString();
 }
 

@@ -390,11 +390,8 @@ on conflict (metric_key) do update set
   semantic_identifier = excluded.semantic_identifier,
   display_label = excluded.display_label,
   search_label = excluded.search_label,
-  value_numeric = excluded.value_numeric,
-  value_display = excluded.value_display,
   value_type = excluded.value_type,
   currency = excluded.currency,
   source_file = excluded.source_file,
-  source_context = excluded.source_context,
   ui_context = excluded.ui_context,
   updated_at = now();

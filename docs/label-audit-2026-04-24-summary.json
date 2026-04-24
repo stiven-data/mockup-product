@@ -1,0 +1,16 @@
+{
+  "audited_rows": 364,
+  "problematic_rows": 354,
+  "by_module": {
+    "gp": 113,
+    "insurance": 12,
+    "taxes": 229
+  },
+  "by_confidence": {
+    "high": 165,
+    "low": 189
+  },
+  "requires_review": 189,
+  "technical_risk": "label is not the app key; metric_key is the technical identifier in schema, API, runtime, and editor.",
+  "operational_risk": "seed_ingestion_data.sql and extract-ingestion-data.mjs will overwrite label on future reseeds because upsert is on metric_key and label = excluded.label."
+}

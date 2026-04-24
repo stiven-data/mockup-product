@@ -36,7 +36,7 @@ test("buildSupabaseRestUrl builds a key-filtered REST query", () => {
   assert.match(url, /metric_key=in\.\("mortgage_total_due","mortgage_interest_rate"\)/);
   assert.match(
     url,
-    /select=id,module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at/,
+    /select=id,module,metric_key,semantic_identifier,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context,updated_at/,
   );
   assert.match(url, /limit=2/);
 });

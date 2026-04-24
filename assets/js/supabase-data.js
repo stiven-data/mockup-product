@@ -3,11 +3,11 @@
   const API_PATH = "/api/metrics";
   const CONFIG_PATH = "/api/public-config";
   const DEFAULT_SELECT =
-    "id,module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
+    "id,module,metric_key,semantic_identifier,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context,updated_at";
   const LEGACY_SELECT =
     "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
   const MAX_LIMIT = 5000;
-  const RUNTIME_VERSION = "2026-04-24-2";
+  const RUNTIME_VERSION = "2026-04-24-4";
   const MODULES = ["mortgage", "insurance", "taxes", "gp"];
   const EMPTY_DISPLAY_TOKENS = new Set([
     "",
@@ -82,6 +82,34 @@
       .trim();
   }
 
+  function resolveMetricText(row, field) {
+    return normalizeEditableText(row?.[field]);
+  }
+
+  function normalizeMetricRow(row) {
+    if (!row || !row.metric_key) return row;
+
+    const displayLabel =
+      resolveMetricText(row, "display_label") ||
+      resolveMetricText(row, "search_label") ||
+      resolveMetricText(row, "label") ||
+      row.metric_key;
+    const searchLabel =
+      resolveMetricText(row, "search_label") ||
+      resolveMetricText(row, "display_label") ||
+      resolveMetricText(row, "label") ||
+      row.metric_key;
+    const uiContext = resolveMetricText(row, "ui_context") || resolveMetricText(row, "source_context") || null;
+
+    return {
+      semantic_identifier: row?.semantic_identifier ?? null,
+      ...row,
+      display_label: displayLabel,
+      search_label: searchLabel,
+      ui_context: uiContext,
+    };
+  }
+
   function parseOptionalNumber(value) {
     if (value === null || value === undefined || value === "") return null;
     const parsed = Number(String(value).replace(/,/g, "").trim());
@@ -91,7 +119,9 @@
   function buildSourceTrace(row) {
     const parts = [];
     if (row?.source_file) parts.push(`Source file: ${repairTextArtifacts(row.source_file)}`);
-    if (row?.source_context) parts.push(`Context: ${repairTextArtifacts(row.source_context)}`);
+    if (row?.ui_context || row?.source_context) {
+      parts.push(`Context: ${repairTextArtifacts(row.ui_context || row.source_context)}`);
+    }
     return parts.join("\n");
   }
 
@@ -108,6 +138,8 @@
 
     for (const row of state.rowsByKey.values()) {
       pushRow(state.rowsBySemanticIdentifier, normalizeLookupText(row.semantic_identifier), row);
+      pushRow(state.rowsByNormalizedLabel, normalizeLookupText(row.search_label), row);
+      pushRow(state.rowsByNormalizedLabel, normalizeLookupText(row.display_label), row);
       pushRow(state.rowsByNormalizedLabel, normalizeLookupText(row.label), row);
     }
   }
@@ -383,7 +415,7 @@
         if (!url) throw Object.assign(new Error("API runtime unavailable."), { status: 0 });
         url.searchParams.set("keys", keys.join(","));
         const payload = await fetchJson(url.toString());
-        return Array.isArray(payload?.data) ? payload.data : [];
+        return Array.isArray(payload?.data) ? payload.data.map(normalizeMetricRow) : [];
       },
       async () => {
         return fetchSupabaseRows({ keys, module: "", limit: keys.length || BATCH_SIZE });
@@ -399,7 +431,7 @@
         url.searchParams.set("module", module);
         url.searchParams.set("limit", String(limit));
         const payload = await fetchJson(url.toString());
-        return Array.isArray(payload?.data) ? payload.data : [];
+        return Array.isArray(payload?.data) ? payload.data.map(normalizeMetricRow) : [];
       },
       async () => {
         return fetchSupabaseRows({ keys: [], module, limit });
@@ -414,9 +446,10 @@
 
   function rememberRows(rows) {
     for (const row of rows) {
-      if (!row?.metric_key) continue;
-      state.rowsByKey.set(row.metric_key, row);
-      updateCachedModuleRow(row);
+      const normalized = normalizeMetricRow(row);
+      if (!normalized?.metric_key) continue;
+      state.rowsByKey.set(normalized.metric_key, normalized);
+      updateCachedModuleRow(normalized);
     }
     rebuildIndexes();
   }
@@ -457,9 +490,13 @@
     const rowsByNormalizedLabel = new Map();
 
     for (const row of rows.filter(Boolean)) {
-      if (row.metric_key) rowsByKey.set(row.metric_key, row);
-      pushRow(rowsBySemanticIdentifier, normalizeLookupText(row.semantic_identifier), row);
-      pushRow(rowsByNormalizedLabel, normalizeLookupText(row.label), row);
+      const normalized = normalizeMetricRow(row);
+      if (!normalized?.metric_key) continue;
+      rowsByKey.set(normalized.metric_key, normalized);
+      pushRow(rowsBySemanticIdentifier, normalizeLookupText(normalized.semantic_identifier), normalized);
+      pushRow(rowsByNormalizedLabel, normalizeLookupText(normalized.search_label), normalized);
+      pushRow(rowsByNormalizedLabel, normalizeLookupText(normalized.display_label), normalized);
+      pushRow(rowsByNormalizedLabel, normalizeLookupText(normalized.label), normalized);
     }
 
     return {
@@ -583,7 +620,7 @@
       const trace = buildSourceTrace(row);
       element.title = trace;
       element.dataset.sourceFile = row.source_file || "";
-      element.dataset.sourceContext = row.source_context || "";
+      element.dataset.sourceContext = row.ui_context || row.source_context || "";
       return;
     }
 
@@ -652,7 +689,7 @@
         },
         (payload) => {
           const isDelete = payload?.eventType === "DELETE" || (!payload?.new && payload?.old);
-          const row = isDelete ? payload?.old : payload?.new || payload?.old;
+          const row = isDelete ? normalizeMetricRow(payload?.old) : normalizeMetricRow(payload?.new || payload?.old);
           if (!row?.metric_key) return;
           if (isDelete) {
             clearRows([row.metric_key]);
@@ -684,7 +721,7 @@
           method: "PATCH",
           body: JSON.stringify(payload),
         });
-        return response?.data || null;
+        return normalizeMetricRow(response?.data || null);
       },
       async () => {
         const config = await getDirectReadConfig();
@@ -698,7 +735,7 @@
             updated_at: new Date().toISOString(),
           }),
         });
-        return Array.isArray(response) ? response[0] || null : null;
+        return normalizeMetricRow(Array.isArray(response) ? response[0] || null : null);
       },
     );
 
