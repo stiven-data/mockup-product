@@ -24,14 +24,10 @@ function createField(field, rowSelected = true) {
   };
 }
 
-test("mortgage bridge fetches mapped metric keys before applying the overlay", async () => {
+test("mortgage bridge fetches module rows and resolves semantic identifiers", async () => {
   const domEvents = new Map();
-  const rowsByKey = new Map([
-    ["mortgage_principal_balance", { value_display: "$10,853,176.39" }],
-    ["mortgage_total_due", { value_display: "$12,000,000" }],
-  ]);
   const fields = [createField("principal-balance"), createField("total-due")];
-  const requestedKeys = [];
+  const requestedModules = [];
 
   const document = {
     readyState: "loading",
@@ -46,11 +42,25 @@ test("mortgage bridge fetches mapped metric keys before applying the overlay", a
 
   const window = {
     ValorisMetrics: {
-      async ensureMetricRows(keys) {
-        requestedKeys.push(...keys);
+      async ensureModuleRows(module) {
+        requestedModules.push(module);
+        return [
+          {
+            module: "mortgage",
+            metric_key: "mortgage_modules_current_debt_001",
+            semantic_identifier: "mortgage.principal_balance",
+            value_display: "$10,853,176.39",
+          },
+          {
+            module: "mortgage",
+            metric_key: "mortgage_modules_current_debt_009",
+            semantic_identifier: "mortgage.total_due",
+            value_display: "$12,000,000",
+          },
+        ];
       },
-      getRow(metricKey) {
-        return rowsByKey.get(metricKey) || null;
+      getMetricRow(rows, lookup) {
+        return rows.find((row) => row.semantic_identifier === lookup.key) || null;
       },
       subscribe() {
         return () => {};
@@ -74,18 +84,7 @@ test("mortgage bridge fetches mapped metric keys before applying the overlay", a
   assert.equal(typeof init, "function");
   await init();
 
-  assert.deepEqual(requestedKeys, [
-    "mortgage_principal_balance",
-    "mortgage_interest_rate",
-    "mortgage_escrow_amount",
-    "mortgage_monthly_payment_io_only",
-    "mortgage_monthly_payment_with_escrow",
-    "mortgage_current_interest_due",
-    "mortgage_current_tax_due",
-    "mortgage_current_insurance_due",
-    "mortgage_total_due",
-    "mortgage_ending_escrow_balance",
-  ]);
+  assert.deepEqual(requestedModules, ["mortgage"]);
   assert.equal(fields[0].textContent, "$10,853,176.39");
   assert.equal(fields[1].textContent, "$12,000,000");
 });
