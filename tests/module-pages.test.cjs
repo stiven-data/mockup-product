@@ -165,8 +165,12 @@ test("gp page loads the shared metrics runtime and binds manual count fields", (
   const html = read("modules/Gp/views/gp mockups.html");
   assert.match(html, /supabase-data\.js/);
   assert.match(html, /gp_total_gp_sponsors/);
+  assert.match(html, /data-semantic-identifier="gp\.total_gp_sponsors"/);
+  assert.match(html, /data-fallback-metric-keys="gp_total_gp_sponsors"/);
   assert.match(html, /gp_k1_partners_in_manager_entity/);
+  assert.match(html, /data-semantic-identifier="gp\.k1_partners_in_manager_entity"/);
   assert.match(html, /gp_source_k1_year/);
+  assert.match(html, /data-semantic-identifier="gp\.source_k1_year"/);
 });
 
 test("insurance page loads the shared metrics runtime and binds insurance metrics", () => {
@@ -175,8 +179,10 @@ test("insurance page loads the shared metrics runtime and binds insurance metric
   assert.match(html, /data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_001"/);
   assert.match(html, /window\.ValorisMetrics/);
   assert.match(html, /Missing in Supabase/);
-  assert.match(html, /insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010/);
-  assert.match(html, /ensureMetricRows\(trendMetricKeys\)/);
+  assert.match(html, /key: "insurance\.monthly_expense\.2025-03"/);
+  assert.match(html, /fallbackMetricKeys: \[\s*"insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010"\s*\]/);
+  assert.match(html, /ensureModuleRows\("insurance"\)/);
+  assert.match(html, /getMetricValue\(rows, \{/);
   assert.doesNotMatch(html, /insurance_expense_[a-z]{3}_[0-9]{4}/);
   assert.doesNotMatch(html, /fallbackDisplay/);
   assert.match(html, /function escapeHtml\(value\)/);
@@ -195,7 +201,7 @@ test("insurance metric bindings stay aligned with seeded outputs", () => {
       ? new RegExp(
           `data-metric-key="${metric.metric_key}"[^>]*>${escapedDisplay}<`,
         )
-      : new RegExp(`metricKey: "${metric.metric_key}"`);
+      : new RegExp(`fallbackMetricKeys: \\[\\s*"${metric.metric_key}"\\s*\\]`);
     const csvPattern = new RegExp(
       `^insurance,${metric.metric_key},.*?,${metric.value_numeric},"?${escapedDisplay}"?,currency,USD,`,
       "m",
@@ -285,7 +291,7 @@ test("gp manual metric bindings stay aligned with seeded outputs", async () => {
 
   for (const manualMetric of GP_MANUAL_METRICS) {
     const htmlPattern = new RegExp(
-      `data-metric-key="${manualMetric.metric_key}"[^>]*>${manualMetric.value_display}<`,
+      `data-metric-key="${manualMetric.metric_key}"[^>]*data-semantic-identifier="${manualMetric.semantic_identifier}"[^>]*data-fallback-metric-keys="${manualMetric.metric_key}"[^>]*>${manualMetric.value_display}<`,
     );
     const csvPattern = new RegExp(
       `^gp,${manualMetric.metric_key},.*?,${manualMetric.value_numeric},${manualMetric.value_display},number,`,
