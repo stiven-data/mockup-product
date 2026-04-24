@@ -16,6 +16,9 @@ create table if not exists ingestion_data (
   updated_at timestamptz not null default now()
 );
 
+alter table if exists ingestion_data
+add column if not exists semantic_identifier text;
+
 create or replace function public.set_ingestion_data_updated_at()
 returns trigger
 language plpgsql

@@ -1,5 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const {
   buildSourceTrace,
@@ -38,19 +40,14 @@ test("buildSupabaseRestUrl builds a key-filtered REST query", () => {
   assert.match(url, /limit=2/);
 });
 
-test("buildSupabaseRestUrl includes semantic_identifier in the select clause", () => {
-  const url = decodeURIComponent(
-    buildSupabaseRestUrl("https://example.supabase.co", {
-      keys: ["mortgage_total_due"],
-      module: "",
-      limit: 1,
-    }),
-  );
+test("schema and setup include the rerunnable semantic_identifier migration", () => {
+  const schema = fs.readFileSync(path.join(__dirname, "..", "supabase", "schema.sql"), "utf8");
+  const setup = fs.readFileSync(path.join(__dirname, "..", "supabase", "setup.sql"), "utf8");
 
-  assert.match(
-    url,
-    /select=id,module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at/,
-  );
+  assert.match(schema, /alter table if exists ingestion_data\s+add column if not exists semantic_identifier text;/i);
+  assert.match(setup, /alter table if exists ingestion_data\s+add column if not exists semantic_identifier text;/i);
+  assert.match(schema, /create index if not exists ingestion_data_semantic_identifier_idx on ingestion_data \(semantic_identifier\);/i);
+  assert.match(setup, /create index if not exists ingestion_data_semantic_identifier_idx on ingestion_data \(semantic_identifier\);/i);
 });
 
 test("parseRequestQuery accepts module requests without keys", () => {

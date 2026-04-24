@@ -14,6 +14,9 @@
   updated_at timestamptz not null default now()
 );
 
+alter table if exists ingestion_data
+add column if not exists semantic_identifier text;
+
 create or replace function public.set_ingestion_data_updated_at()
 returns trigger
 language plpgsql
@@ -456,4 +459,36 @@ on conflict (metric_key) do update set
   source_file = excluded.source_file,
   source_context = excluded.source_context,
   updated_at = now();
+
+update ingestion_data
+set semantic_identifier = case metric_key
+  when 'mortgage_principal_balance' then 'mortgage.principal_balance'
+  when 'mortgage_interest_rate' then 'mortgage.interest_rate'
+  when 'mortgage_escrow_amount' then 'mortgage.escrow_amount'
+  when 'mortgage_monthly_payment_io_only' then 'mortgage.monthly_payment_io_only'
+  when 'mortgage_monthly_payment_with_escrow' then 'mortgage.monthly_payment_with_escrow'
+  when 'mortgage_current_interest_due' then 'mortgage.current_interest_due'
+  when 'mortgage_current_tax_due' then 'mortgage.current_tax_due'
+  when 'mortgage_current_insurance_due' then 'mortgage.current_insurance_due'
+  when 'mortgage_total_due' then 'mortgage.total_due'
+  when 'mortgage_ending_escrow_balance' then 'mortgage.ending_escrow_balance'
+  when 'gp_total_gp_sponsors' then 'gp.total_gp_sponsors'
+  when 'gp_k1_partners_in_manager_entity' then 'gp.k1_partners_in_manager_entity'
+  when 'gp_source_k1_year' then 'gp.source_k1_year'
+end
+where metric_key in (
+  'mortgage_principal_balance',
+  'mortgage_interest_rate',
+  'mortgage_escrow_amount',
+  'mortgage_monthly_payment_io_only',
+  'mortgage_monthly_payment_with_escrow',
+  'mortgage_current_interest_due',
+  'mortgage_current_tax_due',
+  'mortgage_current_insurance_due',
+  'mortgage_total_due',
+  'mortgage_ending_escrow_balance',
+  'gp_total_gp_sponsors',
+  'gp_k1_partners_in_manager_entity',
+  'gp_source_k1_year'
+);
 
