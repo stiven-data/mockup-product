@@ -43,6 +43,30 @@
   };
   let currentRows = [];
 
+  function getCachedMortgageRows(metricsRuntime = window.ValorisMetrics) {
+    if (!metricsRuntime?.getRows) {
+      return currentRows;
+    }
+
+    return metricsRuntime.getRows().filter((row) => row?.module === "mortgage");
+  }
+
+  function resolveMetricRow(metricsRuntime, rows, lookup) {
+    if (!lookup) {
+      return null;
+    }
+
+    if (metricsRuntime?.getMetricRow) {
+      return metricsRuntime.getMetricRow(rows, lookup);
+    }
+
+    if (metricsRuntime?.getRow) {
+      return lookup.fallbackMetricKeys?.map((key) => metricsRuntime.getRow(key)).find(Boolean) || null;
+    }
+
+    return null;
+  }
+
   function getBoundFields() {
     return Array.from(document.querySelectorAll("[data-mortgage-field]"));
   }
@@ -104,9 +128,7 @@
       }
 
       const lookup = FIELD_LOOKUPS[field.dataset.mortgageField];
-      const row = lookup && metricsRuntime?.getMetricRow
-        ? metricsRuntime.getMetricRow(rows, lookup)
-        : null;
+      const row = resolveMetricRow(metricsRuntime, rows, lookup);
       applyFieldValue(field, row);
     }
   }
@@ -118,15 +140,19 @@
       try {
         currentRows = await metricsRuntime.ensureModuleRows("mortgage");
       } catch (error) {
-        currentRows = [];
+        currentRows = getCachedMortgageRows(metricsRuntime);
         console.warn("[mortgage] Supabase overlay refresh failed.", error);
       }
     } else if (metricsRuntime?.refreshMetrics) {
       try {
         await metricsRuntime.refreshMetrics();
+        currentRows = getCachedMortgageRows(metricsRuntime);
       } catch (error) {
+        currentRows = getCachedMortgageRows(metricsRuntime);
         console.warn("[mortgage] Supabase overlay refresh failed.", error);
       }
+    } else {
+      currentRows = getCachedMortgageRows(metricsRuntime);
     }
 
     applyOverlay(currentRows);
@@ -149,7 +175,8 @@
   if (window.ValorisMetrics?.subscribe) {
     window.ValorisMetrics.subscribe((event) => {
       if (event.type === "metric:loaded" || event.type === "metric:change") {
-        refresh();
+        currentRows = getCachedMortgageRows(window.ValorisMetrics);
+        applyOverlay(currentRows);
       }
     });
   }
