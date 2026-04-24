@@ -6,6 +6,7 @@ const vm = require("node:vm");
 
 const runtimePath = path.join(__dirname, "../assets/js/supabase-data.js");
 const runtimeSource = fs.readFileSync(runtimePath, "utf8");
+const SUPABASE_IMPORT_SNIPPET = 'await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm")';
 
 function createResponse(payload, ok = true, status = 200) {
   return {
@@ -80,18 +81,38 @@ async function loadRuntime(metricRows, elements, options = {}) {
 
   window.window = window;
   document.defaultView = window;
+  if (options.publicConfig) {
+    window.VALORIS_PUBLIC_SUPABASE_CONFIG = options.publicConfig;
+  }
+  if (options.supabaseModule) {
+    window.__loadSupabaseModule = async () => options.supabaseModule;
+  }
 
-  const fetch = async (url) => {
-    const pathname = new URL(url).pathname;
+  const fetch = async (url, fetchOptions = {}) => {
+    const parsedUrl = new URL(url);
+    const pathname = parsedUrl.pathname;
 
     if (pathname === "/api/public-config") {
       return createResponse({});
     }
 
     if (pathname === "/api/metrics") {
+      const keys = (parsedUrl.searchParams.get("keys") || "")
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean);
+      const module = parsedUrl.searchParams.get("module");
+      const request = {
+        callCount: metricsCallCount,
+        keys,
+        method: fetchOptions.method || "GET",
+        module,
+        searchParams: parsedUrl.searchParams,
+        url: parsedUrl,
+      };
       const responseConfig =
         typeof options.metricsResponse === "function"
-          ? options.metricsResponse({ callCount: metricsCallCount })
+          ? options.metricsResponse(request)
           : Array.isArray(options.metricsResponse)
             ? options.metricsResponse[Math.min(metricsCallCount, options.metricsResponse.length - 1)]
             : options.metricsResponse;
@@ -107,11 +128,21 @@ async function loadRuntime(metricRows, elements, options = {}) {
           responseConfig.status ?? 500,
         );
       }
-      return createResponse({ data: metricRows });
+
+      const defaultRows = module
+        ? metricRows.filter((row) => row?.module === module)
+        : keys.length
+          ? metricRows.filter((row) => keys.includes(row?.metric_key))
+          : metricRows;
+      return createResponse({ data: responseConfig?.data ?? defaultRows });
     }
 
     throw new Error(`Unexpected fetch URL: ${url}`);
   };
+
+  const scriptSource = options.supabaseModule
+    ? runtimeSource.replace(SUPABASE_IMPORT_SNIPPET, "await window.__loadSupabaseModule()")
+    : runtimeSource;
 
   const context = vm.createContext({
     URL,
@@ -121,7 +152,7 @@ async function loadRuntime(metricRows, elements, options = {}) {
     window,
   });
 
-  new vm.Script(runtimeSource, {
+  new vm.Script(scriptSource, {
     filename: runtimePath,
   }).runInContext(context);
 
@@ -340,6 +371,155 @@ test("getMetricValue falls back to normalized labels and default values", async 
   assert.equal(
     runtime.window.ValorisMetrics.getMetricValue(rows, {
       key: "taxes.missing.metric",
+      defaultValue: "$0.00",
+    }),
+    "$0.00",
+  );
+});
+
+test("ensureModuleRows refetches after a later key refresh clears part of a cached module snapshot", async () => {
+  const fullModuleRows = [
+    {
+      module: "mortgage",
+      metric_key: "mortgage_total_due",
+      semantic_identifier: "mortgage.total_due",
+      label: "Total Due",
+      value_numeric: 112158.22,
+      value_display: "$112,158.22",
+    },
+    {
+      module: "mortgage",
+      metric_key: "mortgage_interest_due",
+      semantic_identifier: "mortgage.interest_due",
+      label: "Interest Due",
+      value_numeric: 18158.22,
+      value_display: "$18,158.22",
+    },
+  ];
+  let moduleFetchCount = 0;
+
+  const runtime = await loadRuntime(fullModuleRows, [], {
+    metricsResponse({ keys, module }) {
+      if (module === "mortgage") {
+        moduleFetchCount += 1;
+        return { data: fullModuleRows };
+      }
+
+      if (keys.length) {
+        return {
+          data: fullModuleRows.filter((row) => row.metric_key === "mortgage_total_due"),
+        };
+      }
+
+      return { data: [] };
+    },
+  });
+
+  const firstRows = await runtime.window.ValorisMetrics.ensureModuleRows("mortgage");
+  assert.equal(firstRows.length, 2);
+  assert.equal(moduleFetchCount, 1);
+
+  const partialRows = await runtime.window.ValorisMetrics.ensureMetricRows([
+    "mortgage_total_due",
+    "mortgage_interest_due",
+  ]);
+  assert.equal(partialRows.length, 1);
+  assert.equal(runtime.window.ValorisMetrics.getRow("mortgage_interest_due"), null);
+
+  const repairedRows = await runtime.window.ValorisMetrics.ensureModuleRows("mortgage");
+  assert.equal(moduleFetchCount, 2);
+  assert.equal(repairedRows.length, 2);
+  assert.equal(
+    runtime.window.ValorisMetrics.getRow("mortgage_interest_due").value_display,
+    "$18,158.22",
+  );
+});
+
+test("realtime delete clears the cached row instead of re-adding it", async () => {
+  let realtimeHandler = null;
+  const cachedRow = {
+    module: "taxes",
+    metric_key: "taxes_total_due",
+    semantic_identifier: "taxes.total_due",
+    label: "Total Due",
+    value_numeric: 9125000,
+    value_display: "$9,125,000",
+    source_file: "modules/taxes/views/index.html",
+    source_context: "Updated total due",
+  };
+  const elements = [
+    createElement({
+      metricKey: "taxes_total_due",
+      textContent: "$8,600,000",
+      metricMissing: "Hidden in Supabase",
+    }),
+  ];
+
+  const runtime = await loadRuntime([cachedRow], elements, {
+    publicConfig: {
+      key: "public-anon-key",
+      url: "https://example.supabase.co",
+    },
+    supabaseModule: {
+      createClient() {
+        return {
+          channel() {
+            return {
+              on(event, filter, handler) {
+                realtimeHandler = handler;
+                return this;
+              },
+              subscribe(statusHandler) {
+                if (statusHandler) statusHandler("SUBSCRIBED");
+                return this;
+              },
+            };
+          },
+        };
+      },
+    },
+  });
+
+  const rows = await runtime.window.ValorisMetrics.ensureModuleRows("taxes");
+  assert.equal(rows.length, 1);
+  assert.equal(typeof realtimeHandler, "function");
+
+  realtimeHandler({
+    eventType: "DELETE",
+    new: null,
+    old: cachedRow,
+  });
+
+  assert.equal(runtime.window.ValorisMetrics.getRow("taxes_total_due"), null);
+  assert.equal(elements[0].textContent, "Hidden in Supabase");
+});
+
+test("getMetricRow does not widen non-array lookup data to the global cache", async () => {
+  const runtime = await loadRuntime(
+    [
+      {
+        module: "mortgage",
+        metric_key: "mortgage_total_due",
+        semantic_identifier: "mortgage.total_due",
+        label: "Total Due",
+        value_numeric: 112158.22,
+        value_display: "$112,158.22",
+      },
+    ],
+    [],
+  );
+
+  await runtime.window.ValorisMetrics.ensureModuleRows("mortgage");
+
+  assert.equal(
+    runtime.window.ValorisMetrics.getMetricRow({}, {
+      key: "mortgage.total_due",
+    }),
+    null,
+  );
+  assert.equal(
+    runtime.window.ValorisMetrics.getMetricValue({}, {
+      key: "mortgage.total_due",
       defaultValue: "$0.00",
     }),
     "$0.00",

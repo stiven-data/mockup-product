@@ -42,6 +42,7 @@
     rowsByModule: new Map(),
     rowsByNormalizedLabel: new Map(),
     rowsBySemanticIdentifier: new Map(),
+    validModuleSnapshots: new Set(),
   };
 
   function chunk(values, size) {
@@ -123,6 +124,47 @@
     const nextRows = moduleRows.slice();
     nextRows[index] = row;
     state.rowsByModule.set(row.module, nextRows);
+  }
+
+  function setModuleSnapshotValidity(module, isValid) {
+    const normalizedModule = normalizeEditableText(module);
+    if (!normalizedModule) return;
+
+    if (isValid) {
+      state.validModuleSnapshots.add(normalizedModule);
+      return;
+    }
+
+    state.validModuleSnapshots.delete(normalizedModule);
+  }
+
+  function cacheModuleRows(module, rows, options = {}) {
+    const normalizedModule = normalizeEditableText(module);
+    if (!normalizedModule) return [];
+
+    const nextRows = rows.filter((row) => row?.metric_key);
+    const previousRows = state.rowsByModule.get(normalizedModule) || [];
+    const nextKeys = new Set(nextRows.map((row) => row.metric_key));
+
+    for (const row of previousRows) {
+      if (row?.metric_key && !nextKeys.has(row.metric_key)) {
+        state.rowsByKey.delete(row.metric_key);
+      }
+    }
+
+    for (const row of nextRows) {
+      state.rowsByKey.set(row.metric_key, row);
+    }
+
+    if (nextRows.length) {
+      state.rowsByModule.set(normalizedModule, nextRows);
+    } else {
+      state.rowsByModule.delete(normalizedModule);
+    }
+
+    setModuleSnapshotValidity(normalizedModule, Boolean(options.valid) && nextRows.length > 0);
+    rebuildIndexes();
+    return nextRows;
   }
 
   function isSkippableNode(node) {
@@ -355,18 +397,28 @@
   function clearRows(keys) {
     const keysToClear = new Set((keys || []).filter(Boolean));
     if (!keysToClear.size) return;
+    const modulesToInvalidate = new Set();
 
     for (const key of keysToClear) {
+      const row = state.rowsByKey.get(key);
+      if (row?.module) modulesToInvalidate.add(row.module);
       state.rowsByKey.delete(key);
     }
 
     for (const [module, rows] of state.rowsByModule.entries()) {
       const nextRows = rows.filter((row) => !keysToClear.has(row?.metric_key));
+      if (nextRows.length !== rows.length) {
+        modulesToInvalidate.add(module);
+      }
       if (nextRows.length) {
         state.rowsByModule.set(module, nextRows);
       } else {
         state.rowsByModule.delete(module);
       }
+    }
+
+    for (const module of modulesToInvalidate) {
+      setModuleSnapshotValidity(module, false);
     }
 
     rebuildIndexes();
@@ -392,11 +444,18 @@
 
   function getLookupIndexes(data) {
     if (Array.isArray(data)) return buildLookupIndexes(data);
+    if (data === undefined || data === null) {
+      return {
+        rowsByKey: state.rowsByKey,
+        rowsByNormalizedLabel: state.rowsByNormalizedLabel,
+        rowsBySemanticIdentifier: state.rowsBySemanticIdentifier,
+      };
+    }
 
     return {
-      rowsByKey: state.rowsByKey,
-      rowsByNormalizedLabel: state.rowsByNormalizedLabel,
-      rowsBySemanticIdentifier: state.rowsBySemanticIdentifier,
+      rowsByKey: new Map(),
+      rowsByNormalizedLabel: new Map(),
+      rowsBySemanticIdentifier: new Map(),
     };
   }
 
@@ -468,21 +527,20 @@
     const normalizedModule = normalizeEditableText(module);
     if (!normalizedModule) return [];
 
-    if (state.rowsByModule.has(normalizedModule)) {
+    if (state.validModuleSnapshots.has(normalizedModule)) {
       return state.rowsByModule.get(normalizedModule) || [];
     }
 
     try {
       const rows = await fetchMetricsByModule(normalizedModule);
-      const cachedRows = rows.filter((row) => row?.metric_key);
-
-      rememberRows(cachedRows);
-      state.rowsByModule.set(normalizedModule, cachedRows);
+      const cachedRows = cacheModuleRows(normalizedModule, rows, {
+        valid: rows.some((row) => row?.metric_key),
+      });
       applyRowsToPage([], { useCachedRows: true });
       emit("metric:loaded", cachedRows);
       return cachedRows;
     } catch (error) {
-      state.rowsByModule.delete(normalizedModule);
+      setModuleSnapshotValidity(normalizedModule, false);
       throw error;
     }
   }
@@ -566,8 +624,15 @@
           table: "ingestion_data",
         },
         (payload) => {
-          const row = payload.new || payload.old;
+          const isDelete = payload?.eventType === "DELETE" || (!payload?.new && payload?.old);
+          const row = isDelete ? payload?.old : payload?.new || payload?.old;
           if (!row?.metric_key) return;
+          if (isDelete) {
+            clearRows([row.metric_key]);
+            applyRowsToPage([], { useCachedRows: true });
+            emit("metric:change", row);
+            return;
+          }
           rememberRows([row]);
           applyRowsToPage([row]);
           emit("metric:change", row);
