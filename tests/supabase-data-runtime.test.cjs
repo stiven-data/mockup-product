@@ -265,3 +265,83 @@ test("ensureMetricRows fetches and caches rows without relying on bound DOM elem
   assert.equal(rows[0].metric_key, "mortgage_total_due");
   assert.equal(runtime.window.ValorisMetrics.getRow("mortgage_total_due").value_display, "$12,000,000");
 });
+
+test("getMetricValue prefers semantic_identifier over label and legacy metric keys", async () => {
+  const runtime = await loadRuntime(
+    [
+      {
+        module: "mortgage",
+        metric_key: "mortgage_modules_current_debt_999",
+        semantic_identifier: "mortgage.total_due",
+        label: "Total Due",
+        value_numeric: 112158.22,
+        value_display: "$112,158.22",
+      },
+      {
+        module: "mortgage",
+        metric_key: "mortgage_total_due",
+        semantic_identifier: null,
+        label: "Legacy Total Due",
+        value_numeric: 999,
+        value_display: "$999.00",
+      },
+    ],
+    [],
+  );
+
+  const rows = await runtime.window.ValorisMetrics.ensureModuleRows("mortgage");
+
+  assert.equal(
+    runtime.window.ValorisMetrics.getMetricValue(rows, {
+      key: "mortgage.total_due",
+      label: "Total Due",
+      metricKey: "mortgage_total_due",
+      fallbackMetricKeys: ["mortgage_total_due"],
+      defaultValue: "$0.00",
+    }),
+    "$112,158.22",
+  );
+
+  assert.equal(
+    runtime.window.ValorisMetrics.getMetricValue(rows, {
+      key: "mortgage.total_due",
+      preferNumeric: true,
+      defaultValue: 0,
+    }),
+    112158.22,
+  );
+});
+
+test("getMetricValue falls back to normalized labels and default values", async () => {
+  const runtime = await loadRuntime(
+    [
+      {
+        module: "taxes",
+        metric_key: "taxes_modules_taxes_views_index_127",
+        semantic_identifier: null,
+        label: "Total Tax Liability:",
+        value_numeric: 149715.38,
+        value_display: "$149,715.38",
+      },
+    ],
+    [],
+  );
+
+  const rows = await runtime.window.ValorisMetrics.ensureModuleRows("taxes");
+
+  assert.equal(
+    runtime.window.ValorisMetrics.getMetricValue(rows, {
+      label: " total tax liability ",
+      defaultValue: "$0.00",
+    }),
+    "$149,715.38",
+  );
+
+  assert.equal(
+    runtime.window.ValorisMetrics.getMetricValue(rows, {
+      key: "taxes.missing.metric",
+      defaultValue: "$0.00",
+    }),
+    "$0.00",
+  );
+});

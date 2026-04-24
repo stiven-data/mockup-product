@@ -3,7 +3,7 @@
   const API_PATH = "/api/metrics";
   const CONFIG_PATH = "/api/public-config";
   const DEFAULT_SELECT =
-    "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
+    "id,module,metric_key,semantic_identifier,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
   const MAX_LIMIT = 5000;
   const RUNTIME_VERSION = "2026-04-24-2";
   const MODULES = ["mortgage", "insurance", "taxes", "gp"];
@@ -39,6 +39,9 @@
     mode: "unknown",
     refreshPromise: null,
     rowsByKey: new Map(),
+    rowsByModule: new Map(),
+    rowsByNormalizedLabel: new Map(),
+    rowsBySemanticIdentifier: new Map(),
   };
 
   function chunk(values, size) {
@@ -68,6 +71,14 @@
     return repaired || "";
   }
 
+  function normalizeLookupText(value) {
+    return repairTextArtifacts(value)
+      .toLowerCase()
+      .replace(/[.:|]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
   function parseOptionalNumber(value) {
     if (value === null || value === undefined || value === "") return null;
     const parsed = Number(String(value).replace(/,/g, "").trim());
@@ -79,6 +90,39 @@
     if (row?.source_file) parts.push(`Source file: ${repairTextArtifacts(row.source_file)}`);
     if (row?.source_context) parts.push(`Context: ${repairTextArtifacts(row.source_context)}`);
     return parts.join("\n");
+  }
+
+  function pushRow(map, key, row) {
+    if (!key) return;
+    const current = map.get(key) || [];
+    current.push(row);
+    map.set(key, current);
+  }
+
+  function rebuildIndexes() {
+    state.rowsBySemanticIdentifier.clear();
+    state.rowsByNormalizedLabel.clear();
+
+    for (const row of state.rowsByKey.values()) {
+      pushRow(state.rowsBySemanticIdentifier, normalizeLookupText(row.semantic_identifier), row);
+      pushRow(state.rowsByNormalizedLabel, normalizeLookupText(row.label), row);
+    }
+  }
+
+  function updateCachedModuleRow(row) {
+    if (!row?.module || !state.rowsByModule.has(row.module)) return;
+
+    const moduleRows = state.rowsByModule.get(row.module) || [];
+    const index = moduleRows.findIndex((candidate) => candidate?.metric_key === row.metric_key);
+
+    if (index === -1) {
+      state.rowsByModule.set(row.module, [...moduleRows, row]);
+      return;
+    }
+
+    const nextRows = moduleRows.slice();
+    nextRows[index] = row;
+    state.rowsByModule.set(row.module, nextRows);
   }
 
   function isSkippableNode(node) {
@@ -301,14 +345,100 @@
 
   function rememberRows(rows) {
     for (const row of rows) {
-      if (row?.metric_key) state.rowsByKey.set(row.metric_key, row);
+      if (!row?.metric_key) continue;
+      state.rowsByKey.set(row.metric_key, row);
+      updateCachedModuleRow(row);
     }
+    rebuildIndexes();
   }
 
   function clearRows(keys) {
-    for (const key of keys) {
+    const keysToClear = new Set((keys || []).filter(Boolean));
+    if (!keysToClear.size) return;
+
+    for (const key of keysToClear) {
       state.rowsByKey.delete(key);
     }
+
+    for (const [module, rows] of state.rowsByModule.entries()) {
+      const nextRows = rows.filter((row) => !keysToClear.has(row?.metric_key));
+      if (nextRows.length) {
+        state.rowsByModule.set(module, nextRows);
+      } else {
+        state.rowsByModule.delete(module);
+      }
+    }
+
+    rebuildIndexes();
+  }
+
+  function buildLookupIndexes(rows) {
+    const rowsByKey = new Map();
+    const rowsBySemanticIdentifier = new Map();
+    const rowsByNormalizedLabel = new Map();
+
+    for (const row of rows.filter(Boolean)) {
+      if (row.metric_key) rowsByKey.set(row.metric_key, row);
+      pushRow(rowsBySemanticIdentifier, normalizeLookupText(row.semantic_identifier), row);
+      pushRow(rowsByNormalizedLabel, normalizeLookupText(row.label), row);
+    }
+
+    return {
+      rowsByKey,
+      rowsByNormalizedLabel,
+      rowsBySemanticIdentifier,
+    };
+  }
+
+  function getLookupIndexes(data) {
+    if (Array.isArray(data)) return buildLookupIndexes(data);
+
+    return {
+      rowsByKey: state.rowsByKey,
+      rowsByNormalizedLabel: state.rowsByNormalizedLabel,
+      rowsBySemanticIdentifier: state.rowsBySemanticIdentifier,
+    };
+  }
+
+  function getMetricCandidates(data, lookup = {}) {
+    const indexes = getLookupIndexes(data);
+    const semanticIdentifier = normalizeLookupText(lookup.key || lookup.metricKey);
+    const normalizedLabel = normalizeLookupText(lookup.label);
+    const candidates = [];
+    const seenMetricKeys = new Set();
+
+    function appendCandidate(row) {
+      if (!row?.metric_key || seenMetricKeys.has(row.metric_key)) return;
+      seenMetricKeys.add(row.metric_key);
+      candidates.push(row);
+    }
+
+    for (const row of indexes.rowsBySemanticIdentifier.get(semanticIdentifier) || []) {
+      appendCandidate(row);
+    }
+
+    for (const row of indexes.rowsByNormalizedLabel.get(normalizedLabel) || []) {
+      appendCandidate(row);
+    }
+
+    appendCandidate(indexes.rowsByKey.get(lookup.metricKey));
+
+    for (const metricKey of lookup.fallbackMetricKeys || []) {
+      appendCandidate(indexes.rowsByKey.get(metricKey));
+    }
+
+    return candidates;
+  }
+
+  function hasUsableMetricValue(row, preferNumeric) {
+    if (!row) return false;
+    if (preferNumeric) return parseOptionalNumber(row.value_numeric) !== null;
+    return Boolean(normalizeDisplayValue(row.value_display, ""));
+  }
+
+  function getMetricRow(data, lookup = {}) {
+    const candidates = getMetricCandidates(data, lookup);
+    return candidates.find((row) => hasUsableMetricValue(row, Boolean(lookup.preferNumeric))) || candidates[0] || null;
   }
 
   async function ensureMetricRows(metricKeys) {
@@ -330,6 +460,29 @@
     } catch (error) {
       clearRows(uniqueKeys);
       applyRowsToPage([], { useCachedRows: true });
+      throw error;
+    }
+  }
+
+  async function ensureModuleRows(module) {
+    const normalizedModule = normalizeEditableText(module);
+    if (!normalizedModule) return [];
+
+    if (state.rowsByModule.has(normalizedModule)) {
+      return state.rowsByModule.get(normalizedModule) || [];
+    }
+
+    try {
+      const rows = await fetchMetricsByModule(normalizedModule);
+      const cachedRows = rows.filter((row) => row?.metric_key);
+
+      rememberRows(cachedRows);
+      state.rowsByModule.set(normalizedModule, cachedRows);
+      applyRowsToPage([], { useCachedRows: true });
+      emit("metric:loaded", cachedRows);
+      return cachedRows;
+    } catch (error) {
+      state.rowsByModule.delete(normalizedModule);
       throw error;
     }
   }
@@ -500,8 +653,22 @@
 
   window.ValorisMetrics = {
     ensureMetricRows,
+    ensureModuleRows,
     fetchAllMetrics,
     fetchMetricsByModule,
+    getMetricRow,
+    getMetricValue(data, lookup = {}) {
+      const row = getMetricRow(data, lookup);
+      if (!row) return lookup.defaultValue;
+
+      if (lookup.preferNumeric) {
+        const value = parseOptionalNumber(row.value_numeric);
+        return value === null ? lookup.defaultValue : value;
+      }
+
+      const value = normalizeDisplayValue(row.value_display, "");
+      return value || lookup.defaultValue;
+    },
     getRow(metricKey) {
       return state.rowsByKey.get(metricKey) || null;
     },
