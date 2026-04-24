@@ -23,6 +23,20 @@
     };
   }
 
+  function parseOptionalNumber(value) {
+    if (value === null || value === undefined || value === "") return null;
+    const parsed = Number(String(value).replace(/,/g, "").trim());
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  function normalizeDraft(runtime, draft) {
+    return {
+      value_display: runtime.normalizeDisplayValue(draft.value_display),
+      value_numeric: parseOptionalNumber(draft.value_numeric),
+      source_context: String(draft.source_context || "").trim(),
+    };
+  }
+
   function inferDefaultModule() {
     const pathname = window.location.pathname.toLowerCase();
     if (pathname.includes("/modules/mortgage/")) return "mortgage";
@@ -66,6 +80,10 @@
       state.rowStatuses.set(metricKey, { message, type });
     }
 
+    function clearRowStatus(metricKey) {
+      state.rowStatuses.delete(metricKey);
+    }
+
     function getRow(metricKey) {
       return state.rows.find((item) => item.metric_key === metricKey) || null;
     }
@@ -81,11 +99,12 @@
       const draft = state.drafts.get(metricKey);
       if (!draft) return false;
 
-      const original = buildDraftFromRow(runtime, row);
+      const original = normalizeDraft(runtime, buildDraftFromRow(runtime, row));
+      const normalizedDraft = normalizeDraft(runtime, draft);
       return (
-        draft.value_display !== original.value_display ||
-        String(draft.value_numeric) !== String(original.value_numeric) ||
-        draft.source_context !== original.source_context
+        normalizedDraft.value_display !== original.value_display ||
+        normalizedDraft.value_numeric !== original.value_numeric ||
+        normalizedDraft.source_context !== original.source_context
       );
     }
 
@@ -217,7 +236,15 @@
 
     async function saveRow(metricKey) {
       const row = getRow(metricKey);
-      if (!row || !hasDraftChanges(metricKey, row)) return;
+      if (!row) return;
+
+      if (!hasDraftChanges(metricKey, row)) {
+        state.drafts.set(metricKey, buildDraftFromRow(runtime, row));
+        clearRowStatus(metricKey);
+        setStatus("Realtime sync active.", "success");
+        render();
+        return;
+      }
 
       const draft = getDraft(metricKey, row);
       state.savingRows.add(metricKey);
@@ -254,7 +281,8 @@
       if (!row) return;
 
       state.drafts.set(metricKey, buildDraftFromRow(runtime, row));
-      setRowStatus(metricKey, "Reset", "");
+      clearRowStatus(metricKey);
+      setStatus("Realtime sync active.", "success");
       render();
     }
 
@@ -269,7 +297,12 @@
 
       const draft = { ...getDraft(metricKey, row), [field]: event.target.value };
       state.drafts.set(metricKey, draft);
-      setRowStatus(metricKey, hasDraftChanges(metricKey, row) ? "Unsaved changes" : "Ready");
+      if (hasDraftChanges(metricKey, row)) {
+        setRowStatus(metricKey, "Unsaved changes");
+      } else {
+        clearRowStatus(metricKey);
+        setStatus("Realtime sync active.", "success");
+      }
       syncRowControls(rowElement, metricKey, row);
     });
 

@@ -80,8 +80,15 @@
 
   async function refresh() {
     const metricsRuntime = window.ValorisMetrics;
+    const metricKeys = [...new Set(Object.values(FIELD_TO_METRIC_KEY))];
 
-    if (metricsRuntime?.refreshMetrics) {
+    if (metricsRuntime?.ensureMetricRows) {
+      try {
+        await metricsRuntime.ensureMetricRows(metricKeys);
+      } catch (error) {
+        console.warn("[mortgage] Supabase overlay refresh failed.", error);
+      }
+    } else if (metricsRuntime?.refreshMetrics) {
       try {
         await metricsRuntime.refreshMetrics();
       } catch (error) {

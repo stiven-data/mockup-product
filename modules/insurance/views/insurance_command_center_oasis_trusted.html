@@ -458,23 +458,26 @@
         </main>
       </div>
     </div>
+    <script src="../../../assets/js/public-config.js?v=2026-04-24-3"></script>
+    <script src="../../../assets/js/supabase-data.js?v=2026-04-24-3"></script>
     <script>
       (() => {
         const insuranceTrendData = [
-          { month: "Mar-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010", period: "Mar-Jul 2025", variant: "standard" },
-          { month: "Apr-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011", period: "Mar-Jul 2025", variant: "standard" },
-          { month: "May-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012", period: "Mar-Jul 2025", variant: "standard" },
-          { month: "Jun-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013", period: "Mar-Jul 2025", variant: "standard" },
-          { month: "Jul-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014", period: "Mar-Jul 2025", variant: "standard" },
-          { month: "Aug-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015", period: "Aug-Dec 2025", variant: "standard" },
-          { month: "Sep-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016", period: "Aug-Dec 2025", variant: "standard" },
-          { month: "Oct-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017", period: "Aug-Dec 2025", variant: "standard" },
-          { month: "Nov-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018", period: "Aug-Dec 2025", variant: "standard" },
-          { month: "Dec-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019", period: "Aug-Dec 2025", variant: "standard" },
-          { month: "Jan-26", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020", period: "Jan-Feb 2026", variant: "renewal" },
-          { month: "Feb-26", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", period: "Jan-Feb 2026", variant: "renewal" }
+          { month: "Mar-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010", period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
+          { month: "Apr-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011", period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
+          { month: "May-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012", period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
+          { month: "Jun-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013", period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
+          { month: "Jul-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014", period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
+          { month: "Aug-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015", period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
+          { month: "Sep-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016", period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
+          { month: "Oct-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017", period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
+          { month: "Nov-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018", period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
+          { month: "Dec-25", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019", period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
+          { month: "Jan-26", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020", period: "Jan-Feb 2026", variant: "renewal", defaultAmount: 8500, defaultDisplay: "$8,500.00" },
+          { month: "Feb-26", metricKey: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", period: "Jan-Feb 2026", variant: "renewal", defaultAmount: 8500, defaultDisplay: "$8,500.00" }
         ];
         const missingDisplay = "Missing in Supabase";
+        const trendMetricKeys = [...new Set(insuranceTrendData.map((entry) => entry.metricKey))];
 
         const barsTarget = document.getElementById("insurance-trend-bars");
         const legendTarget = document.getElementById("insurance-trend-legend");
@@ -492,7 +495,10 @@
           minimumFractionDigits: 1,
           maximumFractionDigits: 1
         });
-        const metricsRuntime = window.ValorisMetrics;
+
+        function getMetricsRuntime() {
+          return window.ValorisMetrics || null;
+        }
 
         function escapeHtml(value) {
           return String(value)
@@ -504,12 +510,13 @@
         }
 
         function getTrendEntryState(entry) {
+          const metricsRuntime = getMetricsRuntime();
           const row = metricsRuntime?.getRow(entry.metricKey) || null;
           const numericAmount = Number(row?.value_numeric);
           return {
             ...entry,
-            amount: Number.isFinite(numericAmount) ? numericAmount : null,
-            displayAmount: row?.value_display || missingDisplay
+            amount: Number.isFinite(numericAmount) ? numericAmount : entry.defaultAmount ?? null,
+            displayAmount: row?.value_display || entry.defaultDisplay || missingDisplay
           };
         }
 
@@ -572,18 +579,28 @@
             .join("");
         }
 
-        renderInsuranceTrend();
+        async function refreshInsuranceTrend() {
+          const metricsRuntime = getMetricsRuntime();
 
-        if (metricsRuntime?.subscribe) {
-          metricsRuntime.subscribe((event) => {
+          if (metricsRuntime?.ensureMetricRows) {
+            try {
+              await metricsRuntime.ensureMetricRows(trendMetricKeys);
+            } catch (error) {
+              console.warn("[insurance] Trend metrics refresh failed.", error);
+            }
+          }
+
+          renderInsuranceTrend();
+        }
+
+        refreshInsuranceTrend();
+
+        getMetricsRuntime()?.subscribe?.((event) => {
             if (event.type === "metric:loaded" || event.type === "metric:change") {
               renderInsuranceTrend();
             }
           });
-        }
       })();
     </script>
-    <script src="../../../assets/js/public-config.js?v=2026-04-24-2"></script>
-    <script src="../../../assets/js/supabase-data.js?v=2026-04-24-2"></script>
   </body>
 </html>

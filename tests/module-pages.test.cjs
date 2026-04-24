@@ -148,9 +148,11 @@ test("insurance page loads the shared metrics runtime and binds insurance metric
   assert.match(html, /window\.ValorisMetrics/);
   assert.match(html, /Missing in Supabase/);
   assert.match(html, /insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010/);
+  assert.match(html, /ensureMetricRows\(trendMetricKeys\)/);
   assert.doesNotMatch(html, /insurance_expense_[a-z]{3}_[0-9]{4}/);
   assert.doesNotMatch(html, /fallbackDisplay/);
   assert.match(html, /function escapeHtml\(value\)/);
+  assert.ok(html.indexOf("supabase-data.js") < html.indexOf("const insuranceTrendData"));
 });
 
 test("insurance metric bindings stay aligned with seeded outputs", () => {

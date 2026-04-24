@@ -245,3 +245,23 @@ test("failed refresh after a successful load clears cached rows for bound fields
   assert.equal(elements[0].title, "");
   assert.equal(runtime.window.ValorisMetrics.getRow("taxes_total_due"), null);
 });
+
+test("ensureMetricRows fetches and caches rows without relying on bound DOM elements", async () => {
+  const runtime = await loadRuntime(
+    [
+      {
+        metric_key: "mortgage_total_due",
+        value_display: "$12,000,000",
+        source_file: "modules/mortgage/views/current-debt-data.js",
+        source_context: "Total Due",
+      },
+    ],
+    [],
+  );
+
+  const rows = await runtime.window.ValorisMetrics.ensureMetricRows(["mortgage_total_due"]);
+
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].metric_key, "mortgage_total_due");
+  assert.equal(runtime.window.ValorisMetrics.getRow("mortgage_total_due").value_display, "$12,000,000");
+});

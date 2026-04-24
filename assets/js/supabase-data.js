@@ -5,7 +5,7 @@
   const DEFAULT_SELECT =
     "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
   const MAX_LIMIT = 5000;
-  const RUNTIME_VERSION = "2026-04-24-1";
+  const RUNTIME_VERSION = "2026-04-24-2";
   const MODULES = ["mortgage", "insurance", "taxes", "gp"];
   const EMPTY_DISPLAY_TOKENS = new Set([
     "",
@@ -311,6 +311,29 @@
     }
   }
 
+  async function ensureMetricRows(metricKeys) {
+    const uniqueKeys = [...new Set((metricKeys || []).filter(Boolean))];
+    if (!uniqueKeys.length) return [];
+
+    try {
+      const rows = (
+        await Promise.all(chunk(uniqueKeys, BATCH_SIZE).map((keys) => fetchMetricBatch(keys)))
+      ).flat();
+      const resolvedKeys = new Set(rows.map((row) => row?.metric_key).filter(Boolean));
+      const missingKeys = uniqueKeys.filter((key) => !resolvedKeys.has(key));
+
+      rememberRows(rows);
+      clearRows(missingKeys);
+      applyRowsToPage([], { useCachedRows: true });
+      emit("metric:loaded", rows);
+      return rows;
+    } catch (error) {
+      clearRows(uniqueKeys);
+      applyRowsToPage([], { useCachedRows: true });
+      throw error;
+    }
+  }
+
   function applyMetricRowToElement(element, row) {
     const missingDisplay = element.dataset.metricMissing || MISSING_DISPLAY_FALLBACK;
     const nextValue = row
@@ -447,23 +470,16 @@
     repairStaticArtifactsInDom();
 
     const elements = Array.from(document.querySelectorAll("[data-metric-key]"));
-    if (!elements.length) return;
+    if (!elements.length) return [];
 
     const uniqueKeys = [...new Set(elements.map((element) => element.dataset.metricKey).filter(Boolean))];
-    if (!uniqueKeys.length) return;
+    if (!uniqueKeys.length) return [];
 
     try {
-      const rows = (
-        await Promise.all(chunk(uniqueKeys, BATCH_SIZE).map((keys) => fetchMetricBatch(keys)))
-      ).flat();
-
-      rememberRows(rows);
-      applyRowsToPage(rows, { useCachedRows: false });
-      emit("metric:loaded", rows);
+      return await ensureMetricRows(uniqueKeys);
     } catch (error) {
       console.warn("[metrics-runtime] Falling back to static HTML values.", error);
-      clearRows(uniqueKeys);
-      applyRowsToPage([], { useCachedRows: false });
+      return [];
     }
   }
 
@@ -483,6 +499,7 @@
   }
 
   window.ValorisMetrics = {
+    ensureMetricRows,
     fetchAllMetrics,
     fetchMetricsByModule,
     getRow(metricKey) {
