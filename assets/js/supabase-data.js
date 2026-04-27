@@ -450,7 +450,7 @@
   }
 
   async function fetchMetricBatch(keys) {
-    return runWithFallback(
+    const rows = await runWithFallback(
       async () => {
         const url = buildRuntimeUrl(API_PATH);
         if (!url) throw Object.assign(new Error("API runtime unavailable."), { status: 0 });
@@ -460,10 +460,12 @@
       },
       async () => fetchSupabaseRows({ keys, module: "", limit: keys.length || BATCH_SIZE }),
     );
+    rememberRows(rows);
+    return rows;
   }
 
   async function fetchMetricsByModule(module, limit = 5000) {
-    return runWithFallback(
+    const rows = await runWithFallback(
       async () => {
         const url = buildRuntimeUrl(API_PATH);
         if (!url) throw Object.assign(new Error("API runtime unavailable."), { status: 0 });
@@ -474,6 +476,10 @@
       },
       async () => fetchSupabaseRows({ keys: [], module, limit }),
     );
+    cacheModuleRows(module, rows, {
+      valid: rows.some((row) => row?.metric_key),
+    });
+    return rows;
   }
 
   async function fetchAllMetrics() {
@@ -713,7 +719,14 @@
         return normalizeMetricRow(response?.data || null);
       },
       async () => {
-        const currentRow = resolveRowByLookupKey(state.rowsByKey, state.rowsByLegacyKey, payload.metric_key);
+        let currentRow = resolveRowByLookupKey(state.rowsByKey, state.rowsByLegacyKey, payload.metric_key);
+        if (!currentRow) {
+          const refetchedRows = await fetchMetricBatch([payload.metric_key]);
+          currentRow =
+            refetchedRows.find(
+              (row) => row?.metric_key === payload.metric_key || row?.legacy_metric_key === payload.metric_key,
+            ) || null;
+        }
         if (!currentRow) {
           throw new Error(`Metric not found: ${payload.metric_key}`);
         }

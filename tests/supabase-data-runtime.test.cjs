@@ -660,3 +660,130 @@ test("direct Supabase reads retry without legacy_metric_key for pre-migration sc
   assert.equal(rows.length, 1);
   assert.equal(rows[0].legacy_metric_key, null);
 });
+
+test("fetchMetricsByModule caches rows so direct save fallback can update the same metric", async () => {
+  const runtime = await loadRuntime([], [], {
+    publicConfig: {
+      key: "public-anon-key",
+      url: "https://example.supabase.co",
+    },
+    metricsResponse: {
+      ok: false,
+      status: 502,
+      payload: { error: "api unavailable" },
+    },
+    supabaseRestResponse: ({ callCount, method, searchParams }) => {
+      if (method === "GET") {
+        if (callCount === 0) {
+          return {
+            data: [
+              {
+                module: "gp",
+                metric_key: "gp_modules_gp_views_gp_mockups_089",
+                value_type: "percent",
+                value_numeric: 2.48,
+                value_display: "2.48%",
+              },
+            ],
+          };
+        }
+
+        return {
+          data: [
+            {
+              module: "gp",
+              metric_key: "gp_modules_gp_views_gp_mockups_089",
+              value_type: "percent",
+              value_numeric: 3.5,
+              value_display: "3.5%",
+              updated_at: "2026-04-27T16:00:00.000Z",
+            },
+          ],
+        };
+      }
+
+      assert.equal(method, "PATCH");
+      assert.match(decodeURIComponent(searchParams.get("metric_key") || ""), /gp_modules_gp_views_gp_mockups_089/);
+      return {
+        data: [
+          {
+            module: "gp",
+            metric_key: "gp_modules_gp_views_gp_mockups_089",
+            value_type: "percent",
+            value_numeric: 3.5,
+            value_display: "3.5%",
+            updated_at: "2026-04-27T16:00:00.000Z",
+          },
+        ],
+      };
+    },
+  });
+
+  const rows = await runtime.window.ValorisMetrics.fetchMetricsByModule("gp");
+  assert.equal(rows.length, 1);
+
+  const saved = await runtime.window.ValorisMetrics.saveMetricUpdate({
+    metric_key: "gp_modules_gp_views_gp_mockups_089",
+    value_numeric: 3.5,
+  });
+
+  assert.equal(saved.metric_key, "gp_modules_gp_views_gp_mockups_089");
+  assert.equal(saved.value_display, "3.5%");
+});
+
+test("saveMetricUpdate refetches the metric when direct fallback has no cached row", async () => {
+  const runtime = await loadRuntime([], [], {
+    publicConfig: {
+      key: "public-anon-key",
+      url: "https://example.supabase.co",
+    },
+    metricsResponse: {
+      ok: false,
+      status: 502,
+      payload: { error: "api unavailable" },
+    },
+    supabaseRestResponse: ({ callCount, method }) => {
+      if (method === "GET" && callCount === 0) {
+        return {
+          data: [
+            {
+              module: "gp",
+              metric_key: "gp_modules_gp_views_gp_mockups_089",
+              value_type: "percent",
+              value_numeric: 2.48,
+              value_display: "2.48%",
+            },
+          ],
+        };
+      }
+
+      if (method === "PATCH") {
+        return {
+          data: [
+            {
+              module: "gp",
+              metric_key: "gp_modules_gp_views_gp_mockups_089",
+              value_type: "percent",
+              value_numeric: 4,
+              value_display: "4%",
+              updated_at: "2026-04-27T16:05:00.000Z",
+            },
+          ],
+        };
+      }
+
+      throw new Error(`Unexpected request: ${method} #${callCount}`);
+    },
+  });
+
+  const saved = await runtime.window.ValorisMetrics.saveMetricUpdate({
+    metric_key: "gp_modules_gp_views_gp_mockups_089",
+    value_numeric: 4,
+  });
+
+  assert.equal(saved.value_display, "4%");
+  assert.equal(
+    runtime.window.ValorisMetrics.getRow("gp_modules_gp_views_gp_mockups_089")?.value_display,
+    "4%",
+  );
+});

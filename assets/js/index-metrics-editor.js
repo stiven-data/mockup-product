@@ -74,7 +74,7 @@
         return String(candidate).trim();
       }
     }
-    return String(row.source_context || row.ui_context || "").trim();
+    return "";
   }
 
   function getValueTypeSummary(row) {
@@ -238,8 +238,7 @@
                 <small>Updated: ${escapeHtml(formatTimestamp(row.updated_at))}</small>
               </td>
               <td>
-                <code>${escapeHtml(runtime.normalizeDisplayValue(row.value_display))}</code>
-                <small>${escapeHtml(getValueTypeSummary(row))}</small>
+                <code>${escapeHtml(getValueTypeSummary(row))}</code>
               </td>
               <td>
                 <input
