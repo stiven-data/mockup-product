@@ -57,6 +57,25 @@ test("buildIngestionMetrics derives logical GP sponsor summary labels from row a
   assert.equal(byKey.get("gp_modules_gp_views_gp_mockups_024").display_label, "Ayesha Khalid | Est. Acq. Fee");
 });
 
+test("buildIngestionMetrics assigns business context to manual mortgage metrics", async () => {
+  const { buildIngestionMetrics } = await import("../scripts/extract-ingestion-data.mjs");
+  const metrics = await buildIngestionMetrics();
+  const byKey = new Map(metrics.map((metric) => [metric.metric_key, metric]));
+
+  assert.equal(
+    byKey.get("mortgage_current_insurance_due").source_context,
+    "Current monthly insurance due within escrow",
+  );
+  assert.equal(
+    byKey.get("mortgage_total_due").source_context,
+    "Current total monthly due including interest and escrow",
+  );
+  assert.notEqual(
+    byKey.get("mortgage_current_insurance_due").source_context,
+    byKey.get("mortgage_current_insurance_due").label,
+  );
+});
+
 test("buildIngestionMetrics derives logical GP partner roster labels for individual investor rows", async () => {
   const { buildIngestionMetrics } = await import("../scripts/extract-ingestion-data.mjs");
   const metrics = await buildIngestionMetrics();

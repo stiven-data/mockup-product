@@ -148,6 +148,15 @@ test("taxes page loads the shared metrics runtime and contains metric bindings",
   assert.match(html, /data-metric-key=/);
 });
 
+test("home page editor explains formatted values and business context separately", () => {
+  const html = read("index.html");
+
+  assert.match(html, /The formatted value is/);
+  assert.match(html, />Formatted</);
+  assert.match(html, />Raw Value</);
+  assert.match(html, />Business Context</);
+});
+
 test("gp page loads the shared metrics runtime and binds manual count fields", () => {
   const html = read("modules/Gp/views/gp mockups.html");
   assert.match(html, /supabase-data\.js/);

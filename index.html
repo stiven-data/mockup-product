@@ -63,8 +63,9 @@
                 <p class="eyebrow">Live Data</p>
                 <h2>Metrics Editor</h2>
                 <p>
-                  Edit only live values from <code>public.ingestion_data</code>. Metric keys,
-                  modules, and source files stay locked so the page structure does not drift.
+                  Edit live metrics from <code>public.ingestion_data</code>. The formatted value is
+                  derived from the raw value plus <code>value_type</code>, while business context
+                  stays editable without changing the metric identity.
                 </p>
               </div>
               <div class="editor-status" id="metrics-editor-status">Loading metrics...</div>
@@ -100,9 +101,9 @@
                 <thead>
                   <tr>
                     <th>Metric</th>
-                    <th>Rendered Value</th>
-                    <th>Numeric Value</th>
-                    <th>Context</th>
+                    <th>Formatted</th>
+                    <th>Raw Value</th>
+                    <th>Business Context</th>
                     <th>Actions</th>
                   </tr>
                 </thead>

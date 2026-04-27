@@ -15,10 +15,87 @@
     return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleString();
   }
 
+  function normalizeComparableText(value) {
+    return String(value ?? "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ");
+  }
+
+  function firstNonEmpty(values) {
+    return values.find((value) => String(value ?? "").trim()) || "";
+  }
+
+  function getPreferredLabel(row) {
+    const fallback = firstNonEmpty([row.display_label, row.search_label, row.label, row.metric_key]);
+    const rejected = new Set([
+      normalizeComparableText(row.value_display),
+      normalizeComparableText(row.metric_key),
+    ]);
+
+    for (const candidate of [row.display_label, row.search_label, row.label, row.metric_key]) {
+      const normalized = normalizeComparableText(candidate);
+      if (normalized && !rejected.has(normalized)) {
+        return candidate;
+      }
+    }
+
+    return fallback;
+  }
+
+  function isMeaningfulContext(row, candidate) {
+    const normalized = normalizeComparableText(candidate);
+    if (!normalized) return false;
+
+    const duplicates = new Set([
+      normalizeComparableText(getPreferredLabel(row)),
+      normalizeComparableText(row.display_label),
+      normalizeComparableText(row.search_label),
+      normalizeComparableText(row.label),
+      normalizeComparableText(row.metric_key),
+      normalizeComparableText(row.value_display),
+    ]);
+
+    return !duplicates.has(normalized);
+  }
+
+  function getPrimaryContext(row) {
+    for (const candidate of [row.source_context, row.ui_context]) {
+      if (isMeaningfulContext(row, candidate)) {
+        return String(candidate).trim();
+      }
+    }
+    return "";
+  }
+
+  function getEditableContextValue(row) {
+    for (const candidate of [row.source_context, row.ui_context]) {
+      if (isMeaningfulContext(row, candidate)) {
+        return String(candidate).trim();
+      }
+    }
+    return String(row.source_context || row.ui_context || "").trim();
+  }
+
+  function getValueTypeSummary(row) {
+    const type = String(row.value_type || "number").trim().toLowerCase();
+    const currency = String(row.currency || "").trim().toUpperCase();
+
+    if (type === "currency") {
+      return currency ? `currency | ${currency}` : "currency";
+    }
+    if (type === "percent") return "percent";
+    return type || "number";
+  }
+
+  function getTraceSummary(row) {
+    return `${row.module} | ${row.source_file || "No source file"}`;
+  }
+
   function buildDraftFromRow(row) {
     return {
       value_numeric: row.value_numeric ?? "",
-      source_context: row.source_context || "",
+      source_context: getEditableContextValue(row),
     };
   }
 
@@ -42,10 +119,6 @@
     if (pathname.includes("/modules/taxes/")) return "taxes";
     if (pathname.includes("/modules/gp/")) return "gp";
     return "";
-  }
-
-  function getPreferredLabel(row) {
-    return row.label || row.display_label || row.search_label || row.metric_key;
   }
 
   function boot() {
@@ -121,6 +194,8 @@
             row.metric_key,
             row.legacy_metric_key,
             row.label,
+            row.display_label,
+            row.search_label,
             row.value_display,
             row.source_file,
             row.ui_context,
@@ -152,24 +227,37 @@
           const rowStatus = state.rowStatuses.get(row.metric_key);
           const isDirty = hasDraftChanges(row.metric_key, row);
           const isSaving = state.savingRows.has(row.metric_key);
+          const primaryContext = getPrimaryContext({ ...row, source_context: draft.source_context });
 
           return `
             <tr data-metric-key="${escapeHtml(row.metric_key)}">
               <td>
                 <strong>${escapeHtml(getPreferredLabel(row))}</strong>
-                <small>${escapeHtml(row.metric_key)}</small>
+                <small class="metric-key">${escapeHtml(row.metric_key)}</small>
                 ${row.legacy_metric_key ? `<small>Legacy: ${escapeHtml(row.legacy_metric_key)}</small>` : ""}
-                <small>${escapeHtml(row.module)} | ${escapeHtml(row.source_file || "No source file")}</small>
                 <small>Updated: ${escapeHtml(formatTimestamp(row.updated_at))}</small>
               </td>
               <td>
                 <code>${escapeHtml(runtime.normalizeDisplayValue(row.value_display))}</code>
+                <small>${escapeHtml(getValueTypeSummary(row))}</small>
               </td>
               <td>
-                <input data-field="value_numeric" value="${escapeHtml(draft.value_numeric)}" />
+                <input
+                  data-field="value_numeric"
+                  inputmode="decimal"
+                  placeholder="Enter raw numeric value"
+                  step="any"
+                  value="${escapeHtml(draft.value_numeric)}"
+                />
               </td>
               <td>
-                <textarea data-field="source_context">${escapeHtml(draft.source_context)}</textarea>
+                <div class="editor-context">
+                  <p class="context-summary${primaryContext ? "" : " is-empty"}">
+                    ${escapeHtml(primaryContext || "No business context available.")}
+                  </p>
+                  <small class="context-trace">${escapeHtml(getTraceSummary(row))}</small>
+                  <textarea data-field="source_context" placeholder="Describe what the raw value represents in business terms.">${escapeHtml(draft.source_context)}</textarea>
+                </div>
               </td>
               <td>
                 <div class="editor-actions">
@@ -209,6 +297,15 @@
       if (resetButton) {
         resetButton.disabled = !isDirty || isSaving;
       }
+    }
+
+    function syncContextPreview(rowElement, row, draft) {
+      const preview = rowElement.querySelector(".context-summary");
+      if (!preview) return;
+
+      const context = getPrimaryContext({ ...row, source_context: draft.source_context });
+      preview.textContent = context || "No business context available.";
+      preview.className = `context-summary${context ? "" : " is-empty"}`;
     }
 
     async function loadRows() {
@@ -305,6 +402,9 @@
       } else {
         clearRowStatus(metricKey);
         setStatus("Realtime sync active.", "success");
+      }
+      if (field === "source_context") {
+        syncContextPreview(rowElement, row, draft);
       }
       syncRowControls(rowElement, metricKey, row);
     });

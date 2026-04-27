@@ -19,16 +19,16 @@ const METADATA_ONLY_OUTPUT = path.join(OUTPUT_DIR, "setup_metadata_only.sql");
 const SCHEMA_OUTPUT = path.join(OUTPUT_DIR, "schema.sql");
 
 const mortgageMetrics = [
-  metric("mortgage", "mortgage_principal_balance", "Principal Balance", 10853176.39, "$10,853,176.39", "currency", "modules/mortgage/views/current-debt-data.js"),
-  metric("mortgage", "mortgage_interest_rate", "Interest Rate", 8.5, "8.50%", "percent", "modules/mortgage/views/current-debt-data.js"),
-  metric("mortgage", "mortgage_escrow_amount", "Escrow Amount", 32719, "$32,719.00 / mo (taxes + insurance impound)", "currency", "modules/mortgage/views/current-debt-data.js"),
-  metric("mortgage", "mortgage_monthly_payment_io_only", "Monthly Payment IO Only", 79439.22, "$79,439.22", "currency", "modules/mortgage/views/current-debt-data.js"),
-  metric("mortgage", "mortgage_monthly_payment_with_escrow", "Monthly Payment With Escrow", 112158.22, "$112,158.22", "currency", "modules/mortgage/views/current-debt-data.js"),
-  metric("mortgage", "mortgage_current_interest_due", "Current Interest Due", 79439.22, "$79,439.22", "currency", "modules/mortgage/views/current-debt-data.js"),
-  metric("mortgage", "mortgage_current_tax_due", "Current Tax Due", 14572.46, "$14,572.46", "currency", "modules/mortgage/views/current-debt-data.js"),
-  metric("mortgage", "mortgage_current_insurance_due", "Current Insurance Due", 18146.54, "$18,146.54", "currency", "modules/mortgage/views/current-debt-data.js"),
-  metric("mortgage", "mortgage_total_due", "Total Due", 112158.22, "$112,158.22", "currency", "modules/mortgage/views/current-debt-data.js"),
-  metric("mortgage", "mortgage_ending_escrow_balance", "Ending Escrow Balance", 281922.98, "$281,922.98", "currency", "modules/mortgage/views/current-debt-data.js"),
+  metric("mortgage", "mortgage_principal_balance", "Principal Balance", 10853176.39, "$10,853,176.39", "currency", "modules/mortgage/views/current-debt-data.js", "Outstanding principal balance from the current debt snapshot"),
+  metric("mortgage", "mortgage_interest_rate", "Interest Rate", 8.5, "8.50%", "percent", "modules/mortgage/views/current-debt-data.js", "Annual interest rate applied to the current debt"),
+  metric("mortgage", "mortgage_escrow_amount", "Escrow Amount", 32719, "$32,719.00 / mo (taxes + insurance impound)", "currency", "modules/mortgage/views/current-debt-data.js", "Monthly escrow amount covering taxes and insurance impound"),
+  metric("mortgage", "mortgage_monthly_payment_io_only", "Monthly Payment IO Only", 79439.22, "$79,439.22", "currency", "modules/mortgage/views/current-debt-data.js", "Interest-only monthly payment before escrow"),
+  metric("mortgage", "mortgage_monthly_payment_with_escrow", "Monthly Payment With Escrow", 112158.22, "$112,158.22", "currency", "modules/mortgage/views/current-debt-data.js", "Monthly payment including escrow"),
+  metric("mortgage", "mortgage_current_interest_due", "Current Interest Due", 79439.22, "$79,439.22", "currency", "modules/mortgage/views/current-debt-data.js", "Current monthly interest due"),
+  metric("mortgage", "mortgage_current_tax_due", "Current Tax Due", 14572.46, "$14,572.46", "currency", "modules/mortgage/views/current-debt-data.js", "Current monthly tax due within escrow"),
+  metric("mortgage", "mortgage_current_insurance_due", "Current Insurance Due", 18146.54, "$18,146.54", "currency", "modules/mortgage/views/current-debt-data.js", "Current monthly insurance due within escrow"),
+  metric("mortgage", "mortgage_total_due", "Total Due", 112158.22, "$112,158.22", "currency", "modules/mortgage/views/current-debt-data.js", "Current total monthly due including interest and escrow"),
+  metric("mortgage", "mortgage_ending_escrow_balance", "Ending Escrow Balance", 281922.98, "$281,922.98", "currency", "modules/mortgage/views/current-debt-data.js", "Projected ending escrow balance from the current debt snapshot"),
 ];
 
 const insuranceTrendMetrics = [

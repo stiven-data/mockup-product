@@ -554,6 +554,18 @@ body {
   color: var(--text-soft);
 }
 
+.app-shell .editor-table code {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.app-shell .metric-key {
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+}
+
 .app-shell .editor-table input,
 .app-shell .editor-table textarea {
   width: 100%;
@@ -567,6 +579,27 @@ body {
 .app-shell .editor-table textarea {
   min-height: 84px;
   resize: vertical;
+}
+
+.app-shell .editor-context {
+  display: grid;
+  gap: 8px;
+}
+
+.app-shell .context-summary {
+  margin: 0;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.app-shell .context-summary.is-empty {
+  color: var(--text-soft);
+  font-style: italic;
+}
+
+.app-shell .context-trace {
+  margin-top: 0;
 }
 
 .app-shell .editor-actions {
