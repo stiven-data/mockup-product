@@ -1,14 +1,6 @@
 (() => {
   const RUNTIME_KEY = "ValorisMetrics";
 
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;");
-  }
-
   function formatTimestamp(value) {
     if (!value) return "Never updated";
     const parsed = new Date(value);
@@ -212,69 +204,118 @@
       meta.textContent = `${rows.length} visible metric${rows.length === 1 ? "" : "s"} loaded from Supabase.`;
     }
 
+    function appendTextNode(parent, tagName, text, className = "") {
+      const element = document.createElement(tagName);
+      if (className) {
+        element.className = className;
+      }
+      element.textContent = text;
+      parent.appendChild(element);
+      return element;
+    }
+
+    function buildEmptyStateRow(message) {
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+      cell.colSpan = 5;
+      cell.textContent = message;
+      row.appendChild(cell);
+      return row;
+    }
+
+    function buildMetricRow(row) {
+      const draft = getDraft(row.metric_key, row);
+      const rowStatus = state.rowStatuses.get(row.metric_key);
+      const isDirty = hasDraftChanges(row.metric_key, row);
+      const isSaving = state.savingRows.has(row.metric_key);
+      const primaryContext = getPrimaryContext({ ...row, source_context: draft.source_context });
+      const tableRow = document.createElement("tr");
+      tableRow.dataset.metricKey = row.metric_key;
+
+      const metricCell = document.createElement("td");
+      appendTextNode(metricCell, "strong", getPreferredLabel(row));
+      appendTextNode(metricCell, "small", row.metric_key, "metric-key");
+      if (row.legacy_metric_key) {
+        appendTextNode(metricCell, "small", `Legacy: ${row.legacy_metric_key}`);
+      }
+      appendTextNode(metricCell, "small", `Updated: ${formatTimestamp(row.updated_at)}`);
+      tableRow.appendChild(metricCell);
+
+      const formattedCell = document.createElement("td");
+      appendTextNode(formattedCell, "code", getValueTypeSummary(row));
+      tableRow.appendChild(formattedCell);
+
+      const rawValueCell = document.createElement("td");
+      const numericInput = document.createElement("input");
+      numericInput.dataset.field = "value_numeric";
+      numericInput.inputMode = "decimal";
+      numericInput.placeholder = "Enter raw numeric value";
+      numericInput.step = "any";
+      numericInput.value = String(draft.value_numeric ?? "");
+      rawValueCell.appendChild(numericInput);
+      tableRow.appendChild(rawValueCell);
+
+      const contextCell = document.createElement("td");
+      const contextWrap = document.createElement("div");
+      contextWrap.className = "editor-context";
+      const contextSummary = appendTextNode(
+        contextWrap,
+        "p",
+        primaryContext || "No business context available.",
+        `context-summary${primaryContext ? "" : " is-empty"}`,
+      );
+      contextSummary.className = `context-summary${primaryContext ? "" : " is-empty"}`;
+      appendTextNode(contextWrap, "small", getTraceSummary(row), "context-trace");
+      const contextTextarea = document.createElement("textarea");
+      contextTextarea.dataset.field = "source_context";
+      contextTextarea.placeholder = "Describe what the raw value represents in business terms.";
+      contextTextarea.value = draft.source_context;
+      contextWrap.appendChild(contextTextarea);
+      contextCell.appendChild(contextWrap);
+      tableRow.appendChild(contextCell);
+
+      const actionsCell = document.createElement("td");
+      const actionsWrap = document.createElement("div");
+      actionsWrap.className = "editor-actions";
+
+      const saveButton = document.createElement("button");
+      saveButton.className = "save-button";
+      saveButton.dataset.action = "save";
+      saveButton.disabled = !isDirty || isSaving;
+      saveButton.textContent = isSaving ? "Saving..." : "Save";
+      actionsWrap.appendChild(saveButton);
+
+      const resetButton = document.createElement("button");
+      resetButton.className = "reset-button";
+      resetButton.dataset.action = "reset";
+      resetButton.disabled = !isDirty || isSaving;
+      resetButton.textContent = "Reset";
+      actionsWrap.appendChild(resetButton);
+
+      const rowStatusElement = document.createElement("span");
+      rowStatusElement.className = `row-status${rowStatus?.type ? ` is-${rowStatus.type}` : ""}`;
+      rowStatusElement.textContent = rowStatus?.message || (isDirty ? "Unsaved changes" : "Ready");
+      actionsWrap.appendChild(rowStatusElement);
+
+      actionsCell.appendChild(actionsWrap);
+      tableRow.appendChild(actionsCell);
+
+      return tableRow;
+    }
+
     function render() {
       const rows = getVisibleRows();
       updateMeta(rows);
+      body.replaceChildren();
 
       if (!rows.length) {
-        body.innerHTML = '<tr><td colspan="5">No metrics match the current filters.</td></tr>';
+        body.appendChild(buildEmptyStateRow("No metrics match the current filters."));
         return;
       }
 
-      body.innerHTML = rows
-        .map((row) => {
-          const draft = getDraft(row.metric_key, row);
-          const rowStatus = state.rowStatuses.get(row.metric_key);
-          const isDirty = hasDraftChanges(row.metric_key, row);
-          const isSaving = state.savingRows.has(row.metric_key);
-          const primaryContext = getPrimaryContext({ ...row, source_context: draft.source_context });
-
-          return `
-            <tr data-metric-key="${escapeHtml(row.metric_key)}">
-              <td>
-                <strong>${escapeHtml(getPreferredLabel(row))}</strong>
-                <small class="metric-key">${escapeHtml(row.metric_key)}</small>
-                ${row.legacy_metric_key ? `<small>Legacy: ${escapeHtml(row.legacy_metric_key)}</small>` : ""}
-                <small>Updated: ${escapeHtml(formatTimestamp(row.updated_at))}</small>
-              </td>
-              <td>
-                <code>${escapeHtml(getValueTypeSummary(row))}</code>
-              </td>
-              <td>
-                <input
-                  data-field="value_numeric"
-                  inputmode="decimal"
-                  placeholder="Enter raw numeric value"
-                  step="any"
-                  value="${escapeHtml(draft.value_numeric)}"
-                />
-              </td>
-              <td>
-                <div class="editor-context">
-                  <p class="context-summary${primaryContext ? "" : " is-empty"}">
-                    ${escapeHtml(primaryContext || "No business context available.")}
-                  </p>
-                  <small class="context-trace">${escapeHtml(getTraceSummary(row))}</small>
-                  <textarea data-field="source_context" placeholder="Describe what the raw value represents in business terms.">${escapeHtml(draft.source_context)}</textarea>
-                </div>
-              </td>
-              <td>
-                <div class="editor-actions">
-                  <button class="save-button" data-action="save" ${isDirty && !isSaving ? "" : "disabled"}>
-                    ${isSaving ? "Saving..." : "Save"}
-                  </button>
-                  <button class="reset-button" data-action="reset" ${isDirty && !isSaving ? "" : "disabled"}>
-                    Reset
-                  </button>
-                  <span class="row-status${rowStatus?.type ? ` is-${rowStatus.type}` : ""}">
-                    ${escapeHtml(rowStatus?.message || (isDirty ? "Unsaved changes" : "Ready"))}
-                  </span>
-                </div>
-              </td>
-            </tr>
-          `;
-        })
-        .join("");
+      for (const row of rows) {
+        body.appendChild(buildMetricRow(row));
+      }
     }
 
     function syncRowControls(rowElement, metricKey, row) {
@@ -312,7 +353,7 @@
         state.rows = [];
         setStatus("Select a module to load metrics.");
         meta.textContent = "Choose a module to edit its live metrics.";
-        body.innerHTML = '<tr><td colspan="5">Select a module to load metrics.</td></tr>';
+        body.replaceChildren(buildEmptyStateRow("Select a module to load metrics."));
         return;
       }
 
@@ -330,7 +371,7 @@
       } catch (error) {
         const message = error.message || "Failed to load metrics.";
         setStatus(message, "error");
-        body.innerHTML = `<tr><td colspan="5">${escapeHtml(message)}</td></tr>`;
+        body.replaceChildren(buildEmptyStateRow(message));
       }
     }
 
