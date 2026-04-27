@@ -2,7 +2,8 @@ const {
   DEFAULT_SELECT,
   LEGACY_SELECT,
   buildSupabaseRestUrl,
-  isMissingSemanticIdentifierError,
+  formatMetricDisplay,
+  isMissingLegacyMetricKeyError,
   normalizeMetricRows,
   parseMetricUpdatePayload,
   parseRequestQuery,
@@ -29,10 +30,10 @@ function getSupabaseCredentials(mode = "read") {
   return { url, key };
 }
 
-function buildSupabaseUpdateUrl(baseUrl, metricKey) {
+function buildSupabaseUpdateUrl(baseUrl, metricKey, select = DEFAULT_SELECT) {
   const url = new URL("/rest/v1/ingestion_data", baseUrl);
   url.searchParams.set("metric_key", `eq.${metricKey}`);
-  url.searchParams.set("select", "*");
+  url.searchParams.set("select", select);
   return url.toString();
 }
 
@@ -42,10 +43,9 @@ function readJsonBody(req) {
   return {};
 }
 
-async function fetchMetricsRows(credentials, query) {
+async function fetchRows(credentials, endpointBuilder) {
   for (const select of [DEFAULT_SELECT, LEGACY_SELECT]) {
-    const endpoint = buildSupabaseRestUrl(credentials.url, query, { select });
-    const response = await fetch(endpoint, {
+    const response = await fetch(endpointBuilder(select), {
       headers: {
         apikey: credentials.key,
         authorization: `Bearer ${credentials.key}`,
@@ -57,7 +57,7 @@ async function fetchMetricsRows(credentials, query) {
     }
 
     const details = await response.text();
-    if (select === DEFAULT_SELECT && isMissingSemanticIdentifierError(response.status, details)) {
+    if (select === DEFAULT_SELECT && isMissingLegacyMetricKeyError(response.status, details)) {
       continue;
     }
 
@@ -65,6 +65,18 @@ async function fetchMetricsRows(credentials, query) {
   }
 
   return [];
+}
+
+async function fetchMetricsRows(credentials, query) {
+  return fetchRows(credentials, (select) => buildSupabaseRestUrl(credentials.url, query, { select }));
+}
+
+async function fetchMetricRow(credentials, metricKey) {
+  const rows = await fetchRows(
+    credentials,
+    (select) => buildSupabaseUpdateUrl(credentials.url, metricKey, select),
+  );
+  return rows[0] || null;
 }
 
 module.exports = async (req, res) => {
@@ -110,6 +122,21 @@ module.exports = async (req, res) => {
 
     const { metric_key, updates } = parseMetricUpdatePayload(readJsonBody(req));
     const credentials = getSupabaseCredentials("write");
+    const existingRow = await fetchMetricRow(credentials, metric_key);
+
+    if (!existingRow) {
+      throw new Error(`Metric not found: ${metric_key}`);
+    }
+
+    const finalUpdates = {
+      ...updates,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (updates.value_numeric !== undefined) {
+      finalUpdates.value_display = formatMetricDisplay(existingRow, updates.value_numeric);
+    }
+
     const endpoint = buildSupabaseUpdateUrl(credentials.url, metric_key);
     const response = await fetch(endpoint, {
       method: "PATCH",
@@ -119,10 +146,7 @@ module.exports = async (req, res) => {
         authorization: `Bearer ${credentials.key}`,
         Prefer: "return=representation",
       },
-      body: JSON.stringify({
-        ...updates,
-        updated_at: new Date().toISOString(),
-      }),
+      body: JSON.stringify(finalUpdates),
     });
 
     if (!response.ok) {
@@ -130,9 +154,9 @@ module.exports = async (req, res) => {
       throw new Error(`Supabase request failed (${response.status}): ${details}`);
     }
 
-    const [data] = await response.json();
+    const [data] = normalizeMetricRows(await response.json());
     res.statusCode = 200;
-    res.end(JSON.stringify({ data }));
+    res.end(JSON.stringify({ data: data || null }));
   } catch (error) {
     res.statusCode = 502;
     res.end(JSON.stringify({ error: error.message }));

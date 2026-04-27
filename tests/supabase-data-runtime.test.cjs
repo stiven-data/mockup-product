@@ -77,6 +77,7 @@ async function loadRuntime(metricRows, elements, options = {}) {
     document,
     location: {
       origin: "https://example.test",
+      pathname: options.pathname || "/",
     },
   };
 
@@ -237,6 +238,7 @@ test("row values replace the static text with value_display", async () => {
   await loadRuntime(
     [
       {
+        module: "taxes",
         metric_key: "taxes_total_due",
         value_display: "$9,125,000",
         source_file: "modules/taxes/views/index.html",
@@ -285,6 +287,7 @@ test("failed refresh after a successful load clears cached rows for bound fields
   const runtime = await loadRuntime(
     [
       {
+        module: "taxes",
         metric_key: "taxes_total_due",
         value_display: "$9,125,000",
         source_file: "modules/taxes/views/index.html",
@@ -312,6 +315,7 @@ test("ensureMetricRows fetches and caches rows without relying on bound DOM elem
   const runtime = await loadRuntime(
     [
       {
+        module: "mortgage",
         metric_key: "mortgage_total_due",
         value_display: "$12,000,000",
         source_file: "modules/mortgage/views/current-debt-data.js",
@@ -328,24 +332,15 @@ test("ensureMetricRows fetches and caches rows without relying on bound DOM elem
   assert.equal(runtime.window.ValorisMetrics.getRow("mortgage_total_due").value_display, "$12,000,000");
 });
 
-test("getMetricValue prefers semantic_identifier over label and legacy metric keys", async () => {
+test("getMetricValue resolves exact metric_key and numeric values", async () => {
   const runtime = await loadRuntime(
     [
       {
         module: "mortgage",
-        metric_key: "mortgage_modules_current_debt_999",
-        semantic_identifier: "mortgage.total_due",
+        metric_key: "mortgage_total_due",
         label: "Total Due",
         value_numeric: 112158.22,
         value_display: "$112,158.22",
-      },
-      {
-        module: "mortgage",
-        metric_key: "mortgage_total_due",
-        semantic_identifier: null,
-        label: "Legacy Total Due",
-        value_numeric: 999,
-        value_display: "$999.00",
       },
     ],
     [],
@@ -355,10 +350,7 @@ test("getMetricValue prefers semantic_identifier over label and legacy metric ke
 
   assert.equal(
     runtime.window.ValorisMetrics.getMetricValue(rows, {
-      key: "mortgage.total_due",
-      label: "Total Due",
       metricKey: "mortgage_total_due",
-      fallbackMetricKeys: ["mortgage_total_due"],
       defaultValue: "$0.00",
     }),
     "$112,158.22",
@@ -366,7 +358,7 @@ test("getMetricValue prefers semantic_identifier over label and legacy metric ke
 
   assert.equal(
     runtime.window.ValorisMetrics.getMetricValue(rows, {
-      key: "mortgage.total_due",
+      metricKey: "mortgage_total_due",
       preferNumeric: true,
       defaultValue: 0,
     }),
@@ -374,13 +366,38 @@ test("getMetricValue prefers semantic_identifier over label and legacy metric ke
   );
 });
 
-test("getMetricValue falls back to normalized labels and default values", async () => {
+test("getMetricValue supports legacy_metric_key fallback for transitional bindings", async () => {
   const runtime = await loadRuntime(
     [
       {
         module: "taxes",
-        metric_key: "taxes_modules_taxes_views_index_127",
-        semantic_identifier: null,
+        metric_key: "taxes_total_tax_liability",
+        legacy_metric_key: "taxes_modules_taxes_views_index_127",
+        label: "Total Tax Liability",
+        value_numeric: 149715.38,
+        value_display: "$149,715.38",
+      },
+    ],
+    [],
+  );
+
+  const rows = await runtime.window.ValorisMetrics.ensureModuleRows("taxes");
+
+  assert.equal(
+    runtime.window.ValorisMetrics.getMetricValue(rows, {
+      fallbackMetricKeys: ["taxes_modules_taxes_views_index_127"],
+      defaultValue: "$0.00",
+    }),
+    "$149,715.38",
+  );
+});
+
+test("getMetricValue no longer falls back to labels or semantic identifiers", async () => {
+  const runtime = await loadRuntime(
+    [
+      {
+        module: "taxes",
+        metric_key: "taxes_total_tax_liability",
         label: "Total Tax Liability:",
         value_numeric: 149715.38,
         value_display: "$149,715.38",
@@ -396,7 +413,7 @@ test("getMetricValue falls back to normalized labels and default values", async 
       label: " total tax liability ",
       defaultValue: "$0.00",
     }),
-    "$149,715.38",
+    "$0.00",
   );
 
   assert.equal(
@@ -413,7 +430,6 @@ test("ensureModuleRows refetches after a later key refresh clears part of a cach
     {
       module: "mortgage",
       metric_key: "mortgage_total_due",
-      semantic_identifier: "mortgage.total_due",
       label: "Total Due",
       value_numeric: 112158.22,
       value_display: "$112,158.22",
@@ -421,7 +437,6 @@ test("ensureModuleRows refetches after a later key refresh clears part of a cach
     {
       module: "mortgage",
       metric_key: "mortgage_interest_due",
-      semantic_identifier: "mortgage.interest_due",
       label: "Interest Due",
       value_numeric: 18158.22,
       value_display: "$18,158.22",
@@ -471,7 +486,7 @@ test("realtime delete clears the cached row instead of re-adding it", async () =
   const cachedRow = {
     module: "taxes",
     metric_key: "taxes_total_due",
-    semantic_identifier: "taxes.total_due",
+    legacy_metric_key: "taxes_modules_taxes_views_index_002",
     label: "Total Due",
     value_numeric: 9125000,
     value_display: "$9,125,000",
@@ -525,13 +540,57 @@ test("realtime delete clears the cached row instead of re-adding it", async () =
   assert.equal(elements[0].textContent, "Hidden in Supabase");
 });
 
+test("module pages can render legacy DOM bindings after fetching canonical rows by module", async () => {
+  const elements = [
+    createElement({
+      metricKey: "taxes_modules_taxes_views_index_127",
+      textContent: "$0.00",
+      metricMissing: "Hidden in Supabase",
+    }),
+  ];
+
+  const runtime = await loadRuntime(
+    [
+      {
+        module: "taxes",
+        metric_key: "taxes_total_tax_liability",
+        legacy_metric_key: "taxes_modules_taxes_views_index_127",
+        value_display: "$149,715.38",
+      },
+    ],
+    elements,
+    {
+      pathname: "/modules/taxes/views/index.html",
+      metricsResponse({ module }) {
+        return module === "taxes"
+          ? {
+              data: [
+                {
+                  module: "taxes",
+                  metric_key: "taxes_total_tax_liability",
+                  legacy_metric_key: "taxes_modules_taxes_views_index_127",
+                  value_display: "$149,715.38",
+                },
+              ],
+            }
+          : { data: [] };
+      },
+    },
+  );
+
+  assert.equal(elements[0].textContent, "$149,715.38");
+  assert.equal(
+    runtime.window.ValorisMetrics.getRow("taxes_modules_taxes_views_index_127").metric_key,
+    "taxes_total_tax_liability",
+  );
+});
+
 test("getMetricRow does not widen non-array lookup data to the global cache", async () => {
   const runtime = await loadRuntime(
     [
       {
         module: "mortgage",
         metric_key: "mortgage_total_due",
-        semantic_identifier: "mortgage.total_due",
         label: "Total Due",
         value_numeric: 112158.22,
         value_display: "$112,158.22",
@@ -544,20 +603,20 @@ test("getMetricRow does not widen non-array lookup data to the global cache", as
 
   assert.equal(
     runtime.window.ValorisMetrics.getMetricRow({}, {
-      key: "mortgage.total_due",
+      metricKey: "mortgage_total_due",
     }),
     null,
   );
   assert.equal(
     runtime.window.ValorisMetrics.getMetricValue({}, {
-      key: "mortgage.total_due",
+      metricKey: "mortgage_total_due",
       defaultValue: "$0.00",
     }),
     "$0.00",
   );
 });
 
-test("direct Supabase reads retry without semantic_identifier for legacy schemas", async () => {
+test("direct Supabase reads retry without legacy_metric_key for pre-migration schemas", async () => {
   const runtime = await loadRuntime([], [], {
     publicConfig: {
       key: "public-anon-key",
@@ -576,12 +635,12 @@ test("direct Supabase reads retry without semantic_identifier for legacy schemas
           status: 400,
           payload: {
             code: "PGRST204",
-            error: "Could not find the 'semantic_identifier' column of 'ingestion_data' in the schema cache",
+            error: "Could not find the 'legacy_metric_key' column of 'ingestion_data' in the schema cache",
           },
         };
       }
 
-      assert.doesNotMatch(select, /semantic_identifier/);
+      assert.doesNotMatch(select, /legacy_metric_key/);
       return {
         data: [
           {
@@ -599,5 +658,5 @@ test("direct Supabase reads retry without semantic_identifier for legacy schemas
   const rows = await runtime.window.ValorisMetrics.fetchMetricsByModule("gp");
 
   assert.equal(rows.length, 1);
-  assert.equal(rows[0].semantic_identifier, null);
+  assert.equal(rows[0].legacy_metric_key, null);
 });

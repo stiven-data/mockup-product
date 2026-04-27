@@ -6,6 +6,7 @@ const path = require("node:path");
 const {
   buildSourceTrace,
   buildSupabaseRestUrl,
+  formatMetricDisplay,
   parseMetricUpdatePayload,
   parseRequestQuery,
 } = require("../api/_lib/metrics.js");
@@ -36,19 +37,19 @@ test("buildSupabaseRestUrl builds a key-filtered REST query", () => {
   assert.match(url, /metric_key=in\.\("mortgage_total_due","mortgage_interest_rate"\)/);
   assert.match(
     url,
-    /select=id,module,metric_key,semantic_identifier,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context,updated_at/,
+    /select=id,module,metric_key,legacy_metric_key,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context,updated_at/,
   );
   assert.match(url, /limit=2/);
 });
 
-test("schema and setup include the rerunnable semantic_identifier migration", () => {
+test("schema and setup include the rerunnable legacy_metric_key migration", () => {
   const schema = fs.readFileSync(path.join(__dirname, "..", "supabase", "schema.sql"), "utf8");
   const setup = fs.readFileSync(path.join(__dirname, "..", "supabase", "setup.sql"), "utf8");
 
-  assert.match(schema, /alter table if exists ingestion_data\s+add column if not exists semantic_identifier text;/i);
-  assert.match(setup, /alter table if exists ingestion_data\s+add column if not exists semantic_identifier text;/i);
-  assert.match(schema, /create index if not exists ingestion_data_semantic_identifier_idx on ingestion_data \(semantic_identifier\);/i);
-  assert.match(setup, /create index if not exists ingestion_data_semantic_identifier_idx on ingestion_data \(semantic_identifier\);/i);
+  assert.match(schema, /alter table if exists ingestion_data\s+add column if not exists legacy_metric_key text;/i);
+  assert.match(setup, /alter table if exists ingestion_data\s+add column if not exists legacy_metric_key text;/i);
+  assert.match(schema, /create index if not exists ingestion_data_legacy_metric_key_idx on ingestion_data \(legacy_metric_key\);/i);
+  assert.match(setup, /create index if not exists ingestion_data_legacy_metric_key_idx on ingestion_data \(legacy_metric_key\);/i);
 });
 
 test("parseRequestQuery accepts module requests without keys", () => {
@@ -76,27 +77,50 @@ test("buildSourceTrace formats file and context for hover traceability", () => {
   );
 });
 
+test("formatMetricDisplay formats currency and percentages from value_numeric", () => {
+  assert.equal(
+    formatMetricDisplay({ value_type: "currency", currency: "USD" }, 1234.5),
+    "$1,234.50",
+  );
+  assert.equal(
+    formatMetricDisplay({ value_type: "percent" }, 4),
+    "4%",
+  );
+});
+
 test("parseMetricUpdatePayload normalizes editable fields", () => {
   const payload = parseMetricUpdatePayload({
-    metric_key: "gp_modules_gp_views_gp_mockups_025",
-    value_display: "   ",
+    metric_key: "gp_total_gp_sponsors",
     value_numeric: "not-a-number",
-    source_context: "2024 KÃ¢â‚¬â€˜1",
+    source_context: "2024 KÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Ëœ1",
   });
 
   assert.deepEqual(payload, {
-    metric_key: "gp_modules_gp_views_gp_mockups_025",
+    metric_key: "gp_total_gp_sponsors",
     updates: {
-      value_display: "-",
       value_numeric: null,
       source_context: "2024 K-1",
     },
   });
 });
 
+test("parseMetricUpdatePayload accepts label edits", () => {
+  const payload = parseMetricUpdatePayload({
+    metric_key: "mortgage_total_due",
+    label: " Total Due ",
+  });
+
+  assert.deepEqual(payload, {
+    metric_key: "mortgage_total_due",
+    updates: {
+      label: "Total Due",
+    },
+  });
+});
+
 test("parseMetricUpdatePayload rejects missing metric keys", () => {
   assert.throws(
-    () => parseMetricUpdatePayload({ value_display: "$10" }),
+    () => parseMetricUpdatePayload({ value_numeric: 10 }),
     /metric_key/i,
   );
 });
@@ -108,7 +132,7 @@ test("parseMetricUpdatePayload rejects payloads without editable fields", () => 
   );
 });
 
-test("GET /api/metrics retries without semantic_identifier for legacy Supabase schemas", async () => {
+test("GET /api/metrics retries without legacy_metric_key for pre-migration schemas", async () => {
   const originalFetch = global.fetch;
   const originalEnv = {
     SUPABASE_URL: process.env.SUPABASE_URL,
@@ -130,7 +154,7 @@ test("GET /api/metrics retries without semantic_identifier for legacy Supabase s
         async text() {
           return JSON.stringify({
             code: "PGRST204",
-            details: "Could not find the 'semantic_identifier' column of 'ingestion_data' in the schema cache",
+            details: "Could not find the 'legacy_metric_key' column of 'ingestion_data' in the schema cache",
           });
         },
       };
@@ -139,9 +163,6 @@ test("GET /api/metrics retries without semantic_identifier for legacy Supabase s
     return {
       ok: true,
       status: 200,
-      async text() {
-        return JSON.stringify([]);
-      },
       async json() {
         return [
           {
@@ -186,9 +207,95 @@ test("GET /api/metrics retries without semantic_identifier for legacy Supabase s
 
   assert.equal(response.statusCode, 200);
   assert.equal(fetchCalls.length, 2);
-  assert.match(fetchCalls[0], /semantic_identifier/);
-  assert.doesNotMatch(fetchCalls[1], /semantic_identifier/);
+  assert.match(fetchCalls[0], /legacy_metric_key/);
+  assert.doesNotMatch(fetchCalls[1], /legacy_metric_key/);
 
   const payload = JSON.parse(response.body);
-  assert.equal(payload.data[0].semantic_identifier, null);
+  assert.equal(payload.data[0].legacy_metric_key, null);
+});
+
+test("PATCH /api/metrics formats value_display from the stored metric metadata", async () => {
+  const originalFetch = global.fetch;
+  const originalEnv = {
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  };
+
+  process.env.SUPABASE_URL = "https://example.supabase.co";
+  process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-key";
+
+  const fetchCalls = [];
+  global.fetch = async (url, options = {}) => {
+    fetchCalls.push({ url: decodeURIComponent(String(url)), options });
+
+    if (fetchCalls.length === 1) {
+      return {
+        ok: true,
+        status: 200,
+        async json() {
+          return [
+            {
+              module: "mortgage",
+              metric_key: "mortgage_total_due",
+              value_type: "currency",
+              currency: "USD",
+              value_display: "$112,158.22",
+            },
+          ];
+        },
+      };
+    }
+
+    return {
+      ok: true,
+      status: 200,
+      async json() {
+        return [
+          {
+            module: "mortgage",
+            metric_key: "mortgage_total_due",
+            value_numeric: 120000,
+            value_display: "$120,000.00",
+          },
+        ];
+      },
+    };
+  };
+
+  const response = {
+    headers: {},
+    statusCode: 200,
+    body: "",
+    setHeader(name, value) {
+      this.headers[name] = value;
+    },
+    end(payload) {
+      this.body = payload;
+    },
+  };
+
+  try {
+    await metricsHandler(
+      {
+        method: "PATCH",
+        body: {
+          metric_key: "mortgage_total_due",
+          value_numeric: 120000,
+        },
+      },
+      response,
+    );
+  } finally {
+    global.fetch = originalFetch;
+    process.env.SUPABASE_URL = originalEnv.SUPABASE_URL;
+    process.env.SUPABASE_SERVICE_ROLE_KEY = originalEnv.SUPABASE_SERVICE_ROLE_KEY;
+  }
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(fetchCalls.length, 2);
+  const patchBody = JSON.parse(fetchCalls[1].options.body);
+  assert.equal(patchBody.value_display, "$120,000.00");
+
+  const payload = JSON.parse(response.body);
+  assert.equal(payload.data.value_display, "$120,000.00");
 });

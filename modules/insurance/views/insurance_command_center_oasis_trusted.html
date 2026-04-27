@@ -463,18 +463,18 @@
     <script>
       (() => {
         const insuranceTrendData = [
-          { month: "Mar-25", key: "insurance.monthly_expense.2025-03", label: "Monthly Insurance Trend | Mar-25", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010"], period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
-          { month: "Apr-25", key: "insurance.monthly_expense.2025-04", label: "Monthly Insurance Trend | Apr-25", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011"], period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
-          { month: "May-25", key: "insurance.monthly_expense.2025-05", label: "Monthly Insurance Trend | May-25", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012"], period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
-          { month: "Jun-25", key: "insurance.monthly_expense.2025-06", label: "Monthly Insurance Trend | Jun-25", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013"], period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
-          { month: "Jul-25", key: "insurance.monthly_expense.2025-07", label: "Monthly Insurance Trend | Jul-25", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014"], period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
-          { month: "Aug-25", key: "insurance.monthly_expense.2025-08", label: "Monthly Insurance Trend | Aug-25", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015"], period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
-          { month: "Sep-25", key: "insurance.monthly_expense.2025-09", label: "Monthly Insurance Trend | Sep-25", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016"], period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
-          { month: "Oct-25", key: "insurance.monthly_expense.2025-10", label: "Monthly Insurance Trend | Oct-25", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017"], period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
-          { month: "Nov-25", key: "insurance.monthly_expense.2025-11", label: "Monthly Insurance Trend | Nov-25", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018"], period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
-          { month: "Dec-25", key: "insurance.monthly_expense.2025-12", label: "Monthly Insurance Trend | Dec-25", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019"], period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
-          { month: "Jan-26", key: "insurance.monthly_expense.2026-01", label: "Monthly Insurance Trend | Jan-26", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020"], period: "Jan-Feb 2026", variant: "renewal", defaultAmount: 8500, defaultDisplay: "$8,500.00" },
-          { month: "Feb-26", key: "insurance.monthly_expense.2026-02", label: "Monthly Insurance Trend | Feb-26", fallbackMetricKeys: ["insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021"], period: "Jan-Feb 2026", variant: "renewal", defaultAmount: 8500, defaultDisplay: "$8,500.00" }
+          { month: "Mar-25", metricKey: "insurance_monthly_insurance_trend_mar_25", label: "Monthly Insurance Trend | Mar-25", period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
+          { month: "Apr-25", metricKey: "insurance_monthly_insurance_trend_apr_25", label: "Monthly Insurance Trend | Apr-25", period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
+          { month: "May-25", metricKey: "insurance_monthly_insurance_trend_may_25", label: "Monthly Insurance Trend | May-25", period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
+          { month: "Jun-25", metricKey: "insurance_monthly_insurance_trend_jun_25", label: "Monthly Insurance Trend | Jun-25", period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
+          { month: "Jul-25", metricKey: "insurance_monthly_insurance_trend_jul_25", label: "Monthly Insurance Trend | Jul-25", period: "Mar-Jul 2025", variant: "standard", defaultAmount: 16496.85, defaultDisplay: "$16,496.85" },
+          { month: "Aug-25", metricKey: "insurance_monthly_insurance_trend_aug_25", label: "Monthly Insurance Trend | Aug-25", period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
+          { month: "Sep-25", metricKey: "insurance_monthly_insurance_trend_sep_25", label: "Monthly Insurance Trend | Sep-25", period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
+          { month: "Oct-25", metricKey: "insurance_monthly_insurance_trend_oct_25", label: "Monthly Insurance Trend | Oct-25", period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
+          { month: "Nov-25", metricKey: "insurance_monthly_insurance_trend_nov_25", label: "Monthly Insurance Trend | Nov-25", period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
+          { month: "Dec-25", metricKey: "insurance_monthly_insurance_trend_dec_25", label: "Monthly Insurance Trend | Dec-25", period: "Aug-Dec 2025", variant: "standard", defaultAmount: 20353.19, defaultDisplay: "$20,353.19" },
+          { month: "Jan-26", metricKey: "insurance_monthly_insurance_trend_jan_26", label: "Monthly Insurance Trend | Jan-26", period: "Jan-Feb 2026", variant: "renewal", defaultAmount: 8500, defaultDisplay: "$8,500.00" },
+          { month: "Feb-26", metricKey: "insurance_monthly_insurance_trend_feb_26", label: "Monthly Insurance Trend | Feb-26", period: "Jan-Feb 2026", variant: "renewal", defaultAmount: 8500, defaultDisplay: "$8,500.00" }
         ];
         const missingDisplay = "Missing in Supabase";
 
@@ -513,16 +513,12 @@
           return {
             ...entry,
             amount: metricsRuntime?.getMetricValue(rows, {
-              key: entry.key,
-              label: entry.label,
-              fallbackMetricKeys: entry.fallbackMetricKeys,
+              metricKey: entry.metricKey,
               defaultValue: entry.defaultAmount ?? null,
               preferNumeric: true
             }) ?? entry.defaultAmount ?? null,
             displayAmount: metricsRuntime?.getMetricValue(rows, {
-              key: entry.key,
-              label: entry.label,
-              fallbackMetricKeys: entry.fallbackMetricKeys,
+              metricKey: entry.metricKey,
               defaultValue: entry.defaultDisplay || missingDisplay
             }) || entry.defaultDisplay || missingDisplay
           };

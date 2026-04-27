@@ -15,9 +15,8 @@
     return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleString();
   }
 
-  function buildDraftFromRow(runtime, row) {
+  function buildDraftFromRow(row) {
     return {
-      value_display: runtime.normalizeDisplayValue(row.value_display),
       value_numeric: row.value_numeric ?? "",
       source_context: row.source_context || "",
     };
@@ -29,9 +28,8 @@
     return Number.isFinite(parsed) ? parsed : null;
   }
 
-  function normalizeDraft(runtime, draft) {
+  function normalizeDraft(draft) {
     return {
-      value_display: runtime.normalizeDisplayValue(draft.value_display),
       value_numeric: parseOptionalNumber(draft.value_numeric),
       source_context: String(draft.source_context || "").trim(),
     };
@@ -47,7 +45,7 @@
   }
 
   function getPreferredLabel(row) {
-    return row.display_label || row.search_label || row.label || row.metric_key;
+    return row.label || row.display_label || row.search_label || row.metric_key;
   }
 
   function boot() {
@@ -94,7 +92,7 @@
 
     function getDraft(metricKey, row) {
       if (!state.drafts.has(metricKey)) {
-        state.drafts.set(metricKey, buildDraftFromRow(runtime, row));
+        state.drafts.set(metricKey, buildDraftFromRow(row));
       }
       return state.drafts.get(metricKey);
     }
@@ -103,10 +101,9 @@
       const draft = state.drafts.get(metricKey);
       if (!draft) return false;
 
-      const original = normalizeDraft(runtime, buildDraftFromRow(runtime, row));
-      const normalizedDraft = normalizeDraft(runtime, draft);
+      const original = normalizeDraft(buildDraftFromRow(row));
+      const normalizedDraft = normalizeDraft(draft);
       return (
-        normalizedDraft.value_display !== original.value_display ||
         normalizedDraft.value_numeric !== original.value_numeric ||
         normalizedDraft.source_context !== original.source_context
       );
@@ -122,8 +119,7 @@
           return [
             row.module,
             row.metric_key,
-            row.display_label,
-            row.search_label,
+            row.legacy_metric_key,
             row.label,
             row.value_display,
             row.source_file,
@@ -161,13 +157,13 @@
             <tr data-metric-key="${escapeHtml(row.metric_key)}">
               <td>
                 <strong>${escapeHtml(getPreferredLabel(row))}</strong>
-                ${getPreferredLabel(row) !== row.label ? `<small>${escapeHtml(row.label)}</small>` : ""}
                 <small>${escapeHtml(row.metric_key)}</small>
+                ${row.legacy_metric_key ? `<small>Legacy: ${escapeHtml(row.legacy_metric_key)}</small>` : ""}
                 <small>${escapeHtml(row.module)} | ${escapeHtml(row.source_file || "No source file")}</small>
                 <small>Updated: ${escapeHtml(formatTimestamp(row.updated_at))}</small>
               </td>
               <td>
-                <input data-field="value_display" value="${escapeHtml(draft.value_display)}" />
+                <code>${escapeHtml(runtime.normalizeDisplayValue(row.value_display))}</code>
               </td>
               <td>
                 <input data-field="value_numeric" value="${escapeHtml(draft.value_numeric)}" />
@@ -247,7 +243,7 @@
       if (!row) return;
 
       if (!hasDraftChanges(metricKey, row)) {
-        state.drafts.set(metricKey, buildDraftFromRow(runtime, row));
+        state.drafts.set(metricKey, buildDraftFromRow(row));
         clearRowStatus(metricKey);
         setStatus("Realtime sync active.", "success");
         render();
@@ -262,14 +258,13 @@
       try {
         const saved = await runtime.saveMetricUpdate({
           metric_key: metricKey,
-          value_display: draft.value_display,
           value_numeric: draft.value_numeric,
           source_context: draft.source_context,
         });
 
         if (saved) {
           state.rows = state.rows.map((item) => (item.metric_key === metricKey ? saved : item));
-          state.drafts.set(metricKey, buildDraftFromRow(runtime, saved));
+          state.drafts.set(metricKey, buildDraftFromRow(saved));
         }
 
         setRowStatus(metricKey, "Saved", "success");
@@ -288,7 +283,7 @@
       const row = getRow(metricKey);
       if (!row) return;
 
-      state.drafts.set(metricKey, buildDraftFromRow(runtime, row));
+      state.drafts.set(metricKey, buildDraftFromRow(row));
       clearRowStatus(metricKey);
       setStatus("Realtime sync active.", "success");
       render();
@@ -351,7 +346,7 @@
       }
 
       if (!hasDraftChanges(row.metric_key, row)) {
-        state.drafts.set(row.metric_key, buildDraftFromRow(runtime, row));
+        state.drafts.set(row.metric_key, buildDraftFromRow(row));
         setRowStatus(row.metric_key, "Updated remotely", "success");
       }
 

@@ -24,10 +24,6 @@ function createField(field, rowSelected = true) {
   };
 }
 
-function createRowsByLookup(rows) {
-  return new Map(rows.map((row) => [row.semantic_identifier || row.metric_key, row]));
-}
-
 function createBridgeHarness({
   fields,
   metricsRuntime,
@@ -70,20 +66,18 @@ function createBridgeHarness({
   };
 }
 
-test("mortgage bridge fetches module rows and resolves semantic identifiers", async () => {
+test("mortgage bridge fetches module rows and resolves canonical metric keys", async () => {
   const fields = [createField("principal-balance"), createField("total-due")];
   const requestedModules = [];
   const rows = [
     {
       module: "mortgage",
-      metric_key: "mortgage_modules_current_debt_001",
-      semantic_identifier: "mortgage.principal_balance",
+      metric_key: "mortgage_principal_balance",
       value_display: "$10,853,176.39",
     },
     {
       module: "mortgage",
-      metric_key: "mortgage_modules_current_debt_009",
-      semantic_identifier: "mortgage.total_due",
+      metric_key: "mortgage_total_due",
       value_display: "$12,000,000",
     },
   ];
@@ -96,7 +90,7 @@ test("mortgage bridge fetches module rows and resolves semantic identifiers", as
         return rows;
       },
       getMetricRow(metricRows, lookup) {
-        return metricRows.find((row) => row.semantic_identifier === lookup.key) || null;
+        return metricRows.find((row) => row.metric_key === lookup.metricKey) || null;
       },
       subscribe() {
         return () => {};
@@ -119,17 +113,14 @@ test("mortgage bridge uses cached mortgage rows after refreshMetrics when ensure
     {
       module: "mortgage",
       metric_key: "mortgage_principal_balance",
-      semantic_identifier: "mortgage.principal_balance",
       value_display: "$10,853,176.39",
     },
     {
       module: "mortgage",
       metric_key: "mortgage_total_due",
-      semantic_identifier: "mortgage.total_due",
       value_display: "$12,000,000",
     },
   ];
-  const rowsByLookup = createRowsByLookup(rows);
   let refreshCount = 0;
 
   const harness = createBridgeHarness({
@@ -142,9 +133,7 @@ test("mortgage bridge uses cached mortgage rows after refreshMetrics when ensure
         return rows;
       },
       getMetricRow(metricRows, lookup) {
-        return metricRows.find((row) => row.semantic_identifier === lookup.key)
-          || lookup.fallbackMetricKeys?.map((key) => rowsByLookup.get(key)).find(Boolean)
-          || null;
+        return metricRows.find((row) => row.metric_key === lookup.metricKey) || null;
       },
       subscribe() {
         return () => {};
@@ -167,14 +156,12 @@ test("mortgage bridge applies subscription updates from cached rows without refe
   const cachedRows = [
     {
       module: "mortgage",
-      metric_key: "mortgage_modules_current_debt_001",
-      semantic_identifier: "mortgage.principal_balance",
+      metric_key: "mortgage_principal_balance",
       value_display: "$10,853,176.39",
     },
     {
       module: "mortgage",
-      metric_key: "mortgage_modules_current_debt_009",
-      semantic_identifier: "mortgage.total_due",
+      metric_key: "mortgage_total_due",
       value_display: "$12,000,000",
     },
   ];
@@ -191,7 +178,7 @@ test("mortgage bridge applies subscription updates from cached rows without refe
         return cachedRows;
       },
       getMetricRow(metricRows, lookup) {
-        return metricRows.find((row) => row.semantic_identifier === lookup.key) || null;
+        return metricRows.find((row) => row.metric_key === lookup.metricKey) || null;
       },
       subscribe(handler) {
         subscriber = handler;
@@ -216,7 +203,7 @@ test("mortgage bridge applies subscription updates from cached rows without refe
   assert.equal(fields[1].textContent, "$12,500,000.00");
 });
 
-test("mortgage bridge falls back to legacy getRow lookups when shared row helpers are unavailable", async () => {
+test("mortgage bridge falls back to direct getRow lookups when shared row helpers are unavailable", async () => {
   const fields = [createField("principal-balance"), createField("total-due")];
   const rowsByKey = new Map([
     [

@@ -4,7 +4,7 @@ create table if not exists ingestion_data (
   id uuid primary key default gen_random_uuid(),
   module text not null,
   metric_key text not null unique,
-  semantic_identifier text,
+  legacy_metric_key text,
   label text not null,
   display_label text,
   search_label text,
@@ -20,7 +20,7 @@ create table if not exists ingestion_data (
 );
 
 alter table if exists ingestion_data
-add column if not exists semantic_identifier text;
+add column if not exists legacy_metric_key text;
 
 alter table ingestion_data add column if not exists display_label text;
 alter table ingestion_data add column if not exists search_label text;
@@ -44,7 +44,7 @@ for each row
 execute function public.set_ingestion_data_updated_at();
 
 create index if not exists ingestion_data_module_idx on ingestion_data (module);
-create index if not exists ingestion_data_semantic_identifier_idx on ingestion_data (semantic_identifier);
+create index if not exists ingestion_data_legacy_metric_key_idx on ingestion_data (legacy_metric_key);
 create index if not exists ingestion_data_search_label_idx on ingestion_data (search_label);
 
 update ingestion_data

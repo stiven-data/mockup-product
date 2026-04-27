@@ -1,44 +1,34 @@
 (() => {
   const FIELD_LOOKUPS = {
     "principal-balance": {
-      key: "mortgage.principal_balance",
-      fallbackMetricKeys: ["mortgage_principal_balance"],
+      metricKey: "mortgage_principal_balance",
     },
     "interest-rate": {
-      key: "mortgage.interest_rate",
-      fallbackMetricKeys: ["mortgage_interest_rate"],
+      metricKey: "mortgage_interest_rate",
     },
     "escrow-amount": {
-      key: "mortgage.escrow_amount",
-      fallbackMetricKeys: ["mortgage_escrow_amount"],
+      metricKey: "mortgage_escrow_amount",
     },
     "monthly-payment-io-only": {
-      key: "mortgage.monthly_payment_io_only",
-      fallbackMetricKeys: ["mortgage_monthly_payment_io_only"],
+      metricKey: "mortgage_monthly_payment_io_only",
     },
     "monthly-payment-with-escrow": {
-      key: "mortgage.monthly_payment_with_escrow",
-      fallbackMetricKeys: ["mortgage_monthly_payment_with_escrow"],
+      metricKey: "mortgage_monthly_payment_with_escrow",
     },
     "current-interest-due": {
-      key: "mortgage.current_interest_due",
-      fallbackMetricKeys: ["mortgage_current_interest_due"],
+      metricKey: "mortgage_current_interest_due",
     },
     "current-tax-due": {
-      key: "mortgage.current_tax_due",
-      fallbackMetricKeys: ["mortgage_current_tax_due"],
+      metricKey: "mortgage_current_tax_due",
     },
     "current-insurance-due": {
-      key: "mortgage.current_insurance_due",
-      fallbackMetricKeys: ["mortgage_current_insurance_due"],
+      metricKey: "mortgage_current_insurance_due",
     },
     "total-due": {
-      key: "mortgage.total_due",
-      fallbackMetricKeys: ["mortgage_total_due"],
+      metricKey: "mortgage_total_due",
     },
     "ending-escrow-balance": {
-      key: "mortgage.ending_escrow_balance",
-      fallbackMetricKeys: ["mortgage_ending_escrow_balance"],
+      metricKey: "mortgage_ending_escrow_balance",
     },
   };
   let currentRows = [];
@@ -61,7 +51,7 @@
     }
 
     if (metricsRuntime?.getRow) {
-      return lookup.fallbackMetricKeys?.map((key) => metricsRuntime.getRow(key)).find(Boolean) || null;
+      return metricsRuntime.getRow(lookup.metricKey) || null;
     }
 
     return null;

@@ -1,18 +1,19 @@
 const DEFAULT_LIMIT = 500;
 const MAX_LIMIT = 5000;
+const DEFAULT_CURRENCY = "USD";
 const DEFAULT_SELECT =
-  "id,module,metric_key,semantic_identifier,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context,updated_at";
+  "id,module,metric_key,legacy_metric_key,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context,updated_at";
 const LEGACY_SELECT =
-  "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
+  "id,module,metric_key,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context,updated_at";
 const TEXT_ARTIFACT_REPLACEMENTS = [
+  [/KÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Ëœ1/g, "K-1"],
   [/KÃ¢â‚¬â€˜1/g, "K-1"],
-  [/Kâ€‘1/g, "K-1"],
-  [/â€‘/g, "-"],
-  [/â€”/g, "-"],
-  [/â€“/g, "-"],
-  [/Â·/g, " - "],
+  [/Ã¢â‚¬â€˜/g, "-"],
+  [/Ã¢â‚¬â€/g, "-"],
+  [/Ã¢â‚¬â€œ/g, "-"],
+  [/Ã‚Â·/g, " - "],
 ];
-const EMPTY_DISPLAY_TOKENS = new Set(["", "-", "—", "–", "â€”", "â€“", "null", "undefined", "nan", "n/a"]);
+const EMPTY_DISPLAY_TOKENS = new Set(["", "-", "â€”", "â€“", "Ã¢â‚¬â€", "Ã¢â‚¬â€œ", "null", "undefined", "nan", "n/a"]);
 
 function parseMetricKeys(rawValue) {
   const values = Array.isArray(rawValue) ? rawValue : String(rawValue || "").split(",");
@@ -52,17 +53,17 @@ function buildSupabaseRestUrl(baseUrl, query, options = {}) {
   return url.toString();
 }
 
-function isMissingSemanticIdentifierError(status, details = "") {
+function isMissingLegacyMetricKeyError(status, details = "") {
   return (
     status === 400 &&
-    /semantic_identifier/i.test(String(details)) &&
+    /legacy_metric_key/i.test(String(details)) &&
     /(column|schema cache|PGRST204)/i.test(String(details))
   );
 }
 
 function normalizeMetricRows(rows) {
   return (Array.isArray(rows) ? rows : []).map((row) => ({
-    semantic_identifier: row?.semantic_identifier ?? null,
+    legacy_metric_key: row?.legacy_metric_key ?? null,
     ...row,
   }));
 }
@@ -94,6 +95,37 @@ function parseOptionalNumber(value) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function formatMetricDisplay(row = {}, valueNumeric) {
+  const numericValue = parseOptionalNumber(valueNumeric);
+  if (numericValue === null) return "-";
+
+  switch (String(row?.value_type || "").toLowerCase()) {
+    case "currency":
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: row?.currency || DEFAULT_CURRENCY,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(numericValue);
+    case "percent":
+      return new Intl.NumberFormat("en-US", {
+        style: "percent",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }).format(Math.abs(numericValue) > 1 ? numericValue / 100 : numericValue);
+    case "integer":
+    case "count":
+      return new Intl.NumberFormat("en-US", {
+        maximumFractionDigits: 0,
+      }).format(numericValue);
+    default:
+      return new Intl.NumberFormat("en-US", {
+        minimumFractionDigits: Number.isInteger(numericValue) ? 0 : 2,
+        maximumFractionDigits: 2,
+      }).format(numericValue);
+  }
+}
+
 function parseMetricUpdatePayload(body = {}) {
   const metric_key = typeof body.metric_key === "string" ? body.metric_key.trim() : "";
   if (!metric_key) {
@@ -101,11 +133,15 @@ function parseMetricUpdatePayload(body = {}) {
   }
 
   const updates = {};
-  if (body.value_display !== undefined) {
-    updates.value_display = normalizeDisplayValue(body.value_display);
-  }
   if (body.value_numeric !== undefined) {
     updates.value_numeric = parseOptionalNumber(body.value_numeric);
+  }
+  if (body.label !== undefined) {
+    const label = repairTextArtifacts(body.label);
+    if (!label) {
+      throw new Error("label cannot be empty.");
+    }
+    updates.label = label;
   }
   if (body.source_context !== undefined) {
     updates.source_context = repairTextArtifacts(body.source_context) || null;
@@ -122,8 +158,11 @@ module.exports = {
   LEGACY_SELECT,
   buildSourceTrace,
   buildSupabaseRestUrl,
-  isMissingSemanticIdentifierError,
+  formatMetricDisplay,
+  isMissingLegacyMetricKeyError,
+  normalizeDisplayValue,
   normalizeMetricRows,
   parseMetricUpdatePayload,
+  parseOptionalNumber,
   parseRequestQuery,
 };

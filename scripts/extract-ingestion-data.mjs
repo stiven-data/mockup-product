@@ -17,21 +17,6 @@ const SQL_OUTPUT = path.join(OUTPUT_DIR, "seed_ingestion_data.sql");
 const SETUP_OUTPUT = path.join(OUTPUT_DIR, "setup.sql");
 const METADATA_ONLY_OUTPUT = path.join(OUTPUT_DIR, "setup_metadata_only.sql");
 const SCHEMA_OUTPUT = path.join(OUTPUT_DIR, "schema.sql");
-const CURATED_SEMANTIC_IDENTIFIERS = {
-  mortgage_principal_balance: "mortgage.principal_balance",
-  mortgage_interest_rate: "mortgage.interest_rate",
-  mortgage_escrow_amount: "mortgage.escrow_amount",
-  mortgage_monthly_payment_io_only: "mortgage.monthly_payment_io_only",
-  mortgage_monthly_payment_with_escrow: "mortgage.monthly_payment_with_escrow",
-  mortgage_current_interest_due: "mortgage.current_interest_due",
-  mortgage_current_tax_due: "mortgage.current_tax_due",
-  mortgage_current_insurance_due: "mortgage.current_insurance_due",
-  mortgage_total_due: "mortgage.total_due",
-  mortgage_ending_escrow_balance: "mortgage.ending_escrow_balance",
-  gp_total_gp_sponsors: "gp.total_gp_sponsors",
-  gp_k1_partners_in_manager_entity: "gp.k1_partners_in_manager_entity",
-  gp_source_k1_year: "gp.source_k1_year",
-};
 
 const mortgageMetrics = [
   metric("mortgage", "mortgage_principal_balance", "Principal Balance", 10853176.39, "$10,853,176.39", "currency", "modules/mortgage/views/current-debt-data.js"),
@@ -47,18 +32,18 @@ const mortgageMetrics = [
 ];
 
 const insuranceTrendMetrics = [
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010", "Monthly Insurance Trend | Mar-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance.monthly_expense.2025-03"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011", "Monthly Insurance Trend | Apr-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance.monthly_expense.2025-04"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012", "Monthly Insurance Trend | May-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance.monthly_expense.2025-05"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013", "Monthly Insurance Trend | Jun-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance.monthly_expense.2025-06"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014", "Monthly Insurance Trend | Jul-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance.monthly_expense.2025-07"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015", "Monthly Insurance Trend | Aug-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance.monthly_expense.2025-08"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016", "Monthly Insurance Trend | Sep-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance.monthly_expense.2025-09"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017", "Monthly Insurance Trend | Oct-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance.monthly_expense.2025-10"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018", "Monthly Insurance Trend | Nov-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance.monthly_expense.2025-11"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019", "Monthly Insurance Trend | Dec-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance.monthly_expense.2025-12"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020", "Monthly Insurance Trend | Jan-26", 8500, "$8,500.00", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Jan-Feb 2026", "insurance.monthly_expense.2026-01"),
-  metric("insurance", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", "Monthly Insurance Trend | Feb-26", 8500, "$8,500.00", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Jan-Feb 2026", "insurance.monthly_expense.2026-02"),
+  metric("insurance", "insurance_monthly_insurance_trend_mar_25", "Monthly Insurance Trend | Mar-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010"),
+  metric("insurance", "insurance_monthly_insurance_trend_apr_25", "Monthly Insurance Trend | Apr-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011"),
+  metric("insurance", "insurance_monthly_insurance_trend_may_25", "Monthly Insurance Trend | May-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012"),
+  metric("insurance", "insurance_monthly_insurance_trend_jun_25", "Monthly Insurance Trend | Jun-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013"),
+  metric("insurance", "insurance_monthly_insurance_trend_jul_25", "Monthly Insurance Trend | Jul-25", 16496.85, "$16,496.85", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Mar-Jul 2025", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014"),
+  metric("insurance", "insurance_monthly_insurance_trend_aug_25", "Monthly Insurance Trend | Aug-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015"),
+  metric("insurance", "insurance_monthly_insurance_trend_sep_25", "Monthly Insurance Trend | Sep-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016"),
+  metric("insurance", "insurance_monthly_insurance_trend_oct_25", "Monthly Insurance Trend | Oct-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017"),
+  metric("insurance", "insurance_monthly_insurance_trend_nov_25", "Monthly Insurance Trend | Nov-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018"),
+  metric("insurance", "insurance_monthly_insurance_trend_dec_25", "Monthly Insurance Trend | Dec-25", 20353.19, "$20,353.19", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Aug-Dec 2025", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019"),
+  metric("insurance", "insurance_monthly_insurance_trend_jan_26", "Monthly Insurance Trend | Jan-26", 8500, "$8,500.00", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Jan-Feb 2026", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020"),
+  metric("insurance", "insurance_monthly_insurance_trend_feb_26", "Monthly Insurance Trend | Feb-26", 8500, "$8,500.00", "currency", "modules/insurance/views/insurance_command_center_oasis_trusted.html", "Monthly insurance trend | Jan-Feb 2026", "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021"),
 ];
 
 export const GP_MANUAL_METRICS = [
@@ -82,9 +67,12 @@ export async function buildIngestionMetrics() {
     )
   ).flat();
 
-  return [...htmlMetrics, ...mortgageMetrics, ...GP_MANUAL_METRICS, ...insuranceTrendMetrics].map((item) =>
-    enrichMetricMetadata(item, labelOverrides),
-  );
+  return [...htmlMetrics, ...mortgageMetrics, ...GP_MANUAL_METRICS, ...insuranceTrendMetrics]
+    .map((item) => ({
+      legacy_metric_key: item.legacy_metric_key ?? null,
+      ...item,
+    }))
+    .map((item) => enrichMetricMetadata(item, labelOverrides));
 }
 
 async function main() {
@@ -117,12 +105,12 @@ function metric(
   value_type,
   source_file,
   source_context = label,
-  semantic_identifier = CURATED_SEMANTIC_IDENTIFIERS[metric_key] || null,
+  legacy_metric_key = null,
 ) {
   return {
     module,
     metric_key,
-    semantic_identifier,
+    legacy_metric_key,
     label,
     display_label: label,
     search_label: label,
@@ -140,7 +128,7 @@ function toCsv(rows) {
   const columns = [
     "module",
     "metric_key",
-    "semantic_identifier",
+    "legacy_metric_key",
     "label",
     "display_label",
     "search_label",
@@ -161,10 +149,10 @@ function toCsv(rows) {
 function toSeedSql(rows) {
   const values = rows
     .map((row) => {
-      const values = [
+      const rowValues = [
         row.module,
         row.metric_key,
-        row.semantic_identifier,
+        row.legacy_metric_key,
         row.label,
         row.display_label,
         row.search_label,
@@ -176,14 +164,14 @@ function toSeedSql(rows) {
         row.source_context,
         row.ui_context,
       ];
-      return `  (${values.map(sqlValue).join(", ")})`;
+      return `  (${rowValues.map(sqlValue).join(", ")})`;
     })
     .join(",\n");
 
   return `insert into ingestion_data (
   module,
   metric_key,
-  semantic_identifier,
+  legacy_metric_key,
   label,
   display_label,
   search_label,
@@ -199,7 +187,8 @@ values
 ${values}
 on conflict (metric_key) do update set
   module = excluded.module,
-  semantic_identifier = excluded.semantic_identifier,
+  legacy_metric_key = excluded.legacy_metric_key,
+  label = excluded.label,
   display_label = excluded.display_label,
   search_label = excluded.search_label,
   value_numeric = excluded.value_numeric,
@@ -216,10 +205,10 @@ on conflict (metric_key) do update set
 function toMetadataOnlySql(rows) {
   const values = rows
     .map((row) => {
-      const values = [
+      const rowValues = [
         row.module,
         row.metric_key,
-        row.semantic_identifier,
+        row.legacy_metric_key,
         row.label,
         row.display_label,
         row.search_label,
@@ -231,14 +220,14 @@ function toMetadataOnlySql(rows) {
         row.source_context,
         row.ui_context,
       ];
-      return `  (${values.map(sqlValue).join(", ")})`;
+      return `  (${rowValues.map(sqlValue).join(", ")})`;
     })
     .join(",\n");
 
   return `insert into ingestion_data (
   module,
   metric_key,
-  semantic_identifier,
+  legacy_metric_key,
   label,
   display_label,
   search_label,
@@ -254,7 +243,8 @@ values
 ${values}
 on conflict (metric_key) do update set
   module = excluded.module,
-  semantic_identifier = excluded.semantic_identifier,
+  legacy_metric_key = excluded.legacy_metric_key,
+  label = excluded.label,
   display_label = excluded.display_label,
   search_label = excluded.search_label,
   value_type = excluded.value_type,

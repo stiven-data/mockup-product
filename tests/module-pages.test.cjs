@@ -113,46 +113,33 @@ const INSURANCE_METRICS = [
   { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_007", value_numeric: 15275.2, value_display: "$15,275.20", binding: "data" },
   { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_008", value_numeric: 15275, value_display: "$15,275", binding: "data" },
   { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_009", value_numeric: 13230, value_display: "$13,230", binding: "data" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020", value_numeric: 8500, value_display: "$8,500.00", binding: "trend" },
-  { metric_key: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021", value_numeric: 8500, value_display: "$8,500.00", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_mar_25", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_apr_25", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_may_25", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_jun_25", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_jul_25", value_numeric: 16496.85, value_display: "$16,496.85", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_aug_25", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_sep_25", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_oct_25", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_nov_25", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_dec_25", value_numeric: 20353.19, value_display: "$20,353.19", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_jan_26", value_numeric: 8500, value_display: "$8,500.00", binding: "trend" },
+  { metric_key: "insurance_monthly_insurance_trend_feb_26", value_numeric: 8500, value_display: "$8,500.00", binding: "trend" },
 ];
 
-const CURATED_SEMANTIC_IDENTIFIERS = {
-  mortgage_principal_balance: "mortgage.principal_balance",
-  mortgage_interest_rate: "mortgage.interest_rate",
-  mortgage_escrow_amount: "mortgage.escrow_amount",
-  mortgage_monthly_payment_io_only: "mortgage.monthly_payment_io_only",
-  mortgage_monthly_payment_with_escrow: "mortgage.monthly_payment_with_escrow",
-  mortgage_current_interest_due: "mortgage.current_interest_due",
-  mortgage_current_tax_due: "mortgage.current_tax_due",
-  mortgage_current_insurance_due: "mortgage.current_insurance_due",
-  mortgage_total_due: "mortgage.total_due",
-  mortgage_ending_escrow_balance: "mortgage.ending_escrow_balance",
-  gp_total_gp_sponsors: "gp.total_gp_sponsors",
-  gp_k1_partners_in_manager_entity: "gp.k1_partners_in_manager_entity",
-  gp_source_k1_year: "gp.source_k1_year",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010: "insurance.monthly_expense.2025-03",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011: "insurance.monthly_expense.2025-04",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012: "insurance.monthly_expense.2025-05",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013: "insurance.monthly_expense.2025-06",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014: "insurance.monthly_expense.2025-07",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015: "insurance.monthly_expense.2025-08",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016: "insurance.monthly_expense.2025-09",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017: "insurance.monthly_expense.2025-10",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018: "insurance.monthly_expense.2025-11",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019: "insurance.monthly_expense.2025-12",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020: "insurance.monthly_expense.2026-01",
-  insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021: "insurance.monthly_expense.2026-02",
+const INSURANCE_TREND_LEGACY_KEYS = {
+  insurance_monthly_insurance_trend_mar_25: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010",
+  insurance_monthly_insurance_trend_apr_25: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_011",
+  insurance_monthly_insurance_trend_may_25: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_012",
+  insurance_monthly_insurance_trend_jun_25: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_013",
+  insurance_monthly_insurance_trend_jul_25: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_014",
+  insurance_monthly_insurance_trend_aug_25: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_015",
+  insurance_monthly_insurance_trend_sep_25: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_016",
+  insurance_monthly_insurance_trend_oct_25: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_017",
+  insurance_monthly_insurance_trend_nov_25: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_018",
+  insurance_monthly_insurance_trend_dec_25: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_019",
+  insurance_monthly_insurance_trend_jan_26: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_020",
+  insurance_monthly_insurance_trend_feb_26: "insurance_modules_insurance_views_insurance_command_center_oasis_trusted_021",
 };
 
 test("taxes page loads the shared metrics runtime and contains metric bindings", () => {
@@ -165,12 +152,10 @@ test("gp page loads the shared metrics runtime and binds manual count fields", (
   const html = read("modules/Gp/views/gp mockups.html");
   assert.match(html, /supabase-data\.js/);
   assert.match(html, /gp_total_gp_sponsors/);
-  assert.match(html, /data-semantic-identifier="gp\.total_gp_sponsors"/);
-  assert.match(html, /data-fallback-metric-keys="gp_total_gp_sponsors"/);
   assert.match(html, /gp_k1_partners_in_manager_entity/);
-  assert.match(html, /data-semantic-identifier="gp\.k1_partners_in_manager_entity"/);
   assert.match(html, /gp_source_k1_year/);
-  assert.match(html, /data-semantic-identifier="gp\.source_k1_year"/);
+  assert.doesNotMatch(html, /data-semantic-identifier=/);
+  assert.doesNotMatch(html, /data-fallback-metric-keys=/);
 });
 
 test("insurance page loads the shared metrics runtime and binds insurance metrics", () => {
@@ -179,10 +164,10 @@ test("insurance page loads the shared metrics runtime and binds insurance metric
   assert.match(html, /data-metric-key="insurance_modules_insurance_views_insurance_command_center_oasis_trusted_001"/);
   assert.match(html, /window\.ValorisMetrics/);
   assert.match(html, /Missing in Supabase/);
-  assert.match(html, /key: "insurance\.monthly_expense\.2025-03"/);
-  assert.match(html, /fallbackMetricKeys: \[\s*"insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010"\s*\]/);
+  assert.match(html, /metricKey: "insurance_monthly_insurance_trend_mar_25"/);
   assert.match(html, /ensureModuleRows\("insurance"\)/);
   assert.match(html, /getMetricValue\(rows, \{/);
+  assert.doesNotMatch(html, /fallbackMetricKeys:/);
   assert.doesNotMatch(html, /insurance_expense_[a-z]{3}_[0-9]{4}/);
   assert.doesNotMatch(html, /fallbackDisplay/);
   assert.match(html, /function escapeHtml\(value\)/);
@@ -201,18 +186,22 @@ test("insurance metric bindings stay aligned with seeded outputs", () => {
       ? new RegExp(
           `data-metric-key="${metric.metric_key}"[^>]*>${escapedDisplay}<`,
         )
-      : new RegExp(`fallbackMetricKeys: \\[\\s*"${metric.metric_key}"\\s*\\]`);
-    const csvPattern = new RegExp(
-      `^insurance,${metric.metric_key},.*?,${metric.value_numeric},"?${escapedDisplay}"?,currency,USD,`,
-      "m",
-    );
-    const sqlPattern = new RegExp(
-      `'insurance', '${metric.metric_key}'.*?, ${metric.value_numeric}, '${escapedDisplay}', 'currency'`,
-    );
+      : new RegExp(`metricKey: "${metric.metric_key}"`);
 
     assert.match(html, htmlPattern);
-    assert.match(csv, csvPattern);
-    assert.match(sql, sqlPattern);
+
+    if (metric.binding === "data") {
+      const csvPattern = new RegExp(
+        `^insurance,${metric.metric_key},.*?,${metric.value_numeric},"?${escapedDisplay}"?,currency,USD,`,
+        "m",
+      );
+      const sqlPattern = new RegExp(
+        `'insurance', '${metric.metric_key}'.*?, ${metric.value_numeric}, '${escapedDisplay}', 'currency'`,
+      );
+
+      assert.match(csv, csvPattern);
+      assert.match(sql, sqlPattern);
+    }
   }
 });
 
@@ -224,11 +213,11 @@ test("seed artifacts include improved ingestion_data metadata columns", () => {
 
   assert.match(
     csv,
-    /^module,metric_key,semantic_identifier,label,display_label,search_label,value_numeric,/
+    /^module,metric_key,legacy_metric_key,label,display_label,search_label,value_numeric,/
   );
   assert.match(
     sql,
-    /insert into ingestion_data \(\s+module,\s+metric_key,\s+semantic_identifier,\s+label,\s+display_label,\s+search_label,/m
+    /insert into ingestion_data \(\s+module,\s+metric_key,\s+legacy_metric_key,\s+label,\s+display_label,\s+search_label,/m
   );
   assert.match(schema, /add column if not exists display_label text;/);
   assert.match(schema, /add column if not exists search_label text;/);
@@ -321,7 +310,7 @@ test("gp manual metric bindings stay aligned with seeded outputs", async () => {
 
   for (const manualMetric of GP_MANUAL_METRICS) {
     const htmlPattern = new RegExp(
-      `data-metric-key="${manualMetric.metric_key}"[^>]*data-semantic-identifier="${manualMetric.semantic_identifier}"[^>]*data-fallback-metric-keys="${manualMetric.metric_key}"[^>]*>${manualMetric.value_display}<`,
+      `data-metric-key="${manualMetric.metric_key}"[^>]*>${manualMetric.value_display}<`,
     );
     const csvPattern = new RegExp(
       `^gp,${manualMetric.metric_key},.*?,${manualMetric.value_numeric},${manualMetric.value_display},number,`,
@@ -337,44 +326,44 @@ test("gp manual metric bindings stay aligned with seeded outputs", async () => {
   }
 });
 
-test("curated seed artifacts include semantic identifiers", () => {
+test("curated seed artifacts include legacy metric keys for insurance trend migration", () => {
   const csv = read("supabase/ingestion_data.csv");
   const sql = read("supabase/seed_ingestion_data.sql");
 
   assert.match(
     csv,
-    /^module,metric_key,semantic_identifier,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context$/m
+    /^module,metric_key,legacy_metric_key,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context$/m
   );
-  for (const [metricKey, semanticIdentifier] of Object.entries(CURATED_SEMANTIC_IDENTIFIERS)) {
+  for (const [metricKey, legacyMetricKey] of Object.entries(INSURANCE_TREND_LEGACY_KEYS)) {
     const escapedMetricKey = metricKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const escapedSemanticIdentifier = semanticIdentifier.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    assert.match(csv, new RegExp(`^[^,]+,${escapedMetricKey},${escapedSemanticIdentifier},`, "m"));
-    assert.match(sql, new RegExp(`'${escapedMetricKey}', '${escapedSemanticIdentifier}',`));
+    const escapedLegacyMetricKey = legacyMetricKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    assert.match(csv, new RegExp(`^[^,]+,${escapedMetricKey},${escapedLegacyMetricKey},`, "m"));
+    assert.match(sql, new RegExp(`'${escapedMetricKey}', '${escapedLegacyMetricKey}',`));
   }
 });
 
-test("buildIngestionMetrics assigns semantic identifiers to curated metric rows", async () => {
+test("buildIngestionMetrics assigns legacy metric keys to curated insurance trend rows", async () => {
   const { buildIngestionMetrics } = await import("../scripts/extract-ingestion-data.mjs");
   const metrics = await buildIngestionMetrics();
 
-  for (const [metricKey, semanticIdentifier] of Object.entries(CURATED_SEMANTIC_IDENTIFIERS)) {
+  for (const [metricKey, legacyMetricKey] of Object.entries(INSURANCE_TREND_LEGACY_KEYS)) {
     const metric = metrics.find((row) => row.metric_key === metricKey);
     assert.ok(metric, `Expected curated metric ${metricKey} to be generated`);
-    assert.equal(metric.semantic_identifier, semanticIdentifier);
+    assert.equal(metric.legacy_metric_key, legacyMetricKey);
   }
 });
 
-test("curated metric definitions carry semantic identifiers without a later patch pass", async () => {
+test("curated metric definitions carry legacy metric keys without a later patch pass", async () => {
   const source = read("scripts/extract-ingestion-data.mjs");
   const { GP_MANUAL_METRICS } = await import("../scripts/extract-ingestion-data.mjs");
 
-  assert.doesNotMatch(source, /insurance_modules_insurance_views_insurance_command_center_oasis_trusted_010:\s*"insurance\.monthly_expense\.2025-03"/);
-  assert.doesNotMatch(source, /withSemanticIdentifiers\(/);
+  assert.doesNotMatch(source, /semantic_identifier/);
 
   for (const manualMetric of GP_MANUAL_METRICS) {
-    assert.ok(
-      manualMetric.semantic_identifier,
-      `Expected ${manualMetric.metric_key} to carry a semantic identifier at definition time`,
+    assert.equal(
+      manualMetric.legacy_metric_key,
+      null,
+      `Expected ${manualMetric.metric_key} to avoid legacy key baggage`,
     );
   }
 });

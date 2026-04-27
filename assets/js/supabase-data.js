@@ -3,19 +3,20 @@
   const API_PATH = "/api/metrics";
   const CONFIG_PATH = "/api/public-config";
   const DEFAULT_SELECT =
-    "id,module,metric_key,semantic_identifier,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context,updated_at";
+    "id,module,metric_key,legacy_metric_key,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context,updated_at";
   const LEGACY_SELECT =
-    "id,module,metric_key,label,value_numeric,value_display,value_type,currency,source_file,source_context,updated_at";
+    "id,module,metric_key,label,display_label,search_label,value_numeric,value_display,value_type,currency,source_file,source_context,ui_context,updated_at";
+  const DEFAULT_CURRENCY = "USD";
   const MAX_LIMIT = 5000;
-  const RUNTIME_VERSION = "2026-04-24-4";
+  const RUNTIME_VERSION = "2026-04-27-1";
   const MODULES = ["mortgage", "insurance", "taxes", "gp"];
   const EMPTY_DISPLAY_TOKENS = new Set([
     "",
     "-",
-    "â€”",
-    "â€“",
     "Ã¢â‚¬â€",
     "Ã¢â‚¬â€œ",
+    "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â",
+    "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“",
     "null",
     "undefined",
     "nan",
@@ -23,14 +24,14 @@
   ]);
   const MISSING_DISPLAY_FALLBACK = "Missing in Supabase";
   const TEXT_ARTIFACT_REPLACEMENTS = [
+    [/KÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‹Å“1/g, "K-1"],
     [/KÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Ëœ1/g, "K-1"],
-    [/KÃ¢â‚¬â€˜1/g, "K-1"],
-    [/Ã¢â‚¬â€˜/g, "-"],
-    [/Ã¢â‚¬â€/g, "-"],
-    [/Ã¢â‚¬â€œ/g, "-"],
-    [/Ã‚Â·/g, " - "],
-    [/Ã¢â‚¬Å“|Ã¢â‚¬Â/g, '"'],
-    [/Ã¢â€“Â¶/g, ">"],
+    [/ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Ëœ/g, "-"],
+    [/ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â/g, "-"],
+    [/ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“/g, "-"],
+    [/Ãƒâ€šÃ‚Â·/g, " - "],
+    [/ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ|ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â/g, '"'],
+    [/ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¶/g, ">"],
   ];
 
   const state = {
@@ -41,9 +42,8 @@
     mode: "unknown",
     refreshPromise: null,
     rowsByKey: new Map(),
+    rowsByLegacyKey: new Map(),
     rowsByModule: new Map(),
-    rowsByNormalizedLabel: new Map(),
-    rowsBySemanticIdentifier: new Map(),
     validModuleSnapshots: new Set(),
   };
 
@@ -74,16 +74,17 @@
     return repaired || "";
   }
 
-  function normalizeLookupText(value) {
-    return repairTextArtifacts(value)
-      .toLowerCase()
-      .replace(/[.:|]+/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
-
   function resolveMetricText(row, field) {
     return normalizeEditableText(row?.[field]);
+  }
+
+  function inferModuleFromPath() {
+    const pathname = String(window.location.pathname || "").toLowerCase();
+    if (pathname.includes("/modules/mortgage/")) return "mortgage";
+    if (pathname.includes("/modules/insurance/")) return "insurance";
+    if (pathname.includes("/modules/taxes/")) return "taxes";
+    if (pathname.includes("/modules/gp/")) return "gp";
+    return "";
   }
 
   function normalizeMetricRow(row) {
@@ -102,7 +103,7 @@
     const uiContext = resolveMetricText(row, "ui_context") || resolveMetricText(row, "source_context") || null;
 
     return {
-      semantic_identifier: row?.semantic_identifier ?? null,
+      legacy_metric_key: row?.legacy_metric_key ?? null,
       ...row,
       display_label: displayLabel,
       search_label: searchLabel,
@@ -116,6 +117,37 @@
     return Number.isFinite(parsed) ? parsed : null;
   }
 
+  function formatMetricDisplay(row = {}, valueNumeric) {
+    const numericValue = parseOptionalNumber(valueNumeric);
+    if (numericValue === null) return "-";
+
+    switch (String(row?.value_type || "").toLowerCase()) {
+      case "currency":
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: row?.currency || DEFAULT_CURRENCY,
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(numericValue);
+      case "percent":
+        return new Intl.NumberFormat("en-US", {
+          style: "percent",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        }).format(Math.abs(numericValue) > 1 ? numericValue / 100 : numericValue);
+      case "integer":
+      case "count":
+        return new Intl.NumberFormat("en-US", {
+          maximumFractionDigits: 0,
+        }).format(numericValue);
+      default:
+        return new Intl.NumberFormat("en-US", {
+          minimumFractionDigits: Number.isInteger(numericValue) ? 0 : 2,
+          maximumFractionDigits: 2,
+        }).format(numericValue);
+    }
+  }
+
   function buildSourceTrace(row) {
     const parts = [];
     if (row?.source_file) parts.push(`Source file: ${repairTextArtifacts(row.source_file)}`);
@@ -125,39 +157,19 @@
     return parts.join("\n");
   }
 
-  function pushRow(map, key, row) {
-    if (!key) return;
-    const current = map.get(key) || [];
-    current.push(row);
-    map.set(key, current);
-  }
-
   function rebuildIndexes() {
-    state.rowsBySemanticIdentifier.clear();
-    state.rowsByNormalizedLabel.clear();
+    state.rowsByKey.clear();
+    state.rowsByLegacyKey.clear();
 
-    for (const row of state.rowsByKey.values()) {
-      pushRow(state.rowsBySemanticIdentifier, normalizeLookupText(row.semantic_identifier), row);
-      pushRow(state.rowsByNormalizedLabel, normalizeLookupText(row.search_label), row);
-      pushRow(state.rowsByNormalizedLabel, normalizeLookupText(row.display_label), row);
-      pushRow(state.rowsByNormalizedLabel, normalizeLookupText(row.label), row);
+    for (const rows of state.rowsByModule.values()) {
+      for (const row of rows) {
+        if (!row?.metric_key) continue;
+        state.rowsByKey.set(row.metric_key, row);
+        if (row.legacy_metric_key) {
+          state.rowsByLegacyKey.set(row.legacy_metric_key, row);
+        }
+      }
     }
-  }
-
-  function updateCachedModuleRow(row) {
-    if (!row?.module || !state.rowsByModule.has(row.module)) return;
-
-    const moduleRows = state.rowsByModule.get(row.module) || [];
-    const index = moduleRows.findIndex((candidate) => candidate?.metric_key === row.metric_key);
-
-    if (index === -1) {
-      state.rowsByModule.set(row.module, [...moduleRows, row]);
-      return;
-    }
-
-    const nextRows = moduleRows.slice();
-    nextRows[index] = row;
-    state.rowsByModule.set(row.module, nextRows);
   }
 
   function setModuleSnapshotValidity(module, isValid) {
@@ -176,20 +188,7 @@
     const normalizedModule = normalizeEditableText(module);
     if (!normalizedModule) return [];
 
-    const nextRows = rows.filter((row) => row?.metric_key);
-    const previousRows = state.rowsByModule.get(normalizedModule) || [];
-    const nextKeys = new Set(nextRows.map((row) => row.metric_key));
-
-    for (const row of previousRows) {
-      if (row?.metric_key && !nextKeys.has(row.metric_key)) {
-        state.rowsByKey.delete(row.metric_key);
-      }
-    }
-
-    for (const row of nextRows) {
-      state.rowsByKey.set(row.metric_key, row);
-    }
-
+    const nextRows = rows.filter((row) => row?.metric_key).map(normalizeMetricRow);
     if (nextRows.length) {
       state.rowsByModule.set(normalizedModule, nextRows);
     } else {
@@ -199,6 +198,48 @@
     setModuleSnapshotValidity(normalizedModule, Boolean(options.valid) && nextRows.length > 0);
     rebuildIndexes();
     return nextRows;
+  }
+
+  function rememberRows(rows) {
+    const grouped = new Map();
+    for (const rawRow of rows) {
+      const row = normalizeMetricRow(rawRow);
+      if (!row?.metric_key || !row?.module) continue;
+      const moduleRows = grouped.get(row.module) || state.rowsByModule.get(row.module) || [];
+      const nextRows = moduleRows.slice();
+      const existingIndex = nextRows.findIndex((candidate) => candidate?.metric_key === row.metric_key);
+      if (existingIndex >= 0) {
+        nextRows[existingIndex] = row;
+      } else {
+        nextRows.push(row);
+      }
+      grouped.set(row.module, nextRows);
+    }
+
+    for (const [module, moduleRows] of grouped.entries()) {
+      state.rowsByModule.set(module, moduleRows);
+    }
+
+    rebuildIndexes();
+  }
+
+  function clearRows(keys) {
+    const keysToClear = new Set((keys || []).filter(Boolean));
+    if (!keysToClear.size) return;
+
+    for (const [module, rows] of state.rowsByModule.entries()) {
+      const nextRows = rows.filter((row) => !keysToClear.has(row?.metric_key));
+      if (nextRows.length !== rows.length) {
+        setModuleSnapshotValidity(module, false);
+      }
+      if (nextRows.length) {
+        state.rowsByModule.set(module, nextRows);
+      } else {
+        state.rowsByModule.delete(module);
+      }
+    }
+
+    rebuildIndexes();
   }
 
   function isSkippableNode(node) {
@@ -317,24 +358,24 @@
     return url.toString();
   }
 
-  function buildSupabaseUpdateUrl(baseUrl, metricKey) {
+  function buildSupabaseUpdateUrl(baseUrl, metricKey, select = DEFAULT_SELECT) {
     const url = new URL("/rest/v1/ingestion_data", baseUrl);
     url.searchParams.set("metric_key", `eq.${metricKey}`);
-    url.searchParams.set("select", DEFAULT_SELECT);
+    url.searchParams.set("select", select);
     return url.toString();
   }
 
-  function isMissingSemanticIdentifierError(error) {
+  function isMissingLegacyMetricKeyError(error) {
     return (
       error?.status === 400 &&
-      /semantic_identifier/i.test(String(error?.message || "")) &&
+      /legacy_metric_key/i.test(String(error?.message || "")) &&
       /(column|schema cache|PGRST204)/i.test(String(error?.message || ""))
     );
   }
 
   function normalizeMetricRows(rows) {
     return (Array.isArray(rows) ? rows : []).map((row) => ({
-      semantic_identifier: row?.semantic_identifier ?? null,
+      legacy_metric_key: row?.legacy_metric_key ?? null,
       ...row,
     }));
   }
@@ -349,7 +390,7 @@
       );
       return normalizeMetricRows(Array.isArray(payload) ? payload : []);
     } catch (error) {
-      if (!isMissingSemanticIdentifierError(error)) throw error;
+      if (!isMissingLegacyMetricKeyError(error)) throw error;
 
       const payload = await fetchJson(
         buildSupabaseReadUrl(config.url, query, { select: LEGACY_SELECT }),
@@ -417,9 +458,7 @@
         const payload = await fetchJson(url.toString());
         return Array.isArray(payload?.data) ? payload.data.map(normalizeMetricRow) : [];
       },
-      async () => {
-        return fetchSupabaseRows({ keys, module: "", limit: keys.length || BATCH_SIZE });
-      },
+      async () => fetchSupabaseRows({ keys, module: "", limit: keys.length || BATCH_SIZE }),
     );
   }
 
@@ -433,9 +472,7 @@
         const payload = await fetchJson(url.toString());
         return Array.isArray(payload?.data) ? payload.data.map(normalizeMetricRow) : [];
       },
-      async () => {
-        return fetchSupabaseRows({ keys: [], module, limit });
-      },
+      async () => fetchSupabaseRows({ keys: [], module, limit }),
     );
   }
 
@@ -444,65 +481,27 @@
     return results.flat();
   }
 
-  function rememberRows(rows) {
-    for (const row of rows) {
-      const normalized = normalizeMetricRow(row);
-      if (!normalized?.metric_key) continue;
-      state.rowsByKey.set(normalized.metric_key, normalized);
-      updateCachedModuleRow(normalized);
-    }
-    rebuildIndexes();
-  }
-
-  function clearRows(keys) {
-    const keysToClear = new Set((keys || []).filter(Boolean));
-    if (!keysToClear.size) return;
-    const modulesToInvalidate = new Set();
-
-    for (const key of keysToClear) {
-      const row = state.rowsByKey.get(key);
-      if (row?.module) modulesToInvalidate.add(row.module);
-      state.rowsByKey.delete(key);
-    }
-
-    for (const [module, rows] of state.rowsByModule.entries()) {
-      const nextRows = rows.filter((row) => !keysToClear.has(row?.metric_key));
-      if (nextRows.length !== rows.length) {
-        modulesToInvalidate.add(module);
-      }
-      if (nextRows.length) {
-        state.rowsByModule.set(module, nextRows);
-      } else {
-        state.rowsByModule.delete(module);
-      }
-    }
-
-    for (const module of modulesToInvalidate) {
-      setModuleSnapshotValidity(module, false);
-    }
-
-    rebuildIndexes();
+  function resolveRowByLookupKey(rowsByKey, rowsByLegacyKey, lookupKey) {
+    if (!lookupKey) return null;
+    return rowsByKey.get(lookupKey) || rowsByLegacyKey.get(lookupKey) || null;
   }
 
   function buildLookupIndexes(rows) {
     const rowsByKey = new Map();
-    const rowsBySemanticIdentifier = new Map();
-    const rowsByNormalizedLabel = new Map();
+    const rowsByLegacyKey = new Map();
 
     for (const row of rows.filter(Boolean)) {
       const normalized = normalizeMetricRow(row);
       if (!normalized?.metric_key) continue;
       rowsByKey.set(normalized.metric_key, normalized);
-      pushRow(rowsBySemanticIdentifier, normalizeLookupText(normalized.semantic_identifier), normalized);
-      pushRow(rowsByNormalizedLabel, normalizeLookupText(normalized.search_label), normalized);
-      pushRow(rowsByNormalizedLabel, normalizeLookupText(normalized.display_label), normalized);
-      pushRow(rowsByNormalizedLabel, normalizeLookupText(normalized.label), normalized);
+      if (normalized.legacy_metric_key) {
+        rowsByLegacyKey.set(normalized.legacy_metric_key, normalized);
+      }
     }
 
     return {
       rowsByKey,
-      rowsByNormalizedLabel,
-      rowsBySemanticIdentifier,
+      rowsByLegacyKey,
     };
   }
 
@@ -511,22 +510,19 @@
     if (data === undefined || data === null) {
       return {
         rowsByKey: state.rowsByKey,
-        rowsByNormalizedLabel: state.rowsByNormalizedLabel,
-        rowsBySemanticIdentifier: state.rowsBySemanticIdentifier,
+        rowsByLegacyKey: state.rowsByLegacyKey,
       };
     }
 
     return {
       rowsByKey: new Map(),
-      rowsByNormalizedLabel: new Map(),
-      rowsBySemanticIdentifier: new Map(),
+      rowsByLegacyKey: new Map(),
     };
   }
 
   function getMetricCandidates(data, lookup = {}) {
     const indexes = getLookupIndexes(data);
-    const semanticIdentifier = normalizeLookupText(lookup.key || lookup.metricKey);
-    const normalizedLabel = normalizeLookupText(lookup.label);
+    const keys = [lookup.metricKey, lookup.key, ...(lookup.fallbackMetricKeys || [])].filter(Boolean);
     const candidates = [];
     const seenMetricKeys = new Set();
 
@@ -536,18 +532,8 @@
       candidates.push(row);
     }
 
-    for (const row of indexes.rowsBySemanticIdentifier.get(semanticIdentifier) || []) {
-      appendCandidate(row);
-    }
-
-    for (const row of indexes.rowsByNormalizedLabel.get(normalizedLabel) || []) {
-      appendCandidate(row);
-    }
-
-    appendCandidate(indexes.rowsByKey.get(lookup.metricKey));
-
-    for (const metricKey of lookup.fallbackMetricKeys || []) {
-      appendCandidate(indexes.rowsByKey.get(metricKey));
+    for (const lookupKey of keys) {
+      appendCandidate(resolveRowByLookupKey(indexes.rowsByKey, indexes.rowsByLegacyKey, lookupKey));
     }
 
     return candidates;
@@ -572,7 +558,9 @@
       const rows = (
         await Promise.all(chunk(uniqueKeys, BATCH_SIZE).map((keys) => fetchMetricBatch(keys)))
       ).flat();
-      const resolvedKeys = new Set(rows.map((row) => row?.metric_key).filter(Boolean));
+      const resolvedKeys = new Set(
+        rows.flatMap((row) => [row?.metric_key, row?.legacy_metric_key]).filter(Boolean),
+      );
       const missingKeys = uniqueKeys.filter((key) => !resolvedKeys.has(key));
 
       rememberRows(rows);
@@ -631,13 +619,14 @@
 
   function applyRowsToPage(rows, options = {}) {
     const { useCachedRows = true } = options;
-    const rowsByKey = new Map(rows.filter(Boolean).map((row) => [row.metric_key, row]));
+    const lookupIndexes = buildLookupIndexes(rows);
     const elements = Array.from(document.querySelectorAll("[data-metric-key]"));
 
     for (const element of elements) {
+      const lookupKey = element.dataset.metricKey;
       const row =
-        rowsByKey.get(element.dataset.metricKey) ||
-        (useCachedRows ? state.rowsByKey.get(element.dataset.metricKey) : null);
+        resolveRowByLookupKey(lookupIndexes.rowsByKey, lookupIndexes.rowsByLegacyKey, lookupKey) ||
+        (useCachedRows ? resolveRowByLookupKey(state.rowsByKey, state.rowsByLegacyKey, lookupKey) : null);
       applyMetricRowToElement(element, row);
     }
   }
@@ -710,9 +699,9 @@
   async function saveMetricUpdate(input) {
     const payload = {
       metric_key: normalizeEditableText(input.metric_key),
-      value_display: normalizeDisplayValue(input.value_display),
       value_numeric: parseOptionalNumber(input.value_numeric),
       source_context: normalizeEditableText(input.source_context) || null,
+      ...(input.label !== undefined ? { label: normalizeEditableText(input.label) } : {}),
     };
 
     const data = await runWithFallback(
@@ -724,16 +713,26 @@
         return normalizeMetricRow(response?.data || null);
       },
       async () => {
+        const currentRow = resolveRowByLookupKey(state.rowsByKey, state.rowsByLegacyKey, payload.metric_key);
+        if (!currentRow) {
+          throw new Error(`Metric not found: ${payload.metric_key}`);
+        }
+
         const config = await getDirectReadConfig();
+        const directPayload = {
+          updated_at: new Date().toISOString(),
+          value_numeric: payload.value_numeric,
+          value_display:
+            payload.value_numeric !== undefined
+              ? formatMetricDisplay(currentRow, payload.value_numeric)
+              : currentRow.value_display,
+          source_context: payload.source_context,
+          ...(payload.label !== undefined ? { label: payload.label } : {}),
+        };
         const response = await fetchJson(buildSupabaseUpdateUrl(config.url, payload.metric_key), {
           method: "PATCH",
           headers: buildSupabaseHeaders(config.key, { Prefer: "return=representation" }),
-          body: JSON.stringify({
-            value_display: payload.value_display,
-            value_numeric: payload.value_numeric,
-            source_context: payload.source_context,
-            updated_at: new Date().toISOString(),
-          }),
+          body: JSON.stringify(directPayload),
         });
         return normalizeMetricRow(Array.isArray(response) ? response[0] || null : null);
       },
@@ -753,6 +752,15 @@
 
     const elements = Array.from(document.querySelectorAll("[data-metric-key]"));
     if (!elements.length) return [];
+
+    const module = inferModuleFromPath();
+    if (module) {
+      try {
+        return await ensureModuleRows(module);
+      } catch (error) {
+        console.warn("[metrics-runtime] Module fetch failed. Falling back to key fetch.", error);
+      }
+    }
 
     const uniqueKeys = [...new Set(elements.map((element) => element.dataset.metricKey).filter(Boolean))];
     if (!uniqueKeys.length) return [];
@@ -785,6 +793,7 @@
     ensureModuleRows,
     fetchAllMetrics,
     fetchMetricsByModule,
+    formatMetricDisplay,
     getMetricRow,
     getMetricValue(data, lookup = {}) {
       const row = getMetricRow(data, lookup);
@@ -799,7 +808,7 @@
       return value || lookup.defaultValue;
     },
     getRow(metricKey) {
-      return state.rowsByKey.get(metricKey) || null;
+      return resolveRowByLookupKey(state.rowsByKey, state.rowsByLegacyKey, metricKey);
     },
     getRows() {
       return [...state.rowsByKey.values()];
