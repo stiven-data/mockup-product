@@ -79,6 +79,34 @@ async function fetchMetricRow(credentials, metricKey) {
   return rows[0] || null;
 }
 
+async function patchMetricRow(credentials, metricKey, updates) {
+  for (const select of [DEFAULT_SELECT, LEGACY_SELECT]) {
+    const response = await fetch(buildSupabaseUpdateUrl(credentials.url, metricKey, select), {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: credentials.key,
+        authorization: `Bearer ${credentials.key}`,
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(updates),
+    });
+
+    if (response.ok) {
+      return normalizeMetricRows(await response.json())[0] || null;
+    }
+
+    const details = await response.text();
+    if (select === DEFAULT_SELECT && isMissingLegacyMetricKeyError(response.status, details)) {
+      continue;
+    }
+
+    throw new Error(`Supabase request failed (${response.status}): ${details}`);
+  }
+
+  return null;
+}
+
 module.exports = async (req, res) => {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.setHeader("Cache-Control", "no-store");
@@ -137,24 +165,7 @@ module.exports = async (req, res) => {
       finalUpdates.value_display = formatMetricDisplay(existingRow, updates.value_numeric);
     }
 
-    const endpoint = buildSupabaseUpdateUrl(credentials.url, metric_key);
-    const response = await fetch(endpoint, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        apikey: credentials.key,
-        authorization: `Bearer ${credentials.key}`,
-        Prefer: "return=representation",
-      },
-      body: JSON.stringify(finalUpdates),
-    });
-
-    if (!response.ok) {
-      const details = await response.text();
-      throw new Error(`Supabase request failed (${response.status}): ${details}`);
-    }
-
-    const [data] = normalizeMetricRows(await response.json());
+    const data = await patchMetricRow(credentials, metric_key, finalUpdates);
     res.statusCode = 200;
     res.end(JSON.stringify({ data: data || null }));
   } catch (error) {

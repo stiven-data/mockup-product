@@ -299,3 +299,101 @@ test("PATCH /api/metrics formats value_display from the stored metric metadata",
   const payload = JSON.parse(response.body);
   assert.equal(payload.data.value_display, "$120,000.00");
 });
+
+test("PATCH /api/metrics retries without legacy_metric_key for pre-migration schemas", async () => {
+  const originalFetch = global.fetch;
+  const originalEnv = {
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  };
+
+  process.env.SUPABASE_URL = "https://example.supabase.co";
+  process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-key";
+
+  const fetchCalls = [];
+  global.fetch = async (url, options = {}) => {
+    fetchCalls.push({ url: decodeURIComponent(String(url)), options });
+
+    if (fetchCalls.length === 1) {
+      return {
+        ok: true,
+        status: 200,
+        async json() {
+          return [
+            {
+              module: "gp",
+              metric_key: "gp_modules_gp_views_gp_mockups_089",
+              value_type: "percent",
+              value_display: "2.48%",
+            },
+          ];
+        },
+      };
+    }
+
+    if (fetchCalls.length === 2) {
+      return {
+        ok: false,
+        status: 400,
+        async text() {
+          return JSON.stringify({
+            code: "42703",
+            message: "column ingestion_data.legacy_metric_key does not exist",
+          });
+        },
+      };
+    }
+
+    return {
+      ok: true,
+      status: 200,
+      async json() {
+        return [
+          {
+            module: "gp",
+            metric_key: "gp_modules_gp_views_gp_mockups_089",
+            value_numeric: 4,
+            value_display: "4%",
+          },
+        ];
+      },
+    };
+  };
+
+  const response = {
+    headers: {},
+    statusCode: 200,
+    body: "",
+    setHeader(name, value) {
+      this.headers[name] = value;
+    },
+    end(payload) {
+      this.body = payload;
+    },
+  };
+
+  try {
+    await metricsHandler(
+      {
+        method: "PATCH",
+        body: {
+          metric_key: "gp_modules_gp_views_gp_mockups_089",
+          value_numeric: 4,
+        },
+      },
+      response,
+    );
+  } finally {
+    global.fetch = originalFetch;
+    process.env.SUPABASE_URL = originalEnv.SUPABASE_URL;
+    process.env.SUPABASE_SERVICE_ROLE_KEY = originalEnv.SUPABASE_SERVICE_ROLE_KEY;
+  }
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(fetchCalls.length, 3);
+  assert.match(fetchCalls[1].url, /legacy_metric_key/);
+  assert.doesNotMatch(fetchCalls[2].url, /legacy_metric_key/);
+
+  const payload = JSON.parse(response.body);
+  assert.equal(payload.data.value_display, "4%");
+});

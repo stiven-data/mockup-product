@@ -787,3 +787,71 @@ test("saveMetricUpdate refetches the metric when direct fallback has no cached r
     "4%",
   );
 });
+
+test("saveMetricUpdate retries direct PATCH without legacy_metric_key for pre-migration schemas", async () => {
+  const runtime = await loadRuntime([], [], {
+    publicConfig: {
+      key: "public-anon-key",
+      url: "https://example.supabase.co",
+    },
+    metricsResponse: {
+      ok: false,
+      status: 502,
+      payload: { error: "api unavailable" },
+    },
+    supabaseRestResponse: ({ callCount, method, searchParams }) => {
+      const select = decodeURIComponent(searchParams.get("select") || "");
+
+      if (method === "GET" && callCount === 0) {
+        return {
+          data: [
+            {
+              module: "gp",
+              metric_key: "gp_modules_gp_views_gp_mockups_089",
+              value_type: "percent",
+              value_numeric: 2.48,
+              value_display: "2.48%",
+            },
+          ],
+        };
+      }
+
+      if (method === "PATCH" && callCount === 1) {
+        assert.match(select, /legacy_metric_key/);
+        return {
+          ok: false,
+          status: 400,
+          payload: {
+            code: "42703",
+            message: "column ingestion_data.legacy_metric_key does not exist",
+          },
+        };
+      }
+
+      if (method === "PATCH" && callCount === 2) {
+        assert.doesNotMatch(select, /legacy_metric_key/);
+        return {
+          data: [
+            {
+              module: "gp",
+              metric_key: "gp_modules_gp_views_gp_mockups_089",
+              value_type: "percent",
+              value_numeric: 4,
+              value_display: "4%",
+              updated_at: "2026-04-27T16:10:00.000Z",
+            },
+          ],
+        };
+      }
+
+      throw new Error(`Unexpected request: ${method} #${callCount}`);
+    },
+  });
+
+  const saved = await runtime.window.ValorisMetrics.saveMetricUpdate({
+    metric_key: "gp_modules_gp_views_gp_mockups_089",
+    value_numeric: 4,
+  });
+
+  assert.equal(saved.value_display, "4%");
+});

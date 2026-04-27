@@ -314,8 +314,14 @@
 
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
-      const error = new Error(payload?.error || `Request failed with status ${response.status}`);
+      const message =
+        payload?.error ||
+        payload?.message ||
+        (payload && Object.keys(payload).length ? JSON.stringify(payload) : "") ||
+        `Request failed with status ${response.status}`;
+      const error = new Error(message);
       error.status = response.status;
+      error.payload = payload;
       throw error;
     }
     return payload;
@@ -366,10 +372,14 @@
   }
 
   function isMissingLegacyMetricKeyError(error) {
+    const payloadText =
+      typeof error?.payload === "object" && error?.payload
+        ? JSON.stringify(error.payload)
+        : String(error?.payload || "");
     return (
       error?.status === 400 &&
-      /legacy_metric_key/i.test(String(error?.message || "")) &&
-      /(column|schema cache|PGRST204)/i.test(String(error?.message || ""))
+      /legacy_metric_key/i.test(`${String(error?.message || "")} ${payloadText}`) &&
+      /(column|schema cache|PGRST204|42703)/i.test(`${String(error?.message || "")} ${payloadText}`)
     );
   }
 
@@ -397,6 +407,28 @@
         { headers: buildSupabaseHeaders(config.key) },
       );
       return normalizeMetricRows(Array.isArray(payload) ? payload : []);
+    }
+  }
+
+  async function patchSupabaseRow(metricKey, directPayload) {
+    const config = await getDirectReadConfig();
+
+    try {
+      const payload = await fetchJson(buildSupabaseUpdateUrl(config.url, metricKey), {
+        method: "PATCH",
+        headers: buildSupabaseHeaders(config.key, { Prefer: "return=representation" }),
+        body: JSON.stringify(directPayload),
+      });
+      return normalizeMetricRow(Array.isArray(payload) ? payload[0] || null : null);
+    } catch (error) {
+      if (!isMissingLegacyMetricKeyError(error)) throw error;
+
+      const payload = await fetchJson(buildSupabaseUpdateUrl(config.url, metricKey, LEGACY_SELECT), {
+        method: "PATCH",
+        headers: buildSupabaseHeaders(config.key, { Prefer: "return=representation" }),
+        body: JSON.stringify(directPayload),
+      });
+      return normalizeMetricRow(Array.isArray(payload) ? payload[0] || null : null);
     }
   }
 
@@ -731,7 +763,6 @@
           throw new Error(`Metric not found: ${payload.metric_key}`);
         }
 
-        const config = await getDirectReadConfig();
         const directPayload = {
           updated_at: new Date().toISOString(),
           value_numeric: payload.value_numeric,
@@ -742,12 +773,7 @@
           source_context: payload.source_context,
           ...(payload.label !== undefined ? { label: payload.label } : {}),
         };
-        const response = await fetchJson(buildSupabaseUpdateUrl(config.url, payload.metric_key), {
-          method: "PATCH",
-          headers: buildSupabaseHeaders(config.key, { Prefer: "return=representation" }),
-          body: JSON.stringify(directPayload),
-        });
-        return normalizeMetricRow(Array.isArray(response) ? response[0] || null : null);
+        return patchSupabaseRow(payload.metric_key, directPayload);
       },
     );
 
